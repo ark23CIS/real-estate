@@ -7,7 +7,7 @@ module.exports = {
     app: ["./server/index.js"],
   },
   output: {
-    path: path.resolve(__dirname, "./dist"),
+    path: path.join(__dirname, "dist"),
     filename: "bundle-server.js",
   },
   externals: [nodeExternals()],
