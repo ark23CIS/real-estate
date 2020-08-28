@@ -11,4 +11,4 @@ exports.SOURCE_DIRECTORY = path.resolve(PROJECT_ROOT, "./src");
 exports.SERVER_DIRECTORY = path.resolve(PROJECT_ROOT, "./server");
 exports.PROJECT_ROOT = PROJECT_ROOT;
 exports.HOST = "localhost";
-exports.PORT = 3000;
+exports.PORT = 8080;
