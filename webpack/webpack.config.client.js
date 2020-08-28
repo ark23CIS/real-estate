@@ -1,20 +1,22 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+let {
+  cleanOptions,
+  BUILD_DIRECTORY,
+  PROJECT_ROOT,
+  CLIENT_DIRECTORY,
+  PUBLIC_DIRECTORY,
+} = require("./constants");
 
-const pathsToClean = ["dist"];
-const cleanOptions = {
-  verbose: true,
-};
+cleanOptions = { ...cleanOptions, root: PROJECT_ROOT };
 
 module.exports = () => {
   return {
     target: "web",
-    entry: {
-      app: ["./client/index.js"],
-    },
+    entry: CLIENT_DIRECTORY,
     output: {
-      path: path.resolve(__dirname, "./dist"),
+      path: BUILD_DIRECTORY,
       filename: "bundle-client.js",
     },
     module: {
@@ -57,10 +59,11 @@ module.exports = () => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: "public/index.html",
+        template: path.resolve(PUBLIC_DIRECTORY, "./index.html"),
         title: "Real Estate",
+        minify: false,
       }),
-      new CleanWebpackPlugin(pathsToClean, cleanOptions),
+      new CleanWebpackPlugin(cleanOptions),
     ],
   };
 };
