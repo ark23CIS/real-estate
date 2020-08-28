@@ -1,23 +1,28 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+// const { HotModuleReplacementPlugin } = require("webpack");
 let {
   cleanOptions,
   BUILD_DIRECTORY,
   PROJECT_ROOT,
-  CLIENT_DIRECTORY,
-  PUBLIC_DIRECTORY,
+  SOURCE_DIRECTORY,
+  STATIC_DIRECTORY,
 } = require("./constants");
 
 cleanOptions = { ...cleanOptions, root: PROJECT_ROOT };
 
 module.exports = () => {
   return {
-    target: "web",
-    entry: CLIENT_DIRECTORY,
+    mode: "none",
+    devtool: false,
+    entry: [
+      // "webpack-hot-middleware/client?reload=true&quiet=true",
+      SOURCE_DIRECTORY,
+    ],
     output: {
       path: BUILD_DIRECTORY,
-      filename: "bundle-client.js",
+      filename: "bundle.js",
     },
     module: {
       rules: [
@@ -59,11 +64,12 @@ module.exports = () => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: path.resolve(PUBLIC_DIRECTORY, "./index.html"),
+        template: path.resolve(STATIC_DIRECTORY, "./index.html"),
         title: "Real Estate",
         minify: false,
       }),
       new CleanWebpackPlugin(cleanOptions),
+      // new HotModuleReplacementPlugin(),
     ],
   };
 };
