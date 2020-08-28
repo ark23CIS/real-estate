@@ -1,7 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-// const { HotModuleReplacementPlugin } = require("webpack");
 let {
   cleanOptions,
   BUILD_DIRECTORY,
@@ -16,10 +15,7 @@ module.exports = () => {
   return {
     mode: "none",
     devtool: false,
-    entry: [
-      // "webpack-hot-middleware/client?reload=true&quiet=true",
-      SOURCE_DIRECTORY,
-    ],
+    entry: [SOURCE_DIRECTORY],
     output: {
       path: BUILD_DIRECTORY,
       filename: "bundle.js",
@@ -28,7 +24,7 @@ module.exports = () => {
       rules: [
         {
           loader: "babel-loader",
-          test: /\.(js | jsx)$/,
+          test: /\.(js|jsx)$/,
           exclude: /node_modules/,
         },
         {
@@ -69,7 +65,6 @@ module.exports = () => {
         minify: false,
       }),
       new CleanWebpackPlugin(cleanOptions),
-      // new HotModuleReplacementPlugin(),
     ],
   };
 };

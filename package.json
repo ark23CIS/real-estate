@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node ./webpack/build.js",
-    "start": "webpack-dev-server --config ./webpack/webpack.config.client.js",
+    "start": "webpack-dev-server --config ./webpack/webpack.config.client.js --open",
     "serve": "serve ./build"
   },
   "repository": {
@@ -24,7 +24,6 @@
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
     "app-root-path": "^3.0.0",
-    "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",
     "babel-preset-env": "^1.7.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -45,8 +44,10 @@
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
+    "@babel/core": "^7.11.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },
