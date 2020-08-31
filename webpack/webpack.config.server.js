@@ -1,15 +1,16 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const { SERVER_DIRECTORY, BUILD_DIRECTORY } = require("./constants");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = (env, options) => {
   const isProduction = options.mode === "production";
   return {
     target: "node",
+    devtool: "none",
     mode: isProduction ? "production" : "development",
-    watch: !isProduction,
     entry: {
-      app: [path.resolve(SERVER_DIRECTORY, "./index.js")],
+      app: ["babel-polyfill", path.resolve(SERVER_DIRECTORY, "./index.js")],
     },
     output: {
       path: BUILD_DIRECTORY,
@@ -18,6 +19,24 @@ module.exports = (env, options) => {
     externals: [nodeExternals()],
     resolve: {
       extensions: [".js", ".jsx"],
+    },
+    optimization: {
+      minimizer: [
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            compress: {
+              unsafe: true,
+              inline: true,
+              passes: 2,
+              keep_fargs: false,
+            },
+            output: {
+              beautify: false,
+            },
+            mangle: true,
+          },
+        }),
+      ],
     },
     module: {
       rules: [

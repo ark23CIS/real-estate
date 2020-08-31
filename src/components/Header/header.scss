@@ -1,0 +1,143 @@
+.header {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  background-color: #060b26;
+  box-shadow: 0px 5px 8px -9px rgba(0, 0, 0, 0.75);
+}
+
+.header__right {
+  padding-right: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.header__left {
+  display: flex;
+}
+
+.header__logo {
+  padding-left: 20px;
+  font-size: 2rem;
+  z-index: 5;
+}
+
+.header__input {
+  display: flex;
+  align-items: center;
+  color: #000;
+  // background-color: #eff2f5;
+  background-color: #fff;
+  padding: 10px;
+  margin-left: 10px;
+  border-radius: 999px;
+}
+
+.header__input > input {
+  border: none;
+  outline-width: 0;
+  background-color: transparent;
+}
+
+.header__option {
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  cursor: pointer;
+}
+
+.header__option:hover {
+  background-color: #eff2f5;
+  border-radius: 10px;
+}
+
+.header__option > .MuiSvgIcon-root {
+  color: gray;
+}
+
+.header__option:hover > .MuiSvgIcon-root {
+  color: purple;
+}
+
+.menu-bars {
+  font-size: 2rem;
+  margin-left: 10px;
+  display: flex;
+  background: none;
+  align-items: center;
+}
+
+.nav-menu {
+  background-color: #060b26;
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  transition: 850ms;
+}
+
+.nav-menu.active {
+  left: 0;
+  transition: 350ms;
+}
+
+.nav-text {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 8px 0px 8px 16px;
+  list-style: none;
+  height: 60px;
+}
+
+.nav-text a {
+  text-decoration: none;
+  color: #f5f5f5;
+  font-style: 18px;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 4px;
+}
+
+.nav-text a:hover {
+  background-color: #1a83ff;
+}
+
+.nav-menu-items {
+  width: 100%;
+}
+
+.navbar-toggler {
+  background-color: #060b26;
+  widows: 100%;
+  margin-left: -15px;
+  height: 80px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+span {
+  margin-left: 16px;
+}
+
+@media (max-width: 375px) {
+  .header__input {
+    width: 70%;
+  }
+  .header__logo {
+    font-size: 1.2rem;
+  }
+  .nav-menu {
+    width: 160px;
+  }
+}

@@ -17,7 +17,7 @@ module.exports = (env, options) => {
   const isProduction = options.mode === "production";
   return {
     mode: isProduction ? "production" : "development",
-    watch: !isProduction,
+    devtool: "none",
     optimization: {
       minimizer: [
         new UglifyJsPlugin({
@@ -44,7 +44,7 @@ module.exports = (env, options) => {
       ],
     },
     devtool: false,
-    entry: [SOURCE_DIRECTORY],
+    entry: ["babel-polyfill", SOURCE_DIRECTORY],
     output: {
       path: BUILD_DIRECTORY,
       filename: "bundle-client.js",
