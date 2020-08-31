@@ -1,8 +1,8 @@
 const webpack = require("webpack");
 
-const config = require("./webpack.config.client");
+const config = require("./webpack.config");
 
-const compiler = webpack(config());
+const compiler = webpack(config);
 
 compiler.run((error, stats) => {
   if (error) {
