@@ -1,4 +1,5 @@
 import React from "react";
+import "./single-estate.scss";
 
 function SingleEstate() {
   return <div>Estate</div>;

@@ -67,6 +67,8 @@
     "express-validator": "^6.6.1",
     "fast-async": "^6.3.8",
     "jsonwebtoken": "^8.5.1",
+    "material-ui": "^0.20.2",
+    "material-ui-icons": "^1.0.0-beta.36",
     "mongoose": "^5.10.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
