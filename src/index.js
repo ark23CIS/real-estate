@@ -1,5 +1,21 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
+import React from "react"
+import ReactDOM from "react-dom"
+import App from "./App"
+import { AppContainer } from "react-hot-loader"
 
-ReactDOM.render(<App />, document.getElementById("root"));
+function render(Component) {
+  ReactDOM.render(
+    <AppContainer>
+      <Component />
+    </AppContainer>,
+    document.getElementById("root")
+  )
+}
+render(App)
+
+if (module && module.hot) {
+  module.hot.accept("./App.js", () => {
+    const NewApp = require("./App.js").default
+    render(NewApp)
+  })
+}

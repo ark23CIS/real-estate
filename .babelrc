@@ -1,19 +1,15 @@
 {
   "presets": [
+    "@babel/preset-react",
     [
       "@babel/preset-env",
       {
-        "loose": true
-      }
-    ],
-    "@babel/preset-react"
-  ],
-  "plugins": [
-    [
-      "@babel/plugin-proposal-class-properties",
-      {
-        "loose": true
+        "debug": false,
+        "targets": {
+          "browsers": ["last 2 versions"],
+        }
       }
     ]
-  ]
+  ],
+  "plugins": ["@babel/plugin-transform-runtime", "react-hot-loader/babel"]
 }
