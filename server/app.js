@@ -1,25 +1,31 @@
 const express = require("express");
 const app = express();
-const PORT = 8080;
-const webpack = require("webpack");
-const config = require("../webpack/webpack.config");
-const compiler = webpack(config());
-const webpackDevMiddleware = require("webpack-dev-middleware")(
-  compiler,
-  config().devServer
-);
-const expressStaticGzip = require("express-static-gzip");
-
-const webpackHotMiddleware = require("webpack-hot-middleware")(compiler);
+const { PORT, mongoURI } = require("./constants");
+const {
+  webpackHotMiddleware,
+  webpackDevMiddleware,
+  expressStaticGzipMiddleware,
+} = require("./middlewares");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const { signIn, users } = require("./routes");
 
 app.use(webpackDevMiddleware);
 app.use(webpackHotMiddleware);
+app.use(expressStaticGzipMiddleware);
 
-app.use(
-  expressStaticGzip("build", {
-    enableBrotli: true,
+mongoose
+  .connect(mongoURI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
   })
-);
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
+
+app.use(bodyParser.json());
+app.use("/api/signin", signIn);
+app.use("/api/users", users);
 
 app.listen(PORT, () => {
   console.log(`Server is listening at PORT ${PORT}`);

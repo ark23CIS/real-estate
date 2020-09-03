@@ -6,6 +6,7 @@ const optimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const miniCSSExtractPlugin = require("mini-css-extract-plugin");
 const compressionPlugin = require("compression-webpack-plugin");
 const brotliPlugin = require("brotli-webpack-plugin");
+const terserPlugin = require('terser-webpack-plugin')
 
 module.exports = (env, options) => {
   return {
@@ -22,10 +23,26 @@ module.exports = (env, options) => {
     mode: "development",
     devtool: "eval-source-map",
     devServer: {
+      historyApiFallback: true,
       contentBase: "build",
       overlay: true,
       hot: true,
       open: true,
+    },
+    optimization: {
+      nodeEnv: 'production',
+      minimize: false,
+      minimizer: [ new terserPlugin() ],
+      noEmitOnErrors: true,
+      removeEmptyChunks: true,
+      mergeDuplicateChunks: true,
+      removeAvailableModules: true,
+      // most usable modules will find earlier
+      occurrenceOrder: true,
+      concatenateModules: true,
+      providedExports: true, // defines exported entities for each module
+      usedExports: true,
+      sideEffects: true // (TREE shaking) depends on providedExport & usedExports
     },
     module: {
       rules: [

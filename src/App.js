@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 import { Header, Routes } from './components';
 
 export default class App extends Component {
   render() {
     return (
-      <BrowserRouter>
+      <HashRouter>
         <Header />
         <Routes />
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 }
