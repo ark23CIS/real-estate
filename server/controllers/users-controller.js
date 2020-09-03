@@ -34,5 +34,4 @@ module.exports = async (req, res) => {
     console.log(err.message);
     res.status(500).send("Server Error");
   }
-  res.send("that works");
 };

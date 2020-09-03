@@ -4,21 +4,19 @@ const compiler = webpack(config());
 const jwt = require("jsonwebtoken");
 const { secret } = require("../constants");
 
-exports.jwtMiddleware = async function (req, res, next) {
+exports.authMiddleware = async function (req, res, next) {
   const token = req.header("x-auth-token");
 
-  if (!token) return res.status(401).json({ msg: "No token" });
+  if (!token) {
+    return res.status(401).json({ msg: "No token" });
+  }
 
   try {
-    await jwt.verify(token, secret, (err, decoded) => {
-      if (err) res.status(401).json({ msg: "Token isnt valid" });
-      else {
-        req.user = decoded.user;
-        next();
-      }
-    });
+    const decoded = jwt.verify(token, secret);
+    req.user = { id: decoded.id };
+    next();
   } catch (err) {
-    res.status(500).json({ msg: "Server err" });
+    res.status(401).json({ msg: "Token is not correct" });
   }
 };
 

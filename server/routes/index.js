@@ -1,7 +1,7 @@
-const signIn = require("./signin-route");
+const auth = require("./auth-route");
 const users = require("./users-route");
 
 module.exports = {
-  signIn,
+  auth,
   users,
 };
