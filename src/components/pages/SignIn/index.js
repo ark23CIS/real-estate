@@ -1,8 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
 import "../SignUp/sign-up.scss";
 
 function SignIn() {
+  const auth = useSelector((state) => state.auth);
+  if (auth.isAuthenticated) {
+    return <Redirect to={`/profiles/${auth.user._id}`} />;
+  }
   return (
     <div className="form-container">
       <div className="form-content">
@@ -18,6 +23,7 @@ function SignIn() {
               className="form__input"
               name="email"
               placeholder="Email"
+              required
             />
           </div>
           <div className="form-inputs">
@@ -30,6 +36,7 @@ function SignIn() {
               className="form__input"
               name="password"
               placeholder="Password"
+              required
             />
           </div>
           <button className="form__input-btn" type="submit">

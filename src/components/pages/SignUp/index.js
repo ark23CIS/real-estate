@@ -1,12 +1,40 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../../redux/actions";
 import "./sign-up.scss";
 
 function SignUp() {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const [registrationData, setRegistrationData] = React.useState({
+    firstName: "",
+    lastName: "",
+    password: "",
+    email: "",
+    passwordConfirm: "",
+  });
+  const onSubmit = React.useCallback(async () => {
+    if (registrationData.password !== registrationData.passwordConfirm)
+      throw new Error("password do not match");
+    dispatch(register(registrationData));
+  }, [dispatch, registrationData]);
+  const onChange = React.useCallback(
+    (e) => {
+      setRegistrationData({
+        ...registrationData,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [registrationData]
+  );
+  if (auth.isAuthenticated) {
+    return <Redirect to={`/profiles/${auth.user._id}`} />;
+  }
   return (
     <div className="form-container">
       <div className="form-content">
-        <form className="form">
+        <div className="form">
           <h1>Rent Real Estate today!</h1>
           <div className="form-inputs">
             <label htmlFor="firstName" className="form__label">
@@ -18,6 +46,8 @@ function SignUp() {
               className="form__input"
               name="firstName"
               placeholder="First name"
+              required
+              onChange={onChange}
             />
           </div>
           <div className="form-inputs">
@@ -30,6 +60,8 @@ function SignUp() {
               className="form__input"
               name="lastName"
               placeholder="Last name"
+              required
+              onChange={onChange}
             />
           </div>
           <div className="form-inputs">
@@ -42,6 +74,8 @@ function SignUp() {
               className="form__input"
               name="email"
               placeholder="Email"
+              required
+              onChange={onChange}
             />
           </div>
           <div className="form-inputs">
@@ -54,6 +88,8 @@ function SignUp() {
               className="form__input"
               name="password"
               placeholder="Password"
+              required
+              onChange={onChange}
             />
           </div>
           <div className="form-inputs">
@@ -62,19 +98,21 @@ function SignUp() {
             </label>
             <input
               id="confirm-password"
-              type="confirm-password"
+              type="password"
               className="form__input"
-              name="confirm-password"
+              name="passwordConfirm"
               placeholder="Confirm Password"
+              required
+              onChange={onChange}
             />
           </div>
-          <button className="form__input-btn" type="submit">
+          <button className="form__input-btn" type="submit" onClick={onSubmit}>
             Sign Up
           </button>
           <span>
             Already have an account ? <Link to="/signin">Login</Link>
           </span>
-        </form>
+        </div>
       </div>
     </div>
   );
