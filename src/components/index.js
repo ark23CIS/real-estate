@@ -1,4 +1,3 @@
-import Header from "./Header";
-import Routes from './Routes'
-
-export { Header, Routes };
+export { default as Header } from "./Header";
+export { default as Routes } from "./Routes";
+export { default as Error } from "./Error";

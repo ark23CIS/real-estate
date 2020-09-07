@@ -9,13 +9,14 @@ import {
   Estates,
   NotFound,
 } from "./pages";
-import Header from "./Header";
+import Error from "./Error";
 import "../styles.css";
 
 export default function Routes() {
   return (
     <div>
-        <Switch>
+      <Error />
+      <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/estates/" component={Estates} />
         <Route path="/estates/:estateID/" component={SingleEstate} />
@@ -23,7 +24,7 @@ export default function Routes() {
         <Route path="/signin/" component={SignIn} />
         <Route path="/profiles/:profileID/" component={Profile} />
         <Route component={NotFound} />
-        </Switch>
+      </Switch>
     </div>
   );
 }

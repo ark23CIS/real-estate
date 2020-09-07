@@ -46,7 +46,6 @@ const Header = React.memo(() => {
             {DrawerData.filter(
               (item) => item.logged !== !isAuthenticated && !loading
             ).map((item, index) => {
-              console.log(item.logged !== !isAuthenticated);
               return (
                 <li
                   key={`${index} ${item.path}`}

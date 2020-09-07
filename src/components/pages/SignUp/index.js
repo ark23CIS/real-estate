@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../../redux/actions";
+import { register, addError } from "../../../redux/actions";
 import "./sign-up.scss";
 
 function SignUp() {
@@ -15,8 +15,11 @@ function SignUp() {
     passwordConfirm: "",
   });
   const onSubmit = React.useCallback(async () => {
-    if (registrationData.password !== registrationData.passwordConfirm)
-      throw new Error("password do not match");
+    if (registrationData.password !== registrationData.passwordConfirm) {
+      dispatch(addError("Password do not match"));
+      console.log("error");
+      return;
+    }
     dispatch(register(registrationData));
   }, [dispatch, registrationData]);
   const onChange = React.useCallback(
@@ -118,4 +121,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default React.memo(SignUp);
