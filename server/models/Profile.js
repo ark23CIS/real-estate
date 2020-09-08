@@ -53,6 +53,18 @@ const ProfileSchema = new Schema({
   dateOfBirth: {
     type: Date,
   },
+
+  messages: [{ type: Schema.Types.ObjectId, ref: "message" }],
+
+  comments: [{ type: Schema.Types.ObjectId, ref: "comment" }],
+
+  likes: [{ type: Schema.Types.ObjectId, ref: "like" }],
+
+  dislikes: [{ type: Schema.Types.ObjectId, ref: "dislike" }],
+
+  estates: [{ type: Schema.Types.ObjectId, ref: "estate" }],
+
+  ratings: [{ type: Schema.Types.ObjectId, ref: "rating" }],
 });
 
 module.exports = mongoose.model("profile", ProfileSchema);
