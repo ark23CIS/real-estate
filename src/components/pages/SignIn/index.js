@@ -11,7 +11,7 @@ function SignIn() {
   return (
     <div className="form-container">
       <div className="form-content">
-        <form className="form">
+        <div className="form">
           <h1>Rent Real Estate today!</h1>
           <div className="form-inputs">
             <label htmlFor="email" className="form__label">
@@ -45,7 +45,7 @@ function SignIn() {
           <span>
             Don't have an account yet ? <Link to="/signup">Sign Up</Link>
           </span>
-        </form>
+        </div>
       </div>
     </div>
   );

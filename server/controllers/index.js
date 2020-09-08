@@ -1,8 +1,20 @@
 const usersController = require("./users-controller");
-const { authGetController, authPutController } = require("./auth-controller");
+const { authGetController, authPostController } = require("./auth-controller");
+const {
+  profileMeGetController,
+  profilePostController,
+  getAllProfilesController,
+  getProfileByUserIDController,
+  deleteOwnProfileController,
+} = require("./profile-controller");
 
 module.exports = {
   usersController,
   authGetController,
-  authPutController,
+  authPostController,
+  profileMeGetController,
+  profilePostController,
+  getAllProfilesController,
+  getProfileByUserIDController,
+  deleteOwnProfileController,
 };

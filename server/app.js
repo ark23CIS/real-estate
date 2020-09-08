@@ -8,7 +8,7 @@ const {
 } = require("./middlewares");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const { auth, users } = require("./routes");
+const { auth, users, profile } = require("./routes");
 
 app.use(webpackDevMiddleware);
 app.use(webpackHotMiddleware);
@@ -26,6 +26,7 @@ mongoose
 app.use(bodyParser.json());
 app.use("/api/users", users);
 app.use("/api/auth", auth);
+app.use("/api/profiles", profile);
 
 app.listen(PORT, () => {
   console.log(`Server is listening at PORT ${PORT}`);

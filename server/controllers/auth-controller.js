@@ -14,7 +14,7 @@ exports.authGetController = async (req, res) => {
   }
 };
 
-exports.authPutController = async (req, res) => {
+exports.authPostController = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
