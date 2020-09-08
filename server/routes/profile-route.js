@@ -5,10 +5,8 @@ const {
   profilePostController,
   getAllProfilesController,
   getProfileByUserIDController,
-} = require("../controllers");
-const {
   deleteOwnProfileController,
-} = require("../controllers/profile-controller");
+} = require("../controllers");
 const router = express.Router();
 
 router.get("/me", authMiddleware, profileMeGetController);

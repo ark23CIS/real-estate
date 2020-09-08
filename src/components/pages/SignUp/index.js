@@ -32,7 +32,7 @@ function SignUp() {
     [registrationData]
   );
   if (auth.isAuthenticated) {
-    return <Redirect to={`/profiles/${auth.user._id}`} />;
+    return <Redirect to={`/estates/`} />;
   }
   return (
     <div className="form-container">

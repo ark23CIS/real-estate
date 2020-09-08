@@ -1,12 +1,30 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../../../redux/actions";
 import { Link, Redirect } from "react-router-dom";
 import "../SignUp/sign-up.scss";
 
 function SignIn() {
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const [loginData, setLoginData] = React.useState({
+    password: "",
+    email: "",
+  });
+  const onClick = React.useCallback(async () => {
+    dispatch(login(loginData));
+  }, [dispatch, loginData]);
+  const onChange = React.useCallback(
+    (e) => {
+      setLoginData({
+        ...loginData,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [loginData]
+  );
   if (auth.isAuthenticated) {
-    return <Redirect to={`/profiles/${auth.user._id}`} />;
+    return <Redirect to={`/estates/`} />;
   }
   return (
     <div className="form-container">
@@ -24,6 +42,7 @@ function SignIn() {
               name="email"
               placeholder="Email"
               required
+              onChange={onChange}
             />
           </div>
           <div className="form-inputs">
@@ -37,9 +56,10 @@ function SignIn() {
               name="password"
               placeholder="Password"
               required
+              onChange={onChange}
             />
           </div>
-          <button className="form__input-btn" type="submit">
+          <button className="form__input-btn" type="submit" onClick={onClick}>
             Sign In
           </button>
           <span>
