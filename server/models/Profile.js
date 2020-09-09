@@ -54,17 +54,17 @@ const ProfileSchema = new Schema({
     type: Date,
   },
 
-  messages: [{ type: Schema.Types.ObjectId, ref: "message" }],
+  messages: [{ type: Schema.Types.ObjectId, ref: "profile" }],
 
-  comments: [{ type: Schema.Types.ObjectId, ref: "comment" }],
+  comments: [{ type: Schema.Types.ObjectId, ref: "profile" }],
 
-  likes: [{ type: Schema.Types.ObjectId, ref: "like" }],
+  likes: [{ type: Schema.Types.ObjectId, ref: "profile" }],
 
-  dislikes: [{ type: Schema.Types.ObjectId, ref: "dislike" }],
+  dislikes: [{ type: Schema.Types.ObjectId, ref: "profile" }],
 
-  estates: [{ type: Schema.Types.ObjectId, ref: "estate" }],
+  estates: [{ type: Schema.Types.ObjectId, ref: "profile" }],
 
-  ratings: [{ type: Schema.Types.ObjectId, ref: "rating" }],
+  ratings: [{ type: Schema.Types.ObjectId, ref: "profile" }],
 });
 
 module.exports = mongoose.model("profile", ProfileSchema);

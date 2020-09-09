@@ -8,6 +8,7 @@ import {
   Profile,
   Estates,
   NotFound,
+  Renters,
 } from "./pages";
 import Error from "./Error";
 import "../styles.css";
@@ -22,6 +23,7 @@ export default function Routes() {
         <Route path="/estates/:estateID/" component={SingleEstate} />
         <Route path="/signup/" component={SignUp} />
         <Route path="/signin/" component={SignIn} />
+        <Route path="/renters/" component={Renters} />
         <Route path="/profiles/:profileID/" component={Profile} />
         <Route component={NotFound} />
       </Switch>

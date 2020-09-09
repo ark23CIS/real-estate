@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const EstateSchema = new Schema({
+const RentSchema = new Schema({
   postedBy: {
     type: Schema.Types.ObjectId,
     ref: "profile",
@@ -21,13 +21,6 @@ const EstateSchema = new Schema({
     required: true,
   },
 
-  photo: [
-    {
-      type: String,
-      default: "estate",
-    },
-  ],
-
   created: {
     type: Date,
     default: Date.now,
@@ -38,7 +31,7 @@ const EstateSchema = new Schema({
     required: true,
   },
 
-  price: {
+  maxPrice: {
     type: Number,
     required: true,
   },
@@ -53,29 +46,6 @@ const EstateSchema = new Schema({
       postedBy: { type: Schema.Types.ObjectId, ref: "profile" },
     },
   ],
-
-  estateAddress: {
-    country: {
-      type: String,
-      default: "-",
-    },
-    city: {
-      type: String,
-      default: "-",
-    },
-    street: {
-      type: String,
-      default: "-",
-    },
-    buildingNumber: {
-      type: String,
-      default: "-",
-    },
-    flatNumber: {
-      type: String,
-      default: "-",
-    },
-  },
 
   likes: [{ type: Schema.Types.ObjectId, ref: "profile" }],
 
@@ -97,4 +67,4 @@ const EstateSchema = new Schema({
   ],
 });
 
-module.exports = mongoose.model("estate", EstateSchema);
+module.exports = mongoose.model("rent", RentSchema);

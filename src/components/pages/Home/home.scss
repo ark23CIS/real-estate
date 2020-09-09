@@ -1,0 +1,45 @@
+.landing {
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  height: 70%;
+  overflow: hidden;
+  &__subtitle {
+    font-size: 30px;
+  }
+  &__title {
+    font-size: 50px;
+  }
+  &__sign-in-btn {
+    margin-right: 20px;
+  }
+  &__sign-up-btn {
+    margin-left: 20px;
+  }
+  &__btns {
+    display: flex;
+  }
+}
+
+.primary-button {
+  background-color: #5bc0de;
+  padding: 15px 30px;
+  color: #fff;
+  outline: none;
+  border: none;
+  font-size: 20px;
+  &:hover {
+    background-color: #428bca;
+  }
+}
+
+.hero {
+  position: relative;
+  height: calc(100vh - 74px);
+  background: url("https://dmn-dallas-news-prod.cdn.arcpublishing.com/resizer/OVbr3QNZFM8d-_zrTsIBSsYDas8=/1660x934/smart/filters:no_upscale()/cloudfront-us-east-1.images.arcpublishing.com/dmn/Q7JXWAMHABHH5EP5EGR6BU32C4.jpg")
+    no-repeat center center/cover;
+}

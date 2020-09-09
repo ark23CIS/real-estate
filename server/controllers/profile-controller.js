@@ -127,7 +127,6 @@ exports.profilePostController = async (req, res) => {
       return res.json(profile);
     }
     profile = new Profile(profileFields);
-    console.log(profile);
     await profile.save();
     res.json(profile);
   } catch (err) {

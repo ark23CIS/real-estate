@@ -2,8 +2,8 @@ import React from "react";
 import { FaEnvelopeOpenText } from "react-icons/fa";
 import { AiFillHome, AiOutlineForm } from "react-icons/ai";
 import { ImProfile } from "react-icons/im";
-import { GiFamilyHouse } from "react-icons/gi";
-import { GoSignIn, GoSignOut } from "react-icons/go";
+import { GiFamilyHouse, GiPerson } from "react-icons/gi";
+import { GoSignIn, GoSignOut, GoPlus } from "react-icons/go";
 
 export const DrawerData = [
   {
@@ -12,9 +12,20 @@ export const DrawerData = [
     icon: <AiFillHome />,
   },
   {
+    title: "Create ad",
+    path: "/create-ad",
+    icon: <GoPlus />,
+    logged: true,
+  },
+  {
     title: "Estates",
     path: "/estates",
     icon: <GiFamilyHouse />,
+  },
+  {
+    title: "Renters",
+    path: "/renters",
+    icon: <GiPerson />,
   },
   {
     title: "Profile",
