@@ -1,12 +1,12 @@
 .landing {
   text-align: center;
-  color: white;
+  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   text-align: center;
-  height: 70%;
+  height: 60%;
   overflow: hidden;
   &__subtitle {
     font-size: 30px;
@@ -40,6 +40,6 @@
 .hero {
   position: relative;
   height: calc(100vh - 74px);
-  background: url("https://dmn-dallas-news-prod.cdn.arcpublishing.com/resizer/OVbr3QNZFM8d-_zrTsIBSsYDas8=/1660x934/smart/filters:no_upscale()/cloudfront-us-east-1.images.arcpublishing.com/dmn/Q7JXWAMHABHH5EP5EGR6BU32C4.jpg")
+  background: url("http://www.fonstola.ru/pic/201304/1600x1200/fonstola.ru-92109.jpg")
     no-repeat center center/cover;
 }

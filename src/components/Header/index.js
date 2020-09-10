@@ -1,15 +1,16 @@
 import React, { Fragment } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import { FaBars } from "react-icons/fa";
-import { useSelector, dispatch, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { withRouter } from "react-router";
 import { DrawerData } from "./DrawerData";
 import { logout } from "../../redux/actions";
 import { IconContext } from "react-icons";
 import "./header.scss";
 
-const Header = React.memo(() => {
+const Header = React.memo(({ location }) => {
   const dispatch = useDispatch();
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
   const [isActive, setIsActive] = React.useState(false);
@@ -39,7 +40,7 @@ const Header = React.memo(() => {
         <nav className={isActive ? "nav-menu active" : "nav-menu"}>
           <ul className="nav-menu__items" onClick={toggleDrawer}>
             <li className="navbar-toggler">
-              <Link to="/">
+              <Link to="#">
                 <AiOutlineClose />
               </Link>
             </li>
@@ -49,10 +50,15 @@ const Header = React.memo(() => {
               return (
                 <li
                   key={`${index} ${item.path}`}
-                  className="nav-text"
+                  className={`nav-text`}
                   onClick={item.title === "Log out" ? onClick : undefined}
                 >
-                  <Link to={item.path}>
+                  <Link
+                    to={item.path}
+                    className={
+                      location.pathname === item.path ? "active-page" : ""
+                    }
+                  >
                     {item.icon}
                     <span>{item.title}</span>
                   </Link>
@@ -66,4 +72,4 @@ const Header = React.memo(() => {
   );
 });
 
-export default Header;
+export default withRouter(React.memo(Header));

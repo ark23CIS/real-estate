@@ -8,7 +8,9 @@ import {
   Profile,
   Estates,
   NotFound,
+  SingleRenter,
   Renters,
+  Search,
 } from "./pages";
 import Error from "./Error";
 import "../styles.css";
@@ -25,6 +27,8 @@ export default function Routes() {
         <Route path="/signin/" component={SignIn} />
         <Route path="/renters/" component={Renters} />
         <Route path="/profiles/:profileID/" component={Profile} />
+        <Route path="/search" component={Search} />
+        <Route path="/renters/:renterID" component={SingleRenter} />
         <Route component={NotFound} />
       </Switch>
     </div>
