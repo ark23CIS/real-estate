@@ -1,8 +1,17 @@
 import React from "react";
-import "./not-found.scss";
+import { Link } from "react-router-dom";
+import Banner from "../../Banner";
 
 function NotFound() {
-  return <div>404 Page Not Found</div>;
+  return (
+    <div className="centralizeBanner">
+      <Banner title="404" subtitle="page not found">
+        <Link to="/" className="primary-button">
+          return home
+        </Link>
+      </Banner>
+    </div>
+  );
 }
 
 export default NotFound;

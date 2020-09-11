@@ -1,7 +1,8 @@
 import React from "react";
+import { withStyles } from "@material-ui/styles";
 
 function NewAd() {
-  return <div>NewAd</div>;
+  return <div>Something</div>;
 }
 
-export default NewAd;
+export default withStyles(styles)(NewAd);

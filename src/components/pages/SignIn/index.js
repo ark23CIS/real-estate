@@ -23,8 +23,8 @@ function SignIn() {
     },
     [loginData]
   );
-  if (auth.isAuthenticated) {
-    return <Redirect to={`/estates/`} />;
+  if (auth.isAuthenticated && auth.user) {
+    return <Redirect to={`/profiles/me`} />;
   }
   return (
     <div className="form-container">

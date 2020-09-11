@@ -1,9 +1,9 @@
 import React from "react";
-import { FaEnvelopeOpenText } from "react-icons/fa";
+import { FaEnvelopeOpenText, FaSearch } from "react-icons/fa";
 import { AiFillHome, AiOutlineForm } from "react-icons/ai";
 import { ImProfile } from "react-icons/im";
 import { GiFamilyHouse, GiPerson } from "react-icons/gi";
-import { GoSignIn, GoSignOut, GoPlus } from "react-icons/go";
+import { GoSignIn, GoSignOut } from "react-icons/go";
 
 export const DrawerData = [
   {
@@ -12,9 +12,9 @@ export const DrawerData = [
     icon: <AiFillHome />,
   },
   {
-    title: "Create ad",
-    path: "/create-ad",
-    icon: <GoPlus />,
+    title: "Search",
+    path: "/search",
+    icon: <FaSearch />,
     logged: true,
   },
   {
@@ -29,7 +29,7 @@ export const DrawerData = [
   },
   {
     title: "Profile",
-    path: "/profile",
+    path: "/profiles/me",
     icon: <ImProfile />,
     logged: true,
   },
@@ -41,7 +41,7 @@ export const DrawerData = [
   },
   {
     title: "Log out",
-    path: "/estates",
+    path: "/signin",
     icon: <GoSignOut />,
     logged: true,
   },
