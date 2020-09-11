@@ -52,7 +52,7 @@ export const getProfileByID = (user_id) => async (dispatch) => {
   }
 };
 
-export const createProfile = (data) => async (dispatch) => {
+export const createProfile = (data, history) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -64,6 +64,7 @@ export const createProfile = (data) => async (dispatch) => {
       type: GET_PROFILE,
       payload: res.data,
     });
+    history.push("/profiles/me");
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,

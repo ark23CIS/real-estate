@@ -17,6 +17,7 @@ export default function (state = initState, action) {
   const { type, payload } = action;
   switch (type) {
     case GET_PROFILE:
+    case CREATE_PROFILE:
       return {
         ...state,
         profile: payload,
@@ -37,12 +38,7 @@ export default function (state = initState, action) {
       return {
         ...state,
         loading: false,
-        profile: [],
-      };
-    case CREATE_PROFILE:
-      return {
-        ...state,
-        loading: false,
+        profile: {},
       };
     default:
       return state;

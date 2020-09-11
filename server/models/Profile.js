@@ -9,28 +9,28 @@ const ProfileSchema = new Schema({
   contactNumber: {
     type: String,
   },
-  livingAddress: {
-    country: {
-      type: String,
-      default: "-",
-    },
-    city: {
-      type: String,
-      default: "-",
-    },
-    street: {
-      type: String,
-      default: "-",
-    },
-    buildingNumber: {
-      type: String,
-      default: "-",
-    },
-    flatNumber: {
-      type: String,
-      default: "-",
-    },
-  },
+  // livingAddress: {
+  //   country: {
+  //     type: String,
+  //     default: "-",
+  //   },
+  //   city: {
+  //     type: String,
+  //     default: "-",
+  //   },
+  //   street: {
+  //     type: String,
+  //     default: "-",
+  //   },
+  //   buildingNumber: {
+  //     type: String,
+  //     default: "-",
+  //   },
+  //   flatNumber: {
+  //     type: String,
+  //     default: "-",
+  //   },
+  // },
 
   social: {
     youtube: {

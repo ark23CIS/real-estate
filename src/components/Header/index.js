@@ -8,6 +8,7 @@ import { withRouter } from "react-router";
 import { DrawerData } from "./DrawerData";
 import { logout } from "../../redux/actions";
 import { IconContext } from "react-icons";
+import { Scrollbars } from "react-custom-scrollbars";
 import "./header.scss";
 
 const Header = React.memo(({ location }) => {
@@ -38,34 +39,36 @@ const Header = React.memo(({ location }) => {
           </div>
         </div>
         <nav className={isActive ? "nav-menu active" : "nav-menu"}>
-          <ul className="nav-menu__items" onClick={toggleDrawer}>
-            <li className="navbar-toggler">
-              <Link to="#">
-                <AiOutlineClose />
-              </Link>
-            </li>
-            {DrawerData.filter(
-              (item) => item.logged !== !isAuthenticated && !loading
-            ).map((item, index) => {
-              return (
-                <li
-                  key={`${index} ${item.path}`}
-                  className={`nav-text`}
-                  onClick={item.title === "Log out" ? onClick : undefined}
-                >
-                  <Link
-                    to={item.path}
-                    className={
-                      location.pathname === item.path ? "active-page" : ""
-                    }
+          <Scrollbars style={{ width: "100%", height: "100%" }}>
+            <ul className="nav-menu__items" onClick={toggleDrawer}>
+              <li className="navbar-toggler">
+                <Link to="#">
+                  <AiOutlineClose />
+                </Link>
+              </li>
+              {DrawerData.filter(
+                (item) => item.logged !== !isAuthenticated && !loading
+              ).map((item, index) => {
+                return (
+                  <li
+                    key={`${index} ${item.path}`}
+                    className={`nav-text`}
+                    onClick={item.title === "Log out" ? onClick : undefined}
                   >
-                    {item.icon}
-                    <span>{item.title}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                    <Link
+                      to={item.path}
+                      className={
+                        location.pathname === item.path ? "active-page" : ""
+                      }
+                    >
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </Scrollbars>
         </nav>
       </IconContext.Provider>
     </Fragment>

@@ -44,7 +44,7 @@ exports.getProfileByUserIDController = async (req, res) => {
 exports.profilePostController = async (req, res) => {
   const {
     dateOfBirth,
-    livingAddress,
+    // livingAddress,
     contactNumber,
     vk,
     instagram,
@@ -68,11 +68,11 @@ exports.profilePostController = async (req, res) => {
   };
 
   const possibleProfileFields = [
-    {
-      name: "livingAddress",
-      mainProperty: true,
-      value: livingAddress,
-    },
+    // {
+    //   name: "livingAddress",
+    //   mainProperty: true,
+    //   value: livingAddress,
+    // },
     { name: "dateOfBirth", mainProperty: true, value: dateOfBirth },
     { name: "contactNumber", mainProperty: true, value: contactNumber },
     {

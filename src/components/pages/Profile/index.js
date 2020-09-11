@@ -6,7 +6,8 @@ import Banner from "../../Banner";
 import { getProfileByID, getProfile } from "../../../redux/actions";
 import "./profile.scss";
 
-function Profile({ match }) {
+function Profile({ match, history }) {
+  console.log(history);
   const {
     auth,
     profile: { profile, profiles },
