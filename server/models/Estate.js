@@ -21,10 +21,10 @@ const EstateSchema = new Schema({
     required: true,
   },
 
-  photo: [
+  photos: [
     {
       type: String,
-      default: "estate",
+      default: "default",
     },
   ],
 

@@ -8,14 +8,23 @@ import "./create-profile.scss";
 
 function index({ history }) {
   const dispatch = useDispatch();
-  const [profileData, setProfileData] = React.useState({ dateOfBirth: null });
-  const onChange = React.useCallback(
+  const [profileData, setProfileData] = React.useState({
+    dateOfBirth: null,
+    file: "",
+  });
+  const onFieldChange = React.useCallback(
     (e) => {
       const target = e.target;
       setProfileData((profileData) => ({
         ...profileData,
         [target.name]: target.value,
       }));
+    },
+    [profileData]
+  );
+  const onFileChange = React.useCallback(
+    (e) => {
+      const file = e.target.files[0];
     },
     [profileData]
   );
@@ -26,37 +35,37 @@ function index({ history }) {
   return (
     <div className="profile-data-form">
       Social Networks
-      <input type="text" name="vk" placeholder="vk" onChange={onChange} />
+      <input type="text" name="vk" placeholder="vk" onChange={onFieldChange} />
       <input
         type="text"
         name="instagram"
         placeholder="instagram"
-        onChange={onChange}
+        onChange={onFieldChange}
       />
       <input
         type="text"
         name="facebook"
         placeholder="facebook"
-        onChange={onChange}
+        onChange={onFieldChange}
       />
       <input
         type="text"
         name="twitter"
         placeholder="twitter"
-        onChange={onChange}
+        onChange={onFieldChange}
       />
       <input
         type="text"
         name="youtube"
         placeholder="youtube"
-        onChange={onChange}
+        onChange={onFieldChange}
       />
       <input
         type="text"
         name="contactNumber"
         placeholder="type Your number"
         required
-        onChange={onChange}
+        onChange={onFieldChange}
       />
       <DatePicker
         selected={profileData.dateOfBirth}
@@ -69,6 +78,12 @@ function index({ history }) {
         dateFormat="dd/MM/yyyy"
         placeholderText="type year of birth"
         required
+      />
+      <input
+        type="file"
+        name="photo"
+        onChange={onFileChange}
+        value={profileData.file}
       />
       <button onClick={onClick} className="primary-button">
         Submit

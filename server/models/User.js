@@ -18,13 +18,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  photo: {
-    type: String,
-    default: "default",
-  },
   dateOfRegistration: {
     type: Date,
     default: Date.now,
+  },
+  confirmed: {
+    type: Boolean,
+    default: false,
   },
 });
 

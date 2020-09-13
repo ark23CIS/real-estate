@@ -40,6 +40,7 @@ function Profile({ match, history }) {
         </Banner>
       )}
       {!isOwnPage && <Fragment>Profile</Fragment>}
+      {isOwnPage && profile && <Fragment>My profile</Fragment>}
     </div>
   );
 }

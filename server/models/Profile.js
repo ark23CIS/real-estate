@@ -9,28 +9,6 @@ const ProfileSchema = new Schema({
   contactNumber: {
     type: String,
   },
-  // livingAddress: {
-  //   country: {
-  //     type: String,
-  //     default: "-",
-  //   },
-  //   city: {
-  //     type: String,
-  //     default: "-",
-  //   },
-  //   street: {
-  //     type: String,
-  //     default: "-",
-  //   },
-  //   buildingNumber: {
-  //     type: String,
-  //     default: "-",
-  //   },
-  //   flatNumber: {
-  //     type: String,
-  //     default: "-",
-  //   },
-  // },
 
   social: {
     youtube: {
@@ -65,6 +43,11 @@ const ProfileSchema = new Schema({
   estates: [{ type: Schema.Types.ObjectId, ref: "profile" }],
 
   ratings: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+
+  photo: {
+    type: String,
+    default: "default",
+  },
 });
 
 module.exports = mongoose.model("profile", ProfileSchema);
