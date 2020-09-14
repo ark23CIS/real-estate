@@ -3,6 +3,7 @@ const config = require("../../webpack/webpack.config");
 const compiler = webpack(config());
 const jwt = require("jsonwebtoken");
 const { secret } = require("../constants");
+const { Profile } = require("../models");
 
 exports.authMiddleware = async function (req, res, next) {
   const token = req.header("x-auth-token");
@@ -30,3 +31,16 @@ exports.webpackDevMiddleware = require("webpack-dev-middleware")(
 exports.expressStaticGzipMiddleware = require("express-static-gzip")("build", {
   enableBrotli: true,
 });
+
+exports.last_seen = async function (req, res, next) {
+  if (req.user) {
+    await Profile.findOneAndUpdate(
+      { user: req.user.id },
+      {
+        last_seen: new Date(),
+      },
+      { new: true }
+    );
+  }
+  next();
+};

@@ -1,10 +1,11 @@
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { secret } = require("../constants");
 const { User } = require("../models");
+const {
+  nodemailer: { transporter, mailOptions },
+} = require("../constants");
 
-module.exports = async (req, res) => {
+exports.postUserCtrl = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -20,16 +21,40 @@ module.exports = async (req, res) => {
 
     user = new User({ firstName, lastName, password, email });
     user.password = await bcrypt.hash(password, salt);
+    user.confirmation_hash = await bcrypt.hash(new Date().toString(), salt);
     await user.save();
+    res.json(user);
+    transporter.sendMail(
+      mailOptions(
+        "realestate.websitee@gmail.com",
+        "danstrig2000@mail.ru",
+        "Testing and Testing",
+        "It works"
+      ),
+      (err, data) => {
+        if (err) console.log(err.message);
+        else {
+          console.log("Email.sent", data);
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
 
-    let payload = {
-      id: user.id,
-    };
-
-    jwt.sign(payload, secret, { expiresIn: 360000 }, (err, token) => {
-      if (err) throw err;
-      res.json({ token });
-    });
+exports.confirmUserCtrl = async (req, res) => {
+  const hash = req.query.hash;
+  if (!hash) {
+    return res.status(422).send("Invalid hash");
+  }
+  try {
+    let result = await User.findOneAndUpdate(
+      { confirmation_hash: hash },
+      { $set: { confirmed: true } }
+    );
+    res.json({ status: "success", message: "User successfully confirmed" });
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");

@@ -1,18 +1,33 @@
+require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 const Datauri = require("datauri/parser");
 const path = require("path");
+const nodemailer = require("nodemailer");
 
-const cloudinaryConfig = (req, res, next) => {
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
+
+let mailOptions = (from, to, subject, text) => ({
+  from,
+  to,
+  subject,
+  text,
+});
+
+const cloudinaryConfig = (_, __, next) => {
   cloudinary.config({
-    cloud_name: "dmsynjpqu",
-    api_key: "432989823973224",
-    api_secret: "HKWn8P5OlL6vkco2lysztOZltNs",
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
   });
   next();
 };
-
-exports.cloudinary = { cloudinaryConfig, uploader: cloudinary.uploader };
 
 const multerStorage = multer.memoryStorage();
 const multerUploads = multer({ multerStorage });
@@ -21,8 +36,10 @@ const dUri = new Datauri();
 
 const datauri = (req) =>
   dUri.format(path.extname(req.file.originalname).toString(), req.file.buffer);
-exports.multer = { multerUploads, datauri };
 
-exports.PORT = 5000;
-exports.mongoURI = "mongodb://localhost/estate";
-exports.secret = "aa47f8215c6f30a0dcdb2a36a9f4168e";
+exports.nodemailer = { transporter, mailOptions };
+exports.multer = { multerUploads, datauri };
+exports.cloudinary = { cloudinaryConfig, uploader: cloudinary.uploader };
+exports.PORT = process.env.PORT || 5000;
+exports.mongoURI = process.env.MONGOURI;
+exports.secret = process.env.SECRET;

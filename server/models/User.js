@@ -26,6 +26,9 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  confirmation_hash: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("user", UserSchema);

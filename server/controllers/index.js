@@ -1,4 +1,4 @@
-const usersController = require("./users-controller");
+const { confirmUserCtrl, postUserCtrl } = require("./users-controller");
 const { authGetController, authPostController } = require("./auth-controller");
 const {
   profileMeGetController,
@@ -10,7 +10,8 @@ const {
 const { postProfileFileCtrl, deleteProfileFileCtrl } = require("./filesCtrl");
 
 module.exports = {
-  usersController,
+  confirmUserCtrl,
+  postUserCtrl,
   authGetController,
   authPostController,
   profileMeGetController,

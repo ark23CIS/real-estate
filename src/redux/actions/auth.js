@@ -39,11 +39,6 @@ export const register = ({ firstName, lastName, email, password }) => async (
   const body = JSON.stringify({ email, firstName, lastName, password });
   try {
     const res = await axios.post("/api/users", body, config);
-    dispatch({
-      type: REGISTER_COMPLETE,
-      payload: res.data,
-    });
-    dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {

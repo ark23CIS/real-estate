@@ -48,6 +48,11 @@ const ProfileSchema = new Schema({
     type: String,
     default: "default",
   },
+
+  last_seen: {
+    type: Date,
+    default: new Date(),
+  },
 });
 
 module.exports = mongoose.model("profile", ProfileSchema);
