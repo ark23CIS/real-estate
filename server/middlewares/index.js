@@ -32,15 +32,21 @@ exports.expressStaticGzipMiddleware = require("express-static-gzip")("build", {
   enableBrotli: true,
 });
 
-exports.last_seen = async function (req, res, next) {
+exports.last_seen = async (req, _, next) => {
+  const token = req.header("x-auth-token");
+  if (token && !req.user) {
+    const decoded = jwt.verify(token, secret);
+    req.user = { id: decoded.id };
+  }
   if (req.user) {
-    await Profile.findOneAndUpdate(
-      { user: req.user.id },
-      {
-        last_seen: new Date(),
-      },
-      { new: true }
-    );
+    try {
+      await Profile.findOneAndUpdate(
+        { user: req.user.id },
+        { $set: { last_seen: new Date() } }
+      );
+    } catch (err) {
+      console.log(err.message);
+    }
   }
   next();
 };
