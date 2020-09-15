@@ -38,7 +38,7 @@ export default function (state = initState, action) {
       return {
         ...state,
         loading: false,
-        profile: {},
+        profile: null,
       };
     default:
       return state;

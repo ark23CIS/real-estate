@@ -55,4 +55,16 @@ const ProfileSchema = new Schema({
   },
 });
 
+ProfileSchema.virtual("isOnline").get(function () {
+  console.log(new Date(), this.last_seen);
+  return (
+    Math.trunc((Date.parse(new Date()) - Date.parse(this.last_seen)) / 60000) <
+    5
+  );
+});
+
+ProfileSchema.set("toJSON", {
+  virtuals: true,
+});
+
 module.exports = mongoose.model("profile", ProfileSchema);
