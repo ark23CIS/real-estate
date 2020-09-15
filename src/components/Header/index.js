@@ -43,7 +43,7 @@ const Header = React.memo(({ location }) => {
             <ul className="nav-menu__items" onClick={toggleDrawer}>
               <li className="navbar-toggler">
                 <Link to="#">
-                  <AiOutlineClose />
+                  <AiOutlineClose style={{ zIndex: 5 }} />
                 </Link>
               </li>
               {DrawerData.filter(

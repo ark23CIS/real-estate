@@ -120,7 +120,7 @@ exports.profilePostController = async (req, res) => {
     let profile = await Profile.findOne({ user: req.user.id });
     if (profile) {
       profile = await Profile.findByIdAndUpdate(
-        { id: req.user.id },
+        { user: req.user.id },
         { $set: profileFields },
         { new: true }
       );
@@ -142,6 +142,72 @@ exports.deleteOwnProfileController = async (req, res) => {
     res.json({ msg: "User and its profile have been removed" });
   } catch (err) {
     console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.likeProfileCtrl = async (req, res) => {
+  const liked_user_id = req.params.liked_user;
+  try {
+    const profile = await Profile.findOne({ user: liked_user_id });
+    if (!profile.likes.includes(req.user.id)) {
+      await Profile.findOneAndUpdate(
+        { user: liked_user_id },
+        { $push: { likes: req.user.id } }
+      );
+    } else {
+      await Profile.findOneAndUpdate(
+        { user: liked_user_id },
+        { $pull: { likes: req.user.id } }
+      );
+    }
+    res.json({ message: "Success" });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+  // await Profile.findOneAndUpdate({ user: user_id }, {  })
+};
+exports.dislikeProfileCtrl = async (req, res) => {
+  console.log("eeeee");
+  const disliked_user_id = req.params.disliked_user;
+  try {
+    const profile = await Profile.findOne({ user: disliked_user_id });
+    if (!profile.dislikes.includes(req.user.id)) {
+      await Profile.findOneAndUpdate(
+        { user: disliked_user_id },
+        { $push: { dislikes: req.user.id } }
+      );
+    } else {
+      await Profile.findOneAndUpdate(
+        { user: disliked_user_id },
+        { $pull: { dislikes: req.user.id } }
+      );
+    }
+    res.json({ message: "Success" });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.rateProfileCtrl = async (req, res) => {
+  const { rating } = req.body;
+  const rated_user_id = req.params.rated_user;
+  try {
+    const profile = await Profile.findOne({ user: rated_user_id });
+    const ids = profile.ratings.map(({ ratedBy }) => ratedBy);
+    if (!ids.includes(req.user.id)) {
+      const updatedProfile = await Profile.findOneAndUpdate(
+        { user: rated_user_id },
+        { $push: { ratings: { rating, ratedBy: req.user.id } } }
+      );
+      res.json({ status: "Rating updated", profile: updatedProfile });
+    } else {
+      res.json({ status: "Already rated before" });
+    }
+  } catch (err) {
+    console.log(err.message);
     res.status(500).send("Server Error");
   }
 };

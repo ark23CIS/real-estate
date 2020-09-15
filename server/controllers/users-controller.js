@@ -1,9 +1,8 @@
+require("dotenv").config();
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const { User } = require("../models");
-const {
-  nodemailer: { transporter, mailOptions },
-} = require("../constants");
+const { nodemailer } = require("../constants");
 
 exports.postUserCtrl = async (req, res) => {
   const errors = validationResult(req);
@@ -24,17 +23,17 @@ exports.postUserCtrl = async (req, res) => {
     user.confirmation_hash = await bcrypt.hash(new Date().toString(), salt);
     await user.save();
     res.json(user);
-    transporter.sendMail(
-      mailOptions(
-        "realestate.websitee@gmail.com",
-        "danstrig2000@mail.ru",
-        "Testing and Testing",
-        "It works"
-      ),
-      (err, data) => {
-        if (err) console.log(err.message);
+    nodemailer.sendMail(
+      {
+        from: "admin@test.com",
+        to: user.email,
+        subject: "Email confirmation Real Estate",
+        html: `Hi, ${user.fullName}. For email confirmation follow <a href="http://localhost:${process.env.PORT}/api/users/confirm?hash=${user.confirmation_hash}">the link</a>`,
+      },
+      function (err, info) {
+        if (err) console.log(err);
         else {
-          console.log("Email.sent", data);
+          console.log(info);
         }
       }
     );
@@ -50,7 +49,7 @@ exports.confirmUserCtrl = async (req, res) => {
     return res.status(422).send("Invalid hash");
   }
   try {
-    let result = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { confirmation_hash: hash },
       { $set: { confirmed: true } }
     );

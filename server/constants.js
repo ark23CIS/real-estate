@@ -5,20 +5,16 @@ const Datauri = require("datauri/parser");
 const path = require("path");
 const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
+const nodeMailerOptions = {
+  host: process.env.NODEMAILER_HOST || "smtp.mailtrap.io",
+  port: Number(process.env.NODEMAILER_PORT) || 2525,
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
+    user: process.env.NODEMAILER_USER,
+    pass: process.env.NODEMAILER_PASS,
   },
-});
-
-let mailOptions = (from, to, subject, text) => ({
-  from,
-  to,
-  subject,
-  text,
-});
+  secureConnection: false,
+  requireTLS: true,
+};
 
 const cloudinaryConfig = (_, __, next) => {
   cloudinary.config({
@@ -37,7 +33,7 @@ const dUri = new Datauri();
 const datauri = (req) =>
   dUri.format(path.extname(req.file.originalname).toString(), req.file.buffer);
 
-exports.nodemailer = { transporter, mailOptions };
+exports.nodemailer = nodemailer.createTransport(nodeMailerOptions);
 exports.multer = { multerUploads, datauri };
 exports.cloudinary = { cloudinaryConfig, uploader: cloudinary.uploader };
 exports.PORT = process.env.PORT || 5000;

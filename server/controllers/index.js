@@ -6,6 +6,9 @@ const {
   getAllProfilesController,
   getProfileByUserIDController,
   deleteOwnProfileController,
+  likeProfileCtrl,
+  dislikeProfileCtrl,
+  rateProfileCtrl,
 } = require("./profile-controller");
 const { postProfileFileCtrl, deleteProfileFileCtrl } = require("./filesCtrl");
 
@@ -21,4 +24,7 @@ module.exports = {
   deleteOwnProfileController,
   postProfileFileCtrl,
   deleteProfileFileCtrl,
+  likeProfileCtrl,
+  dislikeProfileCtrl,
+  rateProfileCtrl,
 };

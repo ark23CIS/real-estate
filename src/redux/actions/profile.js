@@ -72,3 +72,43 @@ export const createProfile = (data, history) => async (dispatch) => {
     });
   }
 };
+
+export const like = (user_id) => async () => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    await axios.put(`/api/profiles/like/${user_id}`, null, config);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const dislike = (user_id) => async () => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    await axios.put(`/api/profiles/dislike/${user_id}`, null, config);
+    console.log(`/api/profiles/dislike/${user_id}`);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const rate = (user_id, rating) => async () => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    await axios.put(`/api/profiles/rate/${user_id}`, { rating }, config);
+  } catch (err) {
+    console.log(err.message);
+  }
+};

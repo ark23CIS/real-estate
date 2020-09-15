@@ -3,7 +3,14 @@ import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Banner from "../../Banner";
-import { getProfileByID, getProfile } from "../../../redux/actions";
+import { Rating } from "../../index";
+import {
+  getProfileByID,
+  getProfile,
+  like,
+  dislike,
+} from "../../../redux/actions";
+import { ThumbDown, ThumbUp } from "@material-ui/icons";
 import "./profile.scss";
 
 function Profile({ match, history }) {
@@ -14,6 +21,7 @@ function Profile({ match, history }) {
   } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [isOwnPage, setIsOwnPage] = React.useState(false);
+
   React.useEffect(() => {
     if (
       match.params.profileID === "me" ||
@@ -26,10 +34,36 @@ function Profile({ match, history }) {
       setIsOwnPage(false);
     }
   }, [dispatch, auth]);
+
+  const onLike = React.useCallback(() => {
+    if (auth.user && auth.user._id) {
+      dispatch(
+        like(
+          match.params.profileID === "me"
+            ? auth.user._id
+            : match.params.profileID
+        )
+      );
+    }
+  }, [dispatch]);
+
+  const onDislike = React.useCallback(() => {
+    if (auth.user && auth.user._id) {
+      dispatch(
+        dislike(
+          match.params.profileID === "me"
+            ? auth.user._id
+            : match.params.profileID
+        )
+      );
+    }
+  }, [dispatch]);
+
   if (auth.user && auth) {
     console.log(match.params.profileID, auth.user._id);
     console.log(isOwnPage);
   }
+
   return (
     <div>
       {!profile && isOwnPage && (
@@ -41,6 +75,13 @@ function Profile({ match, history }) {
       )}
       {!isOwnPage && <Fragment>Profile</Fragment>}
       {isOwnPage && profile && <Fragment>My profile</Fragment>}
+      {profile && (
+        <div>
+          <Rating />
+          <ThumbDown onClick={onDislike} />
+          <ThumbUp onClick={onLike} />
+        </div>
+      )}
     </div>
   );
 }

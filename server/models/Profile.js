@@ -32,17 +32,34 @@ const ProfileSchema = new Schema({
     type: Date,
   },
 
-  messages: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+  messages: [
+    {
+      text: String,
+      author: { type: Schema.Types.ObjectId, ref: "user" },
+      receiver: { type: Schema.Types.ObjectId, ref: "user" },
+    },
+  ],
 
-  comments: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+  comments: [
+    {
+      text: String,
+      created: { type: Date, default: Date.now },
+      postedBy: { type: mongoose.Schema.ObjectId, ref: "user" },
+    },
+  ],
 
-  likes: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+  likes: [{ type: Schema.Types.ObjectId, ref: "user" }],
 
-  dislikes: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+  dislikes: [{ type: Schema.Types.ObjectId, ref: "user" }],
 
-  estates: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+  estates: [{ type: Schema.Types.ObjectId, ref: "user" }],
 
-  ratings: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+  ratings: [
+    {
+      rating: Number,
+      ratedBy: { type: Schema.Types.ObjectId, ref: "user" },
+    },
+  ],
 
   photo: {
     type: String,
@@ -62,6 +79,22 @@ ProfileSchema.virtual("isOnline").get(function () {
     5
   );
 });
+
+ProfileSchema.virtual("totalRating").get(function () {
+  const ratings = this.ratings.map(({ rating }) => rating);
+  const amountOfRatings = ratings.length;
+  return (ratings.reduce((p, c) => p + c, 0) / amountOfRatings).toFixed(1);
+});
+
+const virtualTotalField = (field) => {
+  ProfileSchema.virtual(`amountOf${field}`).get(function () {
+    return this[field].length;
+  });
+};
+
+const fields = ["likes", "dislikes", "comments", "estates"];
+
+fields.forEach((val) => virtualTotalField(val));
 
 ProfileSchema.set("toJSON", {
   virtuals: true,
