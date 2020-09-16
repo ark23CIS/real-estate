@@ -9,6 +9,8 @@ const {
   likeProfileCtrl,
   dislikeProfileCtrl,
   rateProfileCtrl,
+  commentProfileCtrl,
+  uncommentProfileCtrl,
 } = require("../controllers");
 const router = express.Router();
 
@@ -25,6 +27,14 @@ router.put("/like/:liked_user", authMiddleware, likeProfileCtrl);
 router.put("/dislike/:disliked_user", authMiddleware, dislikeProfileCtrl);
 
 router.put("/rate/:rated_user", authMiddleware, rateProfileCtrl);
+
+router.put("/comment/:commented_user", authMiddleware, commentProfileCtrl);
+
+router.put(
+  "/uncomment/:uncommented_user",
+  authMiddleware,
+  uncommentProfileCtrl
+);
 
 router.delete("/me", authMiddleware, deleteOwnProfileController);
 

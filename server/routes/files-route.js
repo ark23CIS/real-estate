@@ -1,9 +1,6 @@
 const express = require("express");
 const { Profile } = require("../models");
-const {
-  postProfileFileCtrl,
-  deleteProfileFileCtrl,
-} = require("../controllers");
+const { deleteProfileFileCtrl } = require("../controllers");
 const {
   multer: { multerUploads, datauri },
   cloudinary: { cloudinaryConfig, uploader },

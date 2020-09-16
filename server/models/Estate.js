@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const EstateSchema = new Schema({
   postedBy: {
     type: Schema.Types.ObjectId,
-    ref: "profile",
+    ref: "user",
   },
   contactNumber: {
     type: String,

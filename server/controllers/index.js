@@ -9,8 +9,12 @@ const {
   likeProfileCtrl,
   dislikeProfileCtrl,
   rateProfileCtrl,
+  commentProfileCtrl,
+  uncommentProfileCtrl,
 } = require("./profile-controller");
-const { postProfileFileCtrl, deleteProfileFileCtrl } = require("./filesCtrl");
+const { deleteProfileFileCtrl } = require("./filesCtrl");
+const { createEstate } = require("./estateCtrl");
+const { createRenter } = require("./renterCtrl");
 
 module.exports = {
   confirmUserCtrl,
@@ -22,9 +26,12 @@ module.exports = {
   getAllProfilesController,
   getProfileByUserIDController,
   deleteOwnProfileController,
-  postProfileFileCtrl,
   deleteProfileFileCtrl,
   likeProfileCtrl,
   dislikeProfileCtrl,
   rateProfileCtrl,
+  commentProfileCtrl,
+  uncommentProfileCtrl,
+  createRenter,
+  createEstate,
 };
