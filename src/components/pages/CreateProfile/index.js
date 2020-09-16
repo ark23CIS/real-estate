@@ -5,6 +5,8 @@ import { createProfile } from "../../../redux/actions";
 import { withRouter } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import "./create-profile.scss";
+import PropTypes from "prop-types";
+import { CreateProfile } from "..";
 
 function index({ history }) {
   const dispatch = useDispatch();
@@ -91,5 +93,9 @@ function index({ history }) {
     </div>
   );
 }
+
+index.propTypes = {
+  history: PropTypes.object,
+};
 
 export default React.memo(withRouter(index));

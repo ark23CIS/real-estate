@@ -10,6 +10,8 @@ import { logout } from "../../redux/actions";
 import { IconContext } from "react-icons";
 import { Scrollbars } from "react-custom-scrollbars";
 import "./header.scss";
+import index from "../Rating";
+import PropTypes from "prop-types";
 
 const Header = React.memo(({ location }) => {
   const dispatch = useDispatch();
@@ -74,5 +76,9 @@ const Header = React.memo(({ location }) => {
     </Fragment>
   );
 });
+
+index.propTypes = {
+  location: PropTypes.object,
+};
 
 export default withRouter(React.memo(Header));

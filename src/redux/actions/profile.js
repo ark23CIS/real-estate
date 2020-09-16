@@ -73,7 +73,7 @@ export const createProfile = (data, history) => async (dispatch) => {
   }
 };
 
-export const like = (user_id) => async () => {
+export const likeProfile = (user_id) => async () => {
   try {
     const config = {
       headers: {
@@ -86,7 +86,7 @@ export const like = (user_id) => async () => {
   }
 };
 
-export const dislike = (user_id) => async () => {
+export const dislikeProfile = (user_id) => async () => {
   try {
     const config = {
       headers: {
@@ -100,7 +100,7 @@ export const dislike = (user_id) => async () => {
   }
 };
 
-export const rate = (user_id, rating) => async () => {
+export const rateProfile = (user_id, rating) => async () => {
   try {
     const config = {
       headers: {
@@ -108,6 +108,7 @@ export const rate = (user_id, rating) => async () => {
       },
     };
     await axios.put(`/api/profiles/rate/${user_id}`, { rating }, config);
+    console.log(`/api/profiles/rate/${user_id}`);
   } catch (err) {
     console.log(err.message);
   }

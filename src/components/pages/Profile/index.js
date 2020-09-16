@@ -3,12 +3,13 @@ import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Banner from "../../Banner";
+import PropTypes from "prop-types";
 import { Rating } from "../../index";
 import {
   getProfileByID,
   getProfile,
-  like,
-  dislike,
+  likeProfile,
+  dislikeProfile,
 } from "../../../redux/actions";
 import { ThumbDown, ThumbUp } from "@material-ui/icons";
 import "./profile.scss";
@@ -38,7 +39,7 @@ function Profile({ match, history }) {
   const onLike = React.useCallback(() => {
     if (auth.user && auth.user._id) {
       dispatch(
-        like(
+        likeProfile(
           match.params.profileID === "me"
             ? auth.user._id
             : match.params.profileID
@@ -50,7 +51,7 @@ function Profile({ match, history }) {
   const onDislike = React.useCallback(() => {
     if (auth.user && auth.user._id) {
       dispatch(
-        dislike(
+        dislikeProfile(
           match.params.profileID === "me"
             ? auth.user._id
             : match.params.profileID
@@ -77,7 +78,7 @@ function Profile({ match, history }) {
       {isOwnPage && profile && <Fragment>My profile</Fragment>}
       {profile && (
         <div>
-          <Rating />
+          <Rating authUserID={auth.user._id || null} />
           <ThumbDown onClick={onDislike} />
           <ThumbUp onClick={onLike} />
         </div>
@@ -86,4 +87,9 @@ function Profile({ match, history }) {
   );
 }
 
-export default withRouter(React.memo(Profile));
+Profile.propTypes = {
+  match: PropTypes.object,
+  history: PropTypes.object,
+};
+
+export default React.memo(withRouter(Profile));

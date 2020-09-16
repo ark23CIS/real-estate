@@ -1,15 +1,28 @@
 import React from "react";
 import StarRatingComponent from "react-star-rating-component";
 import "./stars.scss";
+import { useDispatch } from "react-redux";
+import { rateProfile } from "../../redux/actions";
+import { withRouter } from "react-router";
+import PropTypes from "prop-types";
 
-function index() {
+const index = ({ match, authUserID }) => {
+  const dispatch = useDispatch();
   const [rating, setRating] = React.useState(1);
   const onStarClick = React.useCallback(
     (next) => {
-      console.log(next);
+      if (match.params.profileID)
+        dispatch(
+          rateProfile(
+            match.params.profileID === "me"
+              ? authUserID
+              : match.params.profileID,
+            next
+          )
+        );
       setRating(next);
     },
-    [setRating]
+    [dispatch, setRating, authUserID]
   );
   return (
     <div className="stars">
@@ -21,6 +34,11 @@ function index() {
       />
     </div>
   );
-}
+};
 
-export default index;
+index.propTypes = {
+  match: PropTypes.object,
+  authUserID: PropTypes.string,
+};
+
+export default React.memo(withRouter(index));

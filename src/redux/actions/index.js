@@ -5,7 +5,7 @@ export {
   getProfile,
   getProfileByID,
   createProfile,
-  like,
-  dislike,
-  rate,
+  likeProfile,
+  dislikeProfile,
+  rateProfile,
 } from "./profile";

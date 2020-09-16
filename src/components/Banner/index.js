@@ -1,5 +1,6 @@
 import React from "react";
 import "./banner.scss";
+import PropTypes from "prop-types";
 
 function index({ children, title, subtitle }) {
   return (
@@ -11,5 +12,11 @@ function index({ children, title, subtitle }) {
     </div>
   );
 }
+
+index.propTypes = {
+  children: PropTypes.string,
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+};
 
 export default index;
