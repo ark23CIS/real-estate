@@ -79,8 +79,8 @@ function Profile({ match, history }) {
       {profile && (
         <div>
           <Rating authUserID={auth.user._id || null} />
-          <ThumbDown onClick={onDislike} />
-          <ThumbUp onClick={onLike} />
+          <ThumbDown className="cursor" onClick={onDislike} />
+          <ThumbUp className="cursor" onClick={onLike} />
         </div>
       )}
     </div>
