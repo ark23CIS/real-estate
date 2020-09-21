@@ -1,16 +1,17 @@
 const express = require("express");
 const { authMiddleware } = require("../middlewares");
+const { Profile } = require("../models");
 const {
   profileMeGetController,
   profilePostController,
-  getAllProfilesController,
   getProfileByUserIDController,
   deleteOwnProfileController,
-  likeProfileCtrl,
-  dislikeProfileCtrl,
-  rateProfileCtrl,
-  commentProfileCtrl,
-  uncommentProfileCtrl,
+  getAllCollectionsController,
+  likeCollectionCtrl,
+  dislikeCollectionCtrl,
+  rateCollectionCtrl,
+  commentCollectionCtrl,
+  uncommentCollectionCtrl,
 } = require("../controllers");
 const router = express.Router();
 
@@ -18,22 +19,38 @@ router.get("/me", authMiddleware, profileMeGetController);
 
 router.post("/", authMiddleware, profilePostController);
 
-router.get("/", authMiddleware, getAllProfilesController);
+router.get("/", authMiddleware, getAllCollectionsController(Profile));
 
 router.get("/id/:user_id", authMiddleware, getProfileByUserIDController);
 
-router.put("/like/:liked_user", authMiddleware, likeProfileCtrl);
-
-router.put("/dislike/:disliked_user", authMiddleware, dislikeProfileCtrl);
-
-router.put("/rate/:rated_user", authMiddleware, rateProfileCtrl);
-
-router.put("/comment/:commented_user", authMiddleware, commentProfileCtrl);
+router.put(
+  "/like/:liked_collection",
+  authMiddleware,
+  likeCollectionCtrl(Profile)
+);
 
 router.put(
-  "/uncomment/:uncommented_user",
+  "/dislike/:disliked_collection",
   authMiddleware,
-  uncommentProfileCtrl
+  dislikeCollectionCtrl(Profile)
+);
+
+router.put(
+  "/rate/:rated_collection",
+  authMiddleware,
+  rateCollectionCtrl(Profile)
+);
+
+router.put(
+  "/comment/:commented_collection",
+  authMiddleware,
+  commentCollectionCtrl(Profile)
+);
+
+router.put(
+  "/uncomment/:uncommented_collection",
+  authMiddleware,
+  uncommentCollectionCtrl(Profile)
 );
 
 router.delete("/me", authMiddleware, deleteOwnProfileController);

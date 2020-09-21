@@ -1,7 +1,16 @@
 const express = require("express");
 const { check } = require("express-validator");
-const { createRenter } = require("../controllers");
+const {
+  createRenter,
+  getAllCollectionsController,
+  likeCollectionCtrl,
+  dislikeCollectionCtrl,
+  rateCollectionCtrl,
+  commentCollectionCtrl,
+  uncommentCollectionCtrl,
+} = require("../controllers");
 const { authMiddleware } = require("../middlewares");
+const { Renter } = require("../models");
 const router = express.Router();
 
 router.post(
@@ -18,6 +27,38 @@ router.post(
     check("footage", "Footage should be a number").isNumeric(),
   ],
   createRenter
+);
+
+router.get("/", authMiddleware, getAllCollectionsController(Renter));
+
+router.put(
+  "/like/:liked_collection",
+  authMiddleware,
+  likeCollectionCtrl(Renter)
+);
+
+router.put(
+  "/dislike/:disliked_collection",
+  authMiddleware,
+  dislikeCollectionCtrl(Renter)
+);
+
+router.put(
+  "/rate/:rated_collection",
+  authMiddleware,
+  rateCollectionCtrl(Renter)
+);
+
+router.put(
+  "/comment/:commented_collection",
+  authMiddleware,
+  commentCollectionCtrl(Renter)
+);
+
+router.put(
+  "/uncomment/:uncommented_collection",
+  authMiddleware,
+  uncommentCollectionCtrl(Renter)
 );
 
 module.exports = router;
