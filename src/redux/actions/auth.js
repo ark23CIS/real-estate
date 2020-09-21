@@ -10,6 +10,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_PROFILE,
+  CONFIRMATION,
 } from "./types";
 
 export const loadUser = () => async (dispatch) => {
@@ -28,9 +29,13 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
-export const register = ({ firstName, lastName, email, password }) => async (
-  dispatch
-) => {
+export const register = ({
+  firstName,
+  lastName,
+  email,
+  password,
+  history,
+}) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +43,8 @@ export const register = ({ firstName, lastName, email, password }) => async (
   };
   const body = JSON.stringify({ email, firstName, lastName, password });
   try {
-    const res = await axios.post("/api/users", body, config);
+    await axios.post("/api/users", body, config);
+    history.push("/check-info");
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -47,6 +53,15 @@ export const register = ({ firstName, lastName, email, password }) => async (
     dispatch({
       type: REGISTER_FAIL,
     });
+  }
+};
+
+export const confirm = (hash) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/users/confirm?hash=${hash}`);
+    dispatch({ type: CONFIRMATION, payload: res.data.confirmation_status });
+  } catch (err) {
+    dispatch({ type: CONFIRMATION, payload: "error" });
   }
 };
 

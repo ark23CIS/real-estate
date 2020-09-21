@@ -146,23 +146,23 @@ exports.deleteOwnProfileController = async (req, res) => {
   }
 };
 
-exports.likeProfileCtrl = async (req, res) => {
-  const liked_user_id = req.params.liked_user;
+exports.likeCollectionCtrl = (Model) => async (req, res) => {
+  const liked_collection_id = req.params.liked_collection;
   try {
-    const profile = await Profile.findOne({ user: liked_user_id });
-    let res;
-    if (!profile.likes.includes(req.user.id)) {
-      res = await Profile.findOneAndUpdate(
+    const collection = await Model.findOne({ user: liked_collection_id });
+    let result;
+    if (!collection.likes.includes(req.user.id)) {
+      result = await Model.findOneAndUpdate(
         { user: liked_user_id },
         { $push: { likes: req.user.id } }
       );
     } else {
-      res = await Profile.findOneAndUpdate(
+      result = await Model.findOneAndUpdate(
         { user: liked_user_id },
         { $pull: { likes: req.user.id } }
       );
     }
-    res.json(res);
+    res.json(result);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
@@ -174,19 +174,19 @@ exports.dislikeProfileCtrl = async (req, res) => {
   const disliked_user_id = req.params.disliked_user;
   try {
     const profile = await Profile.findOne({ user: disliked_user_id });
-    let res;
+    let result;
     if (!profile.dislikes.includes(req.user.id)) {
-      res = await Profile.findOneAndUpdate(
+      result = await Profile.findOneAndUpdate(
         { user: disliked_user_id },
         { $push: { dislikes: req.user.id } }
       );
     } else {
-      res = await Profile.findOneAndUpdate(
+      result = await Profile.findOneAndUpdate(
         { user: disliked_user_id },
         { $pull: { dislikes: req.user.id } }
       );
     }
-    res.json(res);
+    res.json(result);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
@@ -218,11 +218,11 @@ exports.commentProfileCtrl = async (req, res) => {
   const { commented_user: commented_user_id } = req.params;
   const { text } = req.body;
   try {
-    let res = await Profile.findOneAndUpdate(
+    let result = await Profile.findOneAndUpdate(
       { user: commented_user_id },
       { $push: { comments: { text, postedBy: req.user.id } } }
     );
-    res.json(res);
+    res.json(result);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");
@@ -235,11 +235,11 @@ exports.uncommentProfileCtrl = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: uncommentedUserID });
     const comments = profile.comments.filter(({ id }) => id !== commentID);
-    const res = await profile.findOneAndUpdate(
+    const result = await profile.findOneAndUpdate(
       { user: uncommentedUserID },
       { $set: { comments } }
     );
-    res.json(res);
+    res.json(result);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server Error");

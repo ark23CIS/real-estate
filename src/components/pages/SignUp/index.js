@@ -1,10 +1,25 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { useStyles, Copyright } from "./signup-helper";
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Link,
+  TextField,
+  CssBaseline,
+  Button,
+  Avatar,
+} from "@material-ui/core";
+import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register, addError } from "../../../redux/actions";
-import "./sign-up.scss";
+import { withRouter } from "react-router";
+import PropTypes from "prop-types";
 
-function SignUp() {
+function SignUp({ history }) {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const [registrationData, setRegistrationData] = React.useState({
@@ -14,14 +29,19 @@ function SignUp() {
     email: "",
     passwordConfirm: "",
   });
-  const onSubmit = React.useCallback(async () => {
-    if (registrationData.password !== registrationData.passwordConfirm) {
-      dispatch(addError("Password do not match"));
-      console.log("error");
-      return;
-    }
-    dispatch(register(registrationData));
-  }, [dispatch, registrationData]);
+  const onSubmit = React.useCallback(
+    async (e) => {
+      e.preventDefault();
+      console.log(registrationData);
+      if (registrationData.password !== registrationData.passwordConfirm) {
+        dispatch(addError("Password do not match"));
+        console.log("error");
+        return;
+      }
+      dispatch(register({ ...registrationData, history }));
+    },
+    [dispatch, registrationData]
+  );
   const onChange = React.useCallback(
     (e) => {
       setRegistrationData({
@@ -34,91 +54,111 @@ function SignUp() {
   if (auth.isAuthenticated && auth.user) {
     return <Redirect to={`/profiles/me`} />;
   }
+
   return (
-    <div className="form-container">
-      <div className="form-content">
-        <div className="form">
-          <h1>Rent Real Estate today!</h1>
-          <div className="form-inputs">
-            <label htmlFor="firstName" className="form__label">
-              First Name
-            </label>
-            <input
-              id="firstName"
-              type="text"
-              className="form__input"
-              name="firstName"
-              placeholder="First name"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-inputs">
-            <label htmlFor="lastName" className="form__label">
-              Last name
-            </label>
-            <input
-              id="lastName"
-              type="text"
-              className="form__input"
-              name="lastName"
-              placeholder="Last name"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-inputs">
-            <label htmlFor="email" className="form__label">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="form__input"
-              name="email"
-              placeholder="Email"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-inputs">
-            <label htmlFor="password" className="form__label">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              className="form__input"
-              name="password"
-              placeholder="Password"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-inputs">
-            <label htmlFor="confirm-password" className="form__label">
-              Confirm Password
-            </label>
-            <input
-              id="confirm-password"
-              type="password"
-              className="form__input"
-              name="passwordConfirm"
-              placeholder="Confirm Password"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <button className="form__input-btn" type="submit" onClick={onSubmit}>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <div className={classes.form}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="fname"
+                name="firstName"
+                variant="outlined"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="lname"
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="passwordConfirm"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="current-password"
+                onChange={onChange}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={onSubmit}
+          >
             Sign Up
-          </button>
-          <span>
-            Already have an account ? <Link to="/signin">Login</Link>
-          </span>
+          </Button>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Link href="#/signin" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
         </div>
       </div>
-    </div>
+      <Box mt={5}>
+        <Copyright />
+      </Box>
+    </Container>
   );
 }
 
-export default React.memo(SignUp);
+SignUp.propTypes = {
+  history: PropTypes.object,
+};
+
+export default React.memo(withRouter(SignUp));

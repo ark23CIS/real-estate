@@ -34,6 +34,17 @@ exports.authPostController = async (req, res) => {
         .status(400)
         .json({ errors: [{ msg: "Incorrect password! Try one more time" }] });
     }
+    if (!user.confirmed) {
+      return res
+        .status(400)
+        .json({
+          errors: [
+            {
+              msg: "You should confirm your email and only then try to log in",
+            },
+          ],
+        });
+    }
     let payload = {
       id: user.id,
     };

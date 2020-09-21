@@ -6,15 +6,55 @@ exports.createEstate = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { region, footage, price, text, title, contactNumber } = req.body;
-  const estate = new Estate({ ...req.body });
+  const { region, footage, price, text, title, contactNumber, user } = req.body;
+  const estate = new Estate({
+    region,
+    footage,
+    price,
+    text,
+    title,
+    contactNumber,
+    user,
+  });
   try {
-    const res = await estate.save();
-    res.json(res);
+    const result = await estate.save();
+    res.json(result);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 };
 
-exports.deleteEstate = async (req, res) => {};
+exports.getOwnEstates = async (req, res) => {
+  try {
+    const estates = await Estate.find({ user: req.user.id });
+    res.json(estates);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.getAllEstates = async (req, res) => {
+  try {
+    const estates = await Estate.find();
+    res.json(estates);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.deleteEstate = async (req, res) => {
+  const { estateID, user } = req.body;
+  if (req.user.id != user) {
+    res.status(400).json({ status: "You cannot delete the renter ad" });
+  }
+  try {
+    await Estate.findOneAndRemove({ id: estateID });
+    res.json({ status: "Estate has been removed successfully" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};

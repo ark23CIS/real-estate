@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 function index({ children, title, subtitle }) {
   return (
     <div className="banner">
-      <h1>{title}</h1>
+      <h1 className="banner__title">{title}</h1>
       <div />
       <p>{subtitle}</p>
       {children}

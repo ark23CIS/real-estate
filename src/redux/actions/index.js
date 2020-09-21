@@ -1,4 +1,4 @@
-export { register, logout, login, loadUser } from "./auth";
+export { register, logout, login, loadUser, confirm } from "./auth";
 export { addError } from "./error";
 export {
   getAllProfiles,

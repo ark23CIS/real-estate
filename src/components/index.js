@@ -4,3 +4,6 @@ export { default as Error } from "./Error";
 export { default as Banner } from "./Banner";
 export { default as Rating } from "./Rating";
 export { default as Comments } from "./Comments";
+export { default as TabComponent } from "./TabComponent";
+export { default as CheckInfo } from "./CheckInfo";
+export { default as Block } from "./Block";

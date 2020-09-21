@@ -52,8 +52,6 @@ const ProfileSchema = new Schema({
 
   dislikes: [{ type: Schema.Types.ObjectId, ref: "user" }],
 
-  estates: [{ type: Schema.Types.ObjectId, ref: "user" }],
-
   ratings: [
     {
       rating: Number,
@@ -73,7 +71,6 @@ const ProfileSchema = new Schema({
 });
 
 ProfileSchema.virtual("isOnline").get(function () {
-  console.log(new Date(), this.last_seen);
   return (
     Math.trunc((Date.parse(new Date()) - Date.parse(this.last_seen)) / 60000) <
     5
@@ -82,13 +79,13 @@ ProfileSchema.virtual("isOnline").get(function () {
 
 ProfileSchema.virtual("totalRating").get(function () {
   const ratings = this.ratings.map(({ rating }) => rating);
-  const amountOfRatings = ratings.length;
+  const amountOfRatings = ratings ? ratings.length : 0;
   return (ratings.reduce((p, c) => p + c, 0) / amountOfRatings).toFixed(1);
 });
 
 const virtualTotalField = (field) => {
   ProfileSchema.virtual(`amountOf${field}`).get(function () {
-    return this[field].length;
+    return this[field] ? this[field].length : 0;
   });
 };
 

@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-import NewAd from "./NewAd";
+import { CreateAd } from "..";
 import "./home.scss";
 
 function Home() {
@@ -23,7 +23,7 @@ function Home() {
   return (
     <div>
       {isAuthenticated ? (
-        <NewAd />
+        <CreateAd />
       ) : (
         <Fragment>
           <div className="hero">

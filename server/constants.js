@@ -6,14 +6,15 @@ const path = require("path");
 const nodemailer = require("nodemailer");
 
 const nodeMailerOptions = {
-  host: process.env.NODEMAILER_HOST || "smtp.mailtrap.io",
-  port: Number(process.env.NODEMAILER_PORT) || 2525,
+  host: process.env.NODEMAILER_HOST,
+  port: Number(process.env.NODEMAILER_PORT),
   auth: {
     user: process.env.NODEMAILER_USER,
     pass: process.env.NODEMAILER_PASS,
   },
-  secureConnection: false,
-  requireTLS: true,
+  // secureConnection: false,
+  // requireTLS: true,
+  secure: false,
 };
 
 const cloudinaryConfig = (_, __, next) => {
@@ -33,7 +34,9 @@ const dUri = new Datauri();
 const datauri = (req) =>
   dUri.format(path.extname(req.file.originalname).toString(), req.file.buffer);
 
-exports.nodemailer = nodemailer.createTransport(nodeMailerOptions);
+exports.nodemailer = nodemailer.createTransport(nodeMailerOptions, {
+  from: `<${process.env.NODEMAILER_USER}>`,
+});
 exports.multer = { multerUploads, datauri };
 exports.cloudinary = { cloudinaryConfig, uploader: cloudinary.uploader };
 exports.PORT = process.env.PORT || 5000;

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const EstateSchema = new Schema({
-  postedBy: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: "user",
   },

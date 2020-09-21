@@ -25,10 +25,9 @@ exports.postUserCtrl = async (req, res) => {
     res.json(user);
     nodemailer.sendMail(
       {
-        from: "admin@test.com",
         to: user.email,
         subject: "Email confirmation Real Estate",
-        html: `Hi, ${user.fullName}. For email confirmation follow <a href="http://localhost:${process.env.PORT}/api/users/confirm?hash=${user.confirmation_hash}">the link</a>`,
+        html: `Hi, ${user.fullName}. For email confirmation follow <a href="http://localhost:${process.env.PORT}/#/check-info?hash=${user.confirmation_hash}">the link</a>`,
       },
       function (err, info) {
         if (err) console.log(err);
@@ -53,9 +52,12 @@ exports.confirmUserCtrl = async (req, res) => {
       { confirmation_hash: hash },
       { $set: { confirmed: true } }
     );
-    res.json({ status: "success", message: "User successfully confirmed" });
+    res.json({
+      confirmation_status: "success",
+      message: "User successfully confirmed",
+    });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send("Server Error");
+    res.json({ confirmation_status: "error" });
   }
 };

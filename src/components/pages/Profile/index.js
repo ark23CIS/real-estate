@@ -68,7 +68,7 @@ function Profile({ match, history }) {
   return (
     <div>
       {!profile && isOwnPage && (
-        <Banner title="Need to create Profile">
+        <Banner title="Need to create a Profile">
           <Link to="/create-profile" className="primary-button">
             Create Profile
           </Link>

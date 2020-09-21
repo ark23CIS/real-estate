@@ -13,7 +13,8 @@ import {
   Search,
   CreateProfile,
 } from "./pages";
-import Error from "./Error";
+import { Error, CheckInfo } from ".";
+import "antd/dist/antd.css";
 import "../styles.css";
 
 export default function Routes() {
@@ -31,6 +32,7 @@ export default function Routes() {
         <Route path="/search" component={Search} />
         <Route path="/renters/:renterID" component={SingleRenter} />
         <Route path="/create-profile" component={CreateProfile} />
+        <Route path="/check-info" component={CheckInfo} />
         <Route component={NotFound} />
       </Switch>
     </div>

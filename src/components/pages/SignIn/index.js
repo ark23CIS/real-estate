@@ -1,10 +1,24 @@
 import React from "react";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Link,
+  TextField,
+  Avatar,
+  Button,
+  CssBaseline,
+} from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "../../../redux/actions";
-import { Link, Redirect } from "react-router-dom";
-import "../SignUp/sign-up.scss";
+import { Redirect } from "react-router-dom";
+import { Copyright } from "../SignUp/signup-helper";
+import { useStyles } from "./signin-helper";
 
-function SignIn() {
+export default function SignIn() {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const [loginData, setLoginData] = React.useState({
@@ -26,49 +40,64 @@ function SignIn() {
   if (auth.isAuthenticated && auth.user) {
     return <Redirect to={`/profiles/me`} />;
   }
+
   return (
-    <div className="form-container">
-      <div className="form-content">
-        <div className="form">
-          <h1>Rent Real Estate today!</h1>
-          <div className="form-inputs">
-            <label htmlFor="email" className="form__label">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="form__input"
-              name="email"
-              placeholder="Email"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-inputs">
-            <label htmlFor="password" className="form__label">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              className="form__input"
-              name="password"
-              placeholder="Password"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <button className="form__input-btn" type="submit" onClick={onClick}>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <div className={classes.form}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={onChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={onChange}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={onClick}
+          >
             Sign In
-          </button>
-          <span>
-            Don't have an account yet ? <Link to="/signup">Sign Up</Link>
-          </span>
+          </Button>
+          <Grid container>
+            <Grid item>
+              <Link href="#/signup" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
         </div>
       </div>
-    </div>
+      <Box mt={8}>
+        <Copyright />
+      </Box>
+    </Container>
   );
 }
-
-export default React.memo(SignIn);

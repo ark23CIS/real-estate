@@ -9,3 +9,4 @@ export { default as SingleRenter } from "./SingleRenter";
 export { default as Home } from "./Home";
 export { default as Search } from "./Search";
 export { default as CreateProfile } from "./CreateProfile";
+export { default as CreateAd } from "./CreateAd";
