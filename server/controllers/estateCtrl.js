@@ -46,8 +46,8 @@ exports.getAllEstates = async (req, res) => {
 };
 
 exports.deleteEstate = async (req, res) => {
-  const { estateID, user } = req.body;
-  if (req.user.id != user) {
+  const { estateID, user_id } = req.body;
+  if (req.user.id != user_id) {
     res.status(400).json({ status: "You cannot delete the renter ad" });
   }
   try {

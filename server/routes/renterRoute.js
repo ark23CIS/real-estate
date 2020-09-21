@@ -8,6 +8,8 @@ const {
   rateCollectionCtrl,
   commentCollectionCtrl,
   uncommentCollectionCtrl,
+  deleteRenter,
+  getOwnRenters,
 } = require("../controllers");
 const { authMiddleware } = require("../middlewares");
 const { Renter } = require("../models");
@@ -30,6 +32,8 @@ router.post(
 );
 
 router.get("/", authMiddleware, getAllCollectionsController(Renter));
+
+router.get("/me", authMiddleware, getOwnRenters);
 
 router.put(
   "/like/:liked_collection",
@@ -60,5 +64,7 @@ router.put(
   authMiddleware,
   uncommentCollectionCtrl(Renter)
 );
+
+router.delete("/", authMiddleware, deleteRenter);
 
 module.exports = router;

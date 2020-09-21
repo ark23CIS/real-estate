@@ -7,8 +7,8 @@ const {
   deleteOwnProfileController,
 } = require("./profile-controller");
 const { deleteProfileFileCtrl } = require("./filesCtrl");
-const { createEstate } = require("./estateCtrl");
-const { createRenter } = require("./renterCtrl");
+const { createEstate, deleteEstate, getOwnEstates } = require("./estateCtrl");
+const { createRenter, deleteRenter, getOwnRenters } = require("./renterCtrl");
 
 const getAllCollectionsController = (Model) => async (req, res) => {
   try {
@@ -27,12 +27,12 @@ const likeCollectionCtrl = (Model) => async (req, res) => {
     let result;
     if (!collection.likes.includes(req.user.id)) {
       result = await Model.findOneAndUpdate(
-        { user: liked_user_id },
+        { user: liked_collection_id },
         { $push: { likes: req.user.id } }
       );
     } else {
       result = await Model.findOneAndUpdate(
-        { user: liked_user_id },
+        { user: liked_collection_id },
         { $pull: { likes: req.user.id } }
       );
     }
@@ -131,7 +131,11 @@ module.exports = {
   deleteOwnProfileController,
   deleteProfileFileCtrl,
   createRenter,
+  deleteRenter,
+  getOwnRenters,
   createEstate,
+  deleteEstate,
+  getOwnEstates,
   uncommentCollectionCtrl,
   commentCollectionCtrl,
   rateCollectionCtrl,

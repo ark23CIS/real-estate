@@ -43,19 +43,9 @@ exports.getOwnRenters = async (req, res) => {
   }
 };
 
-exports.getAllRenters = async (req, res) => {
-  try {
-    const renters = await Renter.find();
-    res.json(renters);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-};
-
 exports.deleteRenter = async (req, res) => {
-  const { user, renterID } = req.body;
-  if (req.body.id !== user) {
+  const { user_id, renterID } = req.body;
+  if (req.user.id !== user_id) {
     return res.status(400).json({ status: "You cannot delete the renter ad" });
   }
   try {

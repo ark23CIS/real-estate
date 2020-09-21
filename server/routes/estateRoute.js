@@ -9,6 +9,7 @@ const {
   rateCollectionCtrl,
   commentCollectionCtrl,
   uncommentCollectionCtrl,
+  getOwnEstates,
 } = require("../controllers");
 const { authMiddleware } = require("../middlewares");
 const router = express.Router();
@@ -30,6 +31,8 @@ router.post(
 );
 
 router.get("/", authMiddleware, getAllCollectionsController(Estate));
+
+router.get("/me", authMiddleware, getOwnEstates);
 
 router.put(
   "/like/:liked_collection",
