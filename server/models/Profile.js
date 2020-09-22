@@ -28,10 +28,6 @@ const ProfileSchema = new Schema({
     },
   },
 
-  dateOfBirth: {
-    type: Date,
-  },
-
   messages: [
     {
       text: String,

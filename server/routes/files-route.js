@@ -8,9 +8,9 @@ const {
 const { authMiddleware } = require("../middlewares");
 const router = express.Router();
 
-router.post(
+router.put(
   "/profile",
-  multerUploads.single("image-raw"),
+  multerUploads.single("file"),
   cloudinaryConfig,
   authMiddleware,
   (req, res) => {
@@ -28,12 +28,11 @@ router.post(
           res.status(500).send("Server Error");
         }
         try {
-          console.log(req.user.id);
-          const profile = await Profile.updateOne(
+          await Profile.updateOne(
             { user: req.user.id },
             { $set: { photo: result.secure_url } }
           );
-          res.json(profile);
+          res.json({ photo: result.secure_url });
         } catch (error) {
           console.log(error);
           console.log(error.message);

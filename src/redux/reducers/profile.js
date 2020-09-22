@@ -4,6 +4,7 @@ import {
   GET_PROFILES,
   CLEAR_PROFILE,
   CREATE_PROFILE,
+  UPDATE_PROFILE_PHOTO,
 } from "../actions/types";
 
 const initState = {
@@ -39,6 +40,11 @@ export default function (state = initState, action) {
         ...state,
         loading: false,
         profile: null,
+      };
+    case UPDATE_PROFILE_PHOTO:
+      return {
+        ...state,
+        profile: { ...state.profile, photo: payload },
       };
     default:
       return state;

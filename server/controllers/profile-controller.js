@@ -42,6 +42,24 @@ exports.profilePostController = async (req, res) => {
     twitter,
     youtube,
   } = req.body;
+  const socials = [
+    { name: "vk", value: vk },
+    { name: "instagram", value: instagram },
+    { name: "facebook", value: facebook },
+    { name: "twitter", value: twitter },
+    { name: "youtube", value: youtube },
+  ];
+  const errors = (socials) => {
+    return socials.reduce((p, { name, value }) => {
+      return value && !value.includes(`https://${name}.com`)
+        ? [...p, { msg: `${name} URL is not correct` }]
+        : [...p];
+    }, []);
+  };
+
+  if (errors(socials).length) {
+    return res.status(400).json({ errors: errors(socials) });
+  }
 
   const profileFields = {};
   profileFields.user = req.user.id;

@@ -5,6 +5,7 @@ import {
   PROFILE_ERROR,
   GET_PROFILES,
   CREATE_PROFILE,
+  UPDATE_PROFILE_PHOTO,
 } from "./types";
 
 export const getProfile = () => async (dispatch) => {
@@ -64,8 +65,21 @@ export const createProfile = (data, history) => async (dispatch) => {
       type: GET_PROFILE,
       payload: res.data,
     });
+    if (data.photo) {
+      const res = await axios.put("/api/files/profile", data.photo, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      dispatch({ type: UPDATE_PROFILE_PHOTO, payload: res.data.photo });
+    }
     history.push("/profiles/me");
   } catch (err) {
+    const errors = err.response.data.errors;
+    console.log(errors);
+    if (errors) {
+      errors.forEach((error) => dispatch(addError(error.msg)));
+    }
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText },

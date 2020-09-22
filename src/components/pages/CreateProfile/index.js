@@ -1,19 +1,28 @@
 import React from "react";
-import DatePicker from "react-datepicker";
-import { useDispatch } from "react-redux";
-import { createProfile } from "../../../redux/actions";
+import {
+  Container,
+  Typography,
+  TextField,
+  Avatar,
+  Button,
+  CssBaseline,
+} from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-import "react-datepicker/dist/react-datepicker.css";
-import "./create-profile.scss";
+import { createProfile } from "../../../redux/actions";
+import { useSelector, useDispatch } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { useStyles } from "../SignIn/signin-helper";
 import PropTypes from "prop-types";
-import { CreateProfile } from "..";
+import { socials } from "./createProfile-helper";
 
-function index({ history }) {
+function SignIn({ socials, history }) {
+  const classes = useStyles();
+  const [profileData, setProfileData] = React.useState({});
   const dispatch = useDispatch();
-  const [profileData, setProfileData] = React.useState({
-    dateOfBirth: null,
-    file: "",
-  });
+  const {
+    profile: { profile },
+  } = useSelector((state) => state);
+
   const onFieldChange = React.useCallback(
     (e) => {
       const target = e.target;
@@ -24,78 +33,88 @@ function index({ history }) {
     },
     [profileData]
   );
-  const onFileChange = React.useCallback(
-    (e) => {
-      const file = e.target.files[0];
-    },
-    [profileData]
-  );
+
   const onClick = React.useCallback(() => {
     dispatch(createProfile(profileData, history));
   }, [profileData]);
-  console.log(profileData);
+
+  const photoChange = React.useCallback(
+    (e) => {
+      const target = e.target;
+      const data = new FormData();
+      data.append("file", target.files[0]);
+      setProfileData((profileData) => ({
+        ...profileData,
+        photo: data,
+      }));
+    },
+    [profileData]
+  );
+
+  if (profile) {
+    return <Redirect to={`/profiles/me`} />;
+  }
+
   return (
-    <div className="profile-data-form">
-      Social Networks
-      <input type="text" name="vk" placeholder="vk" onChange={onFieldChange} />
-      <input
-        type="text"
-        name="instagram"
-        placeholder="instagram"
-        onChange={onFieldChange}
-      />
-      <input
-        type="text"
-        name="facebook"
-        placeholder="facebook"
-        onChange={onFieldChange}
-      />
-      <input
-        type="text"
-        name="twitter"
-        placeholder="twitter"
-        onChange={onFieldChange}
-      />
-      <input
-        type="text"
-        name="youtube"
-        placeholder="youtube"
-        onChange={onFieldChange}
-      />
-      <input
-        type="text"
-        name="contactNumber"
-        placeholder="type Your number"
-        required
-        onChange={onFieldChange}
-      />
-      <DatePicker
-        selected={profileData.dateOfBirth}
-        onChange={(date) =>
-          setProfileData((profileData) => ({
-            ...profileData,
-            dateOfBirth: date,
-          }))
-        }
-        dateFormat="dd/MM/yyyy"
-        placeholderText="type year of birth"
-        required
-      />
-      <input
-        type="file"
-        name="photo"
-        onChange={onFileChange}
-        value={profileData.file}
-      />
-      <button onClick={onClick} className="primary-button">
-        Submit
-      </button>
-    </div>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar} />
+        <Typography component="h1" variant="h5">
+          Create Profile
+        </Typography>
+        <div className={classes.form}>
+          {socials &&
+            socials.map(({ name, label }, index) => (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name={name}
+                label={label}
+                id={name}
+                autoComplete={name}
+                autoFocus
+                onChange={onFieldChange}
+                key={`${name}_${index}`}
+              />
+            ))}
+          <TextField
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            name="contactNumber"
+            label="Contact Number"
+            id="contactNumber"
+            autoComplete="contactNumber"
+            autoFocus
+            required
+            onChange={onFieldChange}
+          />
+          <input type="file" name="photo" id="photo" onChange={photoChange} />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={onClick}
+          >
+            Submit
+          </Button>
+        </div>
+      </div>
+    </Container>
   );
 }
 
-index.propTypes = {
+SignIn.propTypes = {
+  socials: PropTypes.arrayOf(PropTypes.object).isRequired,
   history: PropTypes.object,
 };
 
-export default React.memo(withRouter(index));
+SignIn.defaultProps = {
+  socials,
+};
+
+export default React.memo(withRouter(SignIn));

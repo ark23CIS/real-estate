@@ -95,4 +95,5 @@ export const logout = () => (dispatch) => {
     type: CLEAR_PROFILE,
   });
   dispatch({ type: LOGOUT });
+  localStorage.clear();
 };
