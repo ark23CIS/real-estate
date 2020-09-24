@@ -24,7 +24,6 @@ const EstateSchema = new Schema({
   photos: [
     {
       type: String,
-      default: "default",
     },
   ],
 
@@ -68,10 +67,6 @@ const EstateSchema = new Schema({
       default: "-",
     },
     buildingNumber: {
-      type: String,
-      default: "-",
-    },
-    flatNumber: {
       type: String,
       default: "-",
     },

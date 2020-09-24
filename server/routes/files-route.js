@@ -1,12 +1,42 @@
 const express = require("express");
-const { Profile } = require("../models");
+const { Profile, Estate, Renter } = require("../models");
 const { deleteProfileFileCtrl } = require("../controllers");
 const {
   multer: { multerUploads, datauri },
   cloudinary: { cloudinaryConfig, uploader },
 } = require("../constants");
+const formidableMiddleware = require("express-formidable");
 const { authMiddleware } = require("../middlewares");
 const router = express.Router();
+
+const updatePhotosADCtrl = (Model) => (req, res) => {
+  let ad_id = req.fields.ad_id;
+  const file = datauri(req);
+  uploader.upload(
+    file.content,
+    {
+      crop: "scale",
+      responsive: true,
+      width: "auto",
+    },
+    async (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Server Error");
+      }
+      try {
+        await Model.updateOne(
+          { _id: ad_id },
+          { $push: { photos: result.secure_url } }
+        );
+        res.json({ photo: result.secure_url });
+      } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Server Error");
+      }
+    }
+  );
+};
 
 router.put(
   "/profile",
@@ -25,7 +55,7 @@ router.put(
       async (err, result) => {
         if (err) {
           console.log(err);
-          res.status(500).send("Server Error");
+          return res.status(500).send("Server Error");
         }
         try {
           await Profile.updateOne(
@@ -38,6 +68,56 @@ router.put(
           console.log(error.message);
           res.status(500).send("Server Error");
         }
+      }
+    );
+  }
+);
+
+router.post(
+  "/estate",
+  multerUploads.single("file"),
+  cloudinaryConfig,
+  authMiddleware,
+  (req, res) => {
+    const file = datauri(req);
+    uploader.upload(
+      file.content,
+      {
+        crop: "scale",
+        responsive: true,
+        width: "auto",
+      },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).send("Server Error");
+        }
+        return res.json({ photo: result.secure_url });
+      }
+    );
+  }
+);
+
+router.post(
+  "/renter",
+  multerUploads.single("file"),
+  cloudinaryConfig,
+  authMiddleware,
+  (req, res) => {
+    const file = datauri(req);
+    uploader.upload(
+      file.content,
+      {
+        crop: "scale",
+        responsive: true,
+        width: "auto",
+      },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Server Error");
+        }
+        return res.json({ photo: result.secure_url });
       }
     );
   }

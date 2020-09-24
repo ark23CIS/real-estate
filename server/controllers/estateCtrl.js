@@ -6,7 +6,16 @@ exports.createEstate = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { region, footage, price, text, title, contactNumber, user } = req.body;
+  const {
+    region,
+    footage,
+    price,
+    text,
+    title,
+    contactNumber,
+    estateAddress,
+    photos,
+  } = req.body;
   const estate = new Estate({
     region,
     footage,
@@ -14,7 +23,9 @@ exports.createEstate = async (req, res) => {
     text,
     title,
     contactNumber,
-    user,
+    user: req.user.id,
+    estateAddress,
+    photos,
   });
   try {
     const result = await estate.save();

@@ -9,7 +9,7 @@ const {
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { auth, users, profile, files } = require("./routes");
+const { auth, users, profile, files, estate, renter } = require("./routes");
 const { last_seen } = require("./middlewares");
 
 app.use(webpackDevMiddleware);
@@ -35,6 +35,8 @@ app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use("/api/profiles", profile);
 app.use("/api/files", files);
+app.use("/api/renters", renter);
+app.use("/api/estates", estate);
 
 app.listen(PORT, () => {
   console.log(`Server is listening at PORT ${PORT}`);

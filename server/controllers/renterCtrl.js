@@ -13,7 +13,7 @@ exports.createRenter = async (req, res) => {
     text,
     title,
     contactNumber,
-    user,
+    photos,
   } = req.body;
   const renter = new Renter({
     title,
@@ -22,7 +22,8 @@ exports.createRenter = async (req, res) => {
     maxPrice,
     text,
     contactNumber,
-    user,
+    user: req.user.id,
+    photos,
   });
   try {
     const result = await renter.save();

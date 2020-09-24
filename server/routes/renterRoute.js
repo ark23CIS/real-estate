@@ -25,8 +25,6 @@ router.post(
     check("maxPrice", "Max price is required").exists(),
     check("footage", "Footage is required").exists(),
     check("region", "Region is required").exists(),
-    check("maxPrice", "Max price should be a number").isNumeric(),
-    check("footage", "Footage should be a number").isNumeric(),
   ],
   createRenter
 );

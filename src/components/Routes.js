@@ -6,10 +6,8 @@ import {
   SignUp,
   SignIn,
   Profile,
-  Estates,
   NotFound,
   SingleRenter,
-  Renters,
   Search,
   CreateProfile,
 } from "./pages";
@@ -23,11 +21,9 @@ export default function Routes() {
       <Error />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/estates/" component={Estates} />
         <Route path="/estates/:estateID/" component={SingleEstate} />
         <Route path="/signup/" component={SignUp} />
         <Route path="/signin/" component={SignIn} />
-        <Route path="/renters/" component={Renters} />
         <Route path="/profiles/:profileID/" component={Profile} />
         <Route path="/search" component={Search} />
         <Route path="/renters/:renterID" component={SingleRenter} />

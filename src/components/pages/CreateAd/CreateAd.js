@@ -8,15 +8,55 @@ import {
   CssBaseline,
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-import {} from "../../../redux/actions";
+import ImageUploader from "react-images-upload";
+import { createAD } from "../../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useStyles } from "../SignIn/signin-helper";
 import PropTypes from "prop-types";
 
-function CreateAd({ label, iconComponent, fields }) {
+function CreateAd({ label, iconComponent, fields, history }) {
   const classes = useStyles();
-  const [ADData, setADData] = React.useState({});
+  const [ADData, setADData] = React.useState({ pictures: [] });
   const dispatch = useDispatch();
+
+  const onPhotosChange = React.useCallback(
+    (pictures) => {
+      setADData((ADData) => ({
+        ...ADData,
+        pictures: pictures,
+      }));
+      console.log(ADData);
+    },
+    [ADData]
+  );
+
+  const onAddressChange = React.useCallback(
+    (e) => {
+      const target = e.target;
+      setADData((ADData) => ({
+        ...ADData,
+        estateAddress: { ...ADData.estateAddress, [target.name]: target.value },
+      }));
+    },
+    [ADData]
+  );
+
+  const onFieldChange = React.useCallback(
+    (e) => {
+      const target = e.target;
+      setADData((ADData) => ({
+        ...ADData,
+        [target.name]: target.value,
+      }));
+    },
+    [ADData]
+  );
+
+  const onSubmit = React.useCallback(() => {
+    dispatch(createAD(ADData, label, history));
+  }, [ADData]);
+
+  console.log(ADData.pictures);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -32,7 +72,7 @@ function CreateAd({ label, iconComponent, fields }) {
               .filter(({ belongs }) =>
                 label === "renter" ? belongs !== "estate" : belongs !== "renter"
               )
-              .map(({ name, label }, index) => (
+              .map(({ name, label, type }, index) => (
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -42,18 +82,28 @@ function CreateAd({ label, iconComponent, fields }) {
                   id={name}
                   autoComplete={name}
                   autoFocus
-                  onChange={null}
+                  onChange={
+                    type === "location" ? onAddressChange : onFieldChange
+                  }
                   key={`${name}_${index}`}
+                  required
                 />
               ))}
-
+          <ImageUploader
+            withIcon={true}
+            withPreview={true}
+            buttonText={`Choose ${label} images`}
+            onChange={onPhotosChange}
+            imgExtension={[".jpg", ".gif", ".png", ".gif", "jpeg"]}
+            maxFileSize={5242880}
+          />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={null}
+            onClick={onSubmit}
           >
             Submit
           </Button>
@@ -63,4 +113,11 @@ function CreateAd({ label, iconComponent, fields }) {
   );
 }
 
-export default CreateAd;
+CreateAd.propTypes = {
+  history: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  iconComponent: PropTypes.element.isRequired,
+  fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default React.memo(withRouter(CreateAd));

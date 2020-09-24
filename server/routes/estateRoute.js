@@ -24,8 +24,6 @@ router.post(
     check("price", "Price is required").exists(),
     check("footage", "Footage is required").exists(),
     check("region", "Region is required").exists(),
-    check("price", "Price should be a number").isNumeric(),
-    check("footage", "Footage should be a number").isNumeric(),
   ],
   createEstate
 );

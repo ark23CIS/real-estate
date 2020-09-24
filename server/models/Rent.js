@@ -24,7 +24,6 @@ const RentSchema = new Schema({
   photos: [
     {
       type: String,
-      default: "default",
     },
   ],
 

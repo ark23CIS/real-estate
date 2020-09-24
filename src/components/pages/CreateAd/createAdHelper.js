@@ -10,6 +10,15 @@ const ADFields = [
   { name: "price", label: "Price", belongs: "estate" },
   { name: "maxPrice", label: "Max Price", belongs: "renter" },
   { name: "region", label: "Region" },
+  { name: "country", label: "Country", type: "location", belongs: "estate" },
+  { name: "city", label: "City", type: "location", belongs: "estate" },
+  { name: "street", label: "Street", type: "location", belongs: "estate" },
+  {
+    name: "buildingNumber",
+    label: "Building Number",
+    type: "location",
+    belongs: "estate",
+  },
 ];
 
 export const tabItems = [
