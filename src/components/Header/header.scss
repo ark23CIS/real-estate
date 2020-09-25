@@ -5,6 +5,9 @@
   justify-content: space-between;
   padding: 15px 0;
   background-color: #060b26;
+  z-index: 10;
+  position: absolute;
+  width: 100%;
   &__right {
     padding-right: 10px;
     display: flex;

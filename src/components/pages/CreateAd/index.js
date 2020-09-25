@@ -4,7 +4,7 @@ import { TabComponent } from "../..";
 
 function index() {
   return (
-    <div>
+    <div className="mu-block">
       <TabComponent tabItems={tabItems} />
     </div>
   );

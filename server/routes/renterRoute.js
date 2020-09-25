@@ -10,6 +10,7 @@ const {
   uncommentCollectionCtrl,
   deleteRenter,
   getOwnRenters,
+  getADByID,
 } = require("../controllers");
 const { authMiddleware } = require("../middlewares");
 const { Renter } = require("../models");
@@ -38,6 +39,8 @@ router.put(
   authMiddleware,
   likeCollectionCtrl(Renter)
 );
+
+router.get("/id/:ad_id", authMiddleware, getADByID(Renter));
 
 router.put(
   "/dislike/:disliked_collection",

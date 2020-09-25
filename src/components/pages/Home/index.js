@@ -26,7 +26,7 @@ function Home() {
         <CreateAd />
       ) : (
         <Fragment>
-          <div className="hero">
+          <div className="hero mu-block">
             <section className="landing">
               <div className="landing__title">Real Estate</div>
               <div className="landing__subtitle">

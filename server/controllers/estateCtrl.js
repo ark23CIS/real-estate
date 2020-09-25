@@ -38,7 +38,10 @@ exports.createEstate = async (req, res) => {
 
 exports.getOwnEstates = async (req, res) => {
   try {
-    const estates = await Estate.find({ user: req.user.id });
+    const estates = await Estate.find({ user: req.user.id }).populate(
+      "user",
+      "-password -confirmation_hash"
+    );
     res.json(estates);
   } catch (err) {
     console.error(err.message);
@@ -48,7 +51,10 @@ exports.getOwnEstates = async (req, res) => {
 
 exports.getAllEstates = async (req, res) => {
   try {
-    const estates = await Estate.find();
+    const estates = await Estate.find().populate(
+      "user",
+      "-password -confirmation_hash"
+    );
     res.json(estates);
   } catch (err) {
     console.error(err.message);

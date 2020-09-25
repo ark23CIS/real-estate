@@ -42,7 +42,7 @@ export default function SignIn() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" className="mu-block">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

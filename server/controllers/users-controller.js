@@ -48,14 +48,12 @@ exports.confirmUserCtrl = async (req, res) => {
     return res.status(422).send("Invalid hash");
   }
   try {
-    await User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
       { confirmation_hash: hash },
-      { $set: { confirmed: true } }
+      { $set: { confirmed: true } },
+      { new: true }
     );
-    res.json({
-      confirmation_status: "success",
-      message: "User successfully confirmed",
-    });
+    res.json(user);
   } catch (err) {
     console.log(err.message);
     res.json({ confirmation_status: "error" });

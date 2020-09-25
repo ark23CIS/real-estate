@@ -72,13 +72,20 @@ const EstateSchema = new Schema({
     },
   },
 
-  likes: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+  likes: [{ type: Schema.Types.ObjectId, ref: "user" }],
 
-  dislikes: [{ type: Schema.Types.ObjectId, ref: "profile" }],
+  dislikes: [{ type: Schema.Types.ObjectId, ref: "user" }],
 
   region: {
     type: String,
     required: true,
+  },
+
+  usersWatched: [{ type: Schema.Types.ObjectId, ref: "user" }],
+
+  totalViews: {
+    type: Number,
+    default: 0,
   },
 
   ratings: [
@@ -90,6 +97,27 @@ const EstateSchema = new Schema({
       },
     },
   ],
+});
+
+EstateSchema.virtual("totalRating").get(function () {
+  const ratings = this.ratings.map(({ rating }) => rating);
+  const amountOfRatings = ratings ? ratings.length : 0;
+  const totalRating = ratings.reduce((p, c) => p + c, 0) / amountOfRatings;
+  return isNaN(totalRating) ? 0 : totalRating.toFixed(1);
+});
+
+const virtualTotalField = (field) => {
+  EstateSchema.virtual(`amountOf${field}`).get(function () {
+    return this[field] ? this[field].length : 0;
+  });
+};
+
+const fields = ["likes", "dislikes", "comments", "usersWatched"];
+
+fields.forEach((val) => virtualTotalField(val));
+
+EstateSchema.set("toJSON", {
+  virtuals: true,
 });
 
 module.exports = mongoose.model("estate", EstateSchema);

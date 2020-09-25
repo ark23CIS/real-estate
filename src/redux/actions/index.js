@@ -9,4 +9,5 @@ export {
   dislikeProfile,
   rateProfile,
 } from "./profile";
-export { createAD } from "./estate";
+export { createAD, getEstateByID } from "./estate";
+export { getRenterByID } from "./renter";

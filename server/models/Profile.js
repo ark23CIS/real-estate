@@ -40,7 +40,7 @@ const ProfileSchema = new Schema({
     {
       text: String,
       created: { type: Date, default: Date.now },
-      postedBy: { type: mongoose.Schema.ObjectId, ref: "user" },
+      postedBy: { type: mongoose.Schema.ObjectId, ref: "profile" },
     },
   ],
 
@@ -64,6 +64,13 @@ const ProfileSchema = new Schema({
     type: Date,
     default: new Date(),
   },
+
+  usersWatched: [{ type: Schema.Types.ObjectId, ref: "user" }],
+
+  totalViews: {
+    type: Number,
+    default: 0,
+  },
 });
 
 ProfileSchema.virtual("isOnline").get(function () {
@@ -76,7 +83,8 @@ ProfileSchema.virtual("isOnline").get(function () {
 ProfileSchema.virtual("totalRating").get(function () {
   const ratings = this.ratings.map(({ rating }) => rating);
   const amountOfRatings = ratings ? ratings.length : 0;
-  return (ratings.reduce((p, c) => p + c, 0) / amountOfRatings).toFixed(1);
+  const totalRating = ratings.reduce((p, c) => p + c, 0) / amountOfRatings;
+  return isNaN(totalRating) ? 0 : totalRating.toFixed(1);
 });
 
 const virtualTotalField = (field) => {
@@ -85,7 +93,7 @@ const virtualTotalField = (field) => {
   });
 };
 
-const fields = ["likes", "dislikes", "comments", "estates"];
+const fields = ["likes", "dislikes", "comments", "estates", "usersWatched"];
 
 fields.forEach((val) => virtualTotalField(val));
 

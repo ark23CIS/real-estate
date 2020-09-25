@@ -8,6 +8,10 @@
   text-align: center;
   height: 60%;
   overflow: hidden;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   &__subtitle {
     font-size: 30px;
   }
@@ -36,10 +40,14 @@
     background-color: #428bca;
   }
 }
-
 .hero {
   position: relative;
-  height: calc(100vh - 74px);
+  height: calc(100vh);
   background: url("http://www.fonstola.ru/pic/201304/1600x1200/fonstola.ru-92109.jpg")
     no-repeat center center/cover;
+}
+
+.mu-block {
+  margin-top: 0;
+  padding-top: 80px;
 }
