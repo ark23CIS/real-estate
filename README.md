@@ -11,6 +11,7 @@
   8. NODEMAILER_PASS=
   9. NODEMAILER_HOST=
   10. NODEMAILER_PORT=
+***
 CLOUDINARY params you can get after registration on the cloudinary.com.
 To run email confirmation you need to enter gmail data in NODEMAILER_USER and NODEMAILER_PASS
 and only then follow the link https://support.google.com/mail/answer/7126229?hl=ru and pass
