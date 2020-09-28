@@ -1,10 +1,9 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import "./error.scss";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import './error.scss';
 
-function index() {
+function Error() {
   const errors = useSelector((state) => state.error);
-  console.log(errors);
   errors &&
     errors.map((error) => (
       <div key={error.id} className="error">
@@ -26,4 +25,4 @@ function index() {
   );
 }
 
-export default React.memo(index);
+export default React.memo(Error);

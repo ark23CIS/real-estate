@@ -5,7 +5,7 @@ import {
   CLEAR_PROFILE,
   CREATE_PROFILE,
   UPDATE_PROFILE_PHOTO,
-} from "../actions/types";
+} from '../actions/types';
 
 const initState = {
   profile: null,

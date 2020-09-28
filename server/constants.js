@@ -1,9 +1,9 @@
-require("dotenv").config();
-const cloudinary = require("cloudinary").v2;
-const multer = require("multer");
-const Datauri = require("datauri/parser");
-const path = require("path");
-const nodemailer = require("nodemailer");
+require('dotenv').config();
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const Datauri = require('datauri/parser');
+const path = require('path');
+const nodemailer = require('nodemailer');
 
 const nodeMailerOptions = {
   host: process.env.NODEMAILER_HOST,

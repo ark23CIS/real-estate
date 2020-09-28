@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
-import { AppBar, Tabs, Tab, useTheme } from "@material-ui/core";
-import { useStyles, a11yProps, TabPanel } from "./TabComponentHelper";
+import React from 'react';
+import PropTypes from 'prop-types';
+import SwipeableViews from 'react-swipeable-views';
+import { AppBar, Tabs, Tab, useTheme } from '@material-ui/core';
+import { useStyles, a11yProps, TabPanel } from './TabComponentHelper';
 
-export default function FullWidthTabs({ tabItems }) {
+function TabComponent({ tabItems }) {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -30,16 +30,12 @@ export default function FullWidthTabs({ tabItems }) {
         >
           {tabItems &&
             tabItems.map(({ label }, index) => (
-              <Tab
-                key={`${label}_${index}`}
-                label={label}
-                {...a11yProps(index)}
-              />
+              <Tab key={`${label}_${index}`} label={label} {...a11yProps(index)} />
             ))}
         </Tabs>
       </AppBar>
       <SwipeableViews
-        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
         onChangeIndex={handleChangeIndex}
       >
@@ -54,6 +50,8 @@ export default function FullWidthTabs({ tabItems }) {
   );
 }
 
-FullWidthTabs.proptypes = {
-  tabItems: PropTypes.arrayOf(PropTypes.object),
+TabComponent.proptypes = {
+  tabItems: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
+
+export default TabComponent;

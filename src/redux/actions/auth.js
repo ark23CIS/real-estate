@@ -1,8 +1,7 @@
-import axios from "axios";
-import { setAuthToken } from "../helpers";
-import { addError } from "./error";
+import axios from 'axios';
+import { setAuthToken } from '../helpers';
+import { addError } from './error';
 import {
-  REGISTER_COMPLETE,
   REGISTER_FAIL,
   AUTH_ERROR,
   USER_LOADED,
@@ -11,14 +10,14 @@ import {
   LOGOUT,
   CLEAR_PROFILE,
   CONFIRMATION,
-} from "./types";
+} from './types';
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
   try {
-    const res = await axios.get("/api/auth");
+    const res = await axios.get('/api/auth');
     dispatch({ type: USER_LOADED, payload: res.data });
   } catch (err) {
     const errors = err.response.data.errors;
@@ -29,22 +28,16 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
-export const register = ({
-  firstName,
-  lastName,
-  email,
-  password,
-  history,
-}) => async (dispatch) => {
+export const register = ({ firstName, lastName, email, password, history }) => async (dispatch) => {
   const config = {
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   };
   const body = JSON.stringify({ email, firstName, lastName, password });
   try {
-    await axios.post("/api/users", body, config);
-    history.push("/check-info");
+    await axios.post('/api/users', body, config);
+    history.push('/check-info');
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -59,21 +52,21 @@ export const register = ({
 export const confirm = (hash) => async (dispatch) => {
   try {
     const res = await axios.get(`/api/users/confirm?hash=${hash}`);
-    dispatch({ type: CONFIRMATION, payload: res.data.confirmation_status });
+    dispatch({ type: CONFIRMATION, payload: res.data.confirmed ? 'success' : 'error' });
   } catch (err) {
-    dispatch({ type: CONFIRMATION, payload: "error" });
+    dispatch({ type: CONFIRMATION, payload: 'error' });
   }
 };
 
 export const login = ({ email, password }) => async (dispatch) => {
   const config = {
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   };
   const body = JSON.stringify({ email, password });
   try {
-    const res = await axios.post("/api/auth", body, config);
+    const res = await axios.post('/api/auth', body, config);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,

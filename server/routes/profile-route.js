@@ -1,6 +1,6 @@
-const express = require("express");
-const { authMiddleware } = require("../middlewares");
-const { Profile } = require("../models");
+const express = require('express');
+const { authMiddleware } = require('../middlewares');
+const { Profile } = require('../models');
 const {
   profileMeGetController,
   profilePostController,
@@ -12,47 +12,35 @@ const {
   rateCollectionCtrl,
   commentCollectionCtrl,
   uncommentCollectionCtrl,
-} = require("../controllers");
+} = require('../controllers');
 const router = express.Router();
 
-router.get("/me", authMiddleware, profileMeGetController);
+router.get('/me', authMiddleware, profileMeGetController);
 
-router.post("/", authMiddleware, profilePostController);
+router.post('/', authMiddleware, profilePostController);
 
-router.get("/", authMiddleware, getAllCollectionsController(Profile));
+router.get('/', authMiddleware, getAllCollectionsController(Profile));
 
-router.get("/id/:user_id", authMiddleware, getProfileByUserIDController);
+router.get('/id/:user_id', getProfileByUserIDController);
+
+router.put('/like/:liked_collection', authMiddleware, likeCollectionCtrl(Profile, 'user'));
+
+router.put('/dislike/:disliked_collection', authMiddleware, dislikeCollectionCtrl(Profile, 'user'));
+
+router.put('/rate/:rated_collection', authMiddleware, rateCollectionCtrl(Profile, 'user'));
 
 router.put(
-  "/like/:liked_collection",
+  '/comment/:commented_collection',
   authMiddleware,
-  likeCollectionCtrl(Profile)
+  commentCollectionCtrl(Profile, 'user'),
 );
 
 router.put(
-  "/dislike/:disliked_collection",
+  '/uncomment/:uncommented_collection',
   authMiddleware,
-  dislikeCollectionCtrl(Profile)
+  uncommentCollectionCtrl(Profile, 'user'),
 );
 
-router.put(
-  "/rate/:rated_collection",
-  authMiddleware,
-  rateCollectionCtrl(Profile)
-);
-
-router.put(
-  "/comment/:commented_collection",
-  authMiddleware,
-  commentCollectionCtrl(Profile)
-);
-
-router.put(
-  "/uncomment/:uncommented_collection",
-  authMiddleware,
-  uncommentCollectionCtrl(Profile)
-);
-
-router.delete("/me", authMiddleware, deleteOwnProfileController);
+router.delete('/me', authMiddleware, deleteOwnProfileController);
 
 module.exports = router;

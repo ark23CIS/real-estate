@@ -1,23 +1,27 @@
-import React, { Fragment } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getEstateByID } from "../../../redux/actions";
-import { withRouter } from "react-router";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import Slider from "../../Slider";
-import { Comments } from "../..";
-import "./single-estate.scss";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { withRouter } from 'react-router';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { getEstateByID } from '../../../redux/actions';
+import Slider from '../../Slider';
+import { Comments, Rating, Like, Dislike } from '../..';
 
-function index({ match }) {
+function SingleEstate({ match }) {
   const dispatch = useDispatch();
-  const { estate } = useSelector((state) => state.estate);
+  const {
+    estate: { estate },
+    auth: { user },
+  } = useSelector((state) => state);
+
   const estateID = match.params.estateID;
+
   React.useEffect(() => {
     if (estateID) dispatch(getEstateByID(estateID));
   }, [dispatch, estateID]);
-  console.log(estate);
+
   return (
-    <Fragment>
+    <React.Fragment>
       {estate && (
         <Fragment>
           <div className="mu-block">
@@ -26,7 +30,7 @@ function index({ match }) {
           <div>{estate.title}</div>
           <div>{estate.text}</div>
           <div>Total views: {estate.totalViews}</div>
-          <div>Users watched times: {estate.amountOfusersWatched}</div>
+          <div>Users watched: {estate.amountOfusersWatched}</div>
           <div>Phone to contact: {estate.contactNumber}</div>
           <div>Price: {estate.price}$</div>
           <div>Footage: {estate.footage} squared meters</div>
@@ -36,23 +40,36 @@ function index({ match }) {
           <div>Region: {estate.region}</div>
           <div>Street: {estate.estateAddress.street}</div>
           <div>Building Number: {estate.estateAddress.buildingNumber}</div>
-          <div>Created at: {estate.created}</div>
+          <div>Created at: {new Date(estate.created).toDateString()}</div>
+          <Like
+            likeType="renter"
+            collectionID={estateID}
+            amountOflikes={estate.amountOflikes}
+            isActive={estate.likes.includes(user._id)}
+          />
+          <Dislike
+            collectionID={estateID}
+            amountOfDislikes={estate.amountOfdislikes}
+            dislikeType="renter"
+            isActive={estate.dislikes.includes(user._id)}
+          />
           <div>Total Star Rating: {estate.totalRating}</div>
+          <Rating label="estate" collectionID={estateID} />
           <div>
-            Author:{" "}
+            Author:{' '}
             <Link
               to={`/profiles/${estate.user._id}`}
             >{`${estate.user.firstName} ${estate.user.lastName}`}</Link>
           </div>
-          <Comments comments={estate.comments} />
+          <Comments comments={estate.comments} label="estate" collectionID={estateID} />
         </Fragment>
       )}
-    </Fragment>
+    </React.Fragment>
   );
 }
 
-index.propTypes = {
-  match: PropTypes.object,
+SingleEstate.propTypes = {
+  match: PropTypes.object.isRequired,
 };
 
-export default React.memo(withRouter(index));
+export default React.memo(withRouter(SingleEstate));

@@ -1,18 +1,22 @@
-import React from "react";
-import Carousel from "react-elastic-carousel";
-import PropTypes from "prop-types";
-import Item from "./Item";
-import "./slider.scss";
+import React from 'react';
+import Carousel from 'react-elastic-carousel';
+import PropTypes from 'prop-types';
+import Item from './Item';
+import './slider.scss';
 
-function index({ photoLinks }) {
+function Slider({ photoLinks }) {
+  if (!photoLinks.length) {
+    photoLinks = ['https://banffventureforum.com/wp-content/uploads/2019/08/No-Image.png'];
+  }
   return (
     <Carousel className="ad-images">
       {photoLinks &&
         photoLinks.map((link, index) => (
           <Item>
             <img
-              style={{ height: "100%" }}
+              style={{ height: '100%' }}
               src={link}
+              alt={`${index} photo`}
               key={`${link}_${index}`}
             />
           </Item>
@@ -21,8 +25,8 @@ function index({ photoLinks }) {
   );
 }
 
-index.propTypes = {
-  photoLinks: PropTypes.arrayOf(PropTypes.string),
+Slider.propTypes = {
+  photoLinks: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default index;
+export default Slider;

@@ -1,74 +1,61 @@
-import React from "react";
-import {
-  CardHeader,
-  TextField,
-  Avatar,
-  Icon,
-  withStyles,
-} from "@material-ui/core";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import React from 'react';
+import { CardHeader, TextField, Avatar, withStyles } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import CommentBody from './CommentBody';
+import { commentEstate, commentProfile, commentRenter } from '../../redux/actions';
+import { styles } from './comments-styles';
 
-const styles = (theme) => ({
-  cardHeader: {
-    paddingTop: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-  },
-  smallAvatar: {
-    width: 25,
-    height: 25,
-  },
-  commentField: {
-    width: "96%",
-  },
-  commentText: {
-    backgroundColor: "white",
-    padding: theme.spacing.unit,
-    margin: `2px ${theme.spacing.unit * 2}px 2px 2px`,
-  },
-  commentDate: {
-    display: "block",
-    color: "gray",
-    fontSize: "0.8em",
-  },
-  commentDelete: {
-    fontSize: "1.6em",
-    verticalAlign: "middle",
-    cursor: "pointer",
-  },
-});
+function Comments({ comments, classes, label, collectionID }) {
+  const [comment, setComment] = React.useState('');
+  const dispatch = useDispatch();
+  const { profile } = useSelector((state) => state.profile);
 
-function index({ comments, classes }) {
-  const commentBody = (item) => {
-    return (
-      <p className={classes.commentText}>
-        <Link to={"/user/"}>ee</Link>
-        <br />
-        text
-        <span className={classes.commentDate}>
-          {new Date(item.created).toDateString()} |
-          {false && (
-            <Icon onClick={null} className={classes.commentDelete}>
-              delete
-            </Icon>
-          )}
-        </span>
-      </p>
-    );
-  };
+  const onCommentChange = React.useCallback(
+    (e) => {
+      setComment(e.target.value);
+    },
+    [setComment],
+  );
+
+  const onKeyDown = React.useCallback(
+    (e) => {
+      if (e.keyCode === 13 && e.target.value) {
+        if (collectionID) {
+          if (label === 'estate') {
+            dispatch(commentEstate({ text: comment, commented_collection: collectionID }));
+          } else if (label === 'renter') {
+            dispatch(commentRenter({ text: comment, commented_collection: collectionID }));
+          } else {
+            dispatch(
+              commentProfile({
+                text: comment,
+                commented_collection: collectionID,
+              }),
+            );
+          }
+        }
+        setComment('');
+      }
+    },
+    [dispatch, comment, collectionID],
+  );
 
   return (
     <div>
       <CardHeader
         avatar={
-          <Avatar className={classes.smallAvatar} src={"/api/users/photo/"} />
+          <Avatar
+            className={classes.smallAvatar}
+            src={profile ? (profile.photo === 'default' ? '' : profile.photo) : ''}
+          />
         }
         title={
           <TextField
-            onKeyDown={null}
+            onKeyDown={onKeyDown}
             multiline
-            value={null}
-            onChange={null}
+            value={comment}
+            onChange={onCommentChange}
             placeholder="Write something ..."
             className={classes.commentField}
             margin="normal"
@@ -82,12 +69,20 @@ function index({ comments, classes }) {
             avatar={
               <Avatar
                 className={classes.smallAvatar}
-                src={"/api/users/photo/"}
+                src={item.postedBy && item.postedBy.photo !== 'default' ? item.postedBy.photo : ''}
               />
             }
-            title={commentBody(item)}
+            title={
+              <CommentBody
+                item={item}
+                classes={classes}
+                collectionID={collectionID}
+                userID={profile.user._id}
+                label={label}
+              />
+            }
             className={classes.cardHeader}
-            key={i}
+            key={`${i}_${item.created}`}
           />
         );
       })}
@@ -95,9 +90,16 @@ function index({ comments, classes }) {
   );
 }
 
-index.propTypes = {
-  comments: PropTypes.array.isRequired,
+Comments.propTypes = {
+  comments: PropTypes.array,
   classes: PropTypes.object.isRequired,
+  label: PropTypes.string.isRequired,
+  collectionID: PropTypes.string,
 };
 
-export default withStyles(styles)(index);
+Comments.defaultProps = {
+  comments: [],
+  collectionID: '',
+};
+
+export default withStyles(styles)(React.memo(Comments));

@@ -1,5 +1,5 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import {
   Home,
   SingleEstate,
@@ -10,14 +10,14 @@ import {
   SingleRenter,
   Search,
   CreateProfile,
-} from "./pages";
-import { Error, CheckInfo } from ".";
-import "antd/dist/antd.css";
-import "../styles.css";
+} from './pages';
+import { Error, CheckInfo } from '.';
+import 'antd/dist/antd.css';
+import '../styles.css';
 
 export default function Routes() {
   return (
-    <div>
+    <div className="mu-block">
       <Error />
       <Switch>
         <Route exact path="/" component={Home} />

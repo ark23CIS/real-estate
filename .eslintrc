@@ -1,0 +1,7 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "no-console": ["error", { "allow": ["log"] }],
+    "linebreak-style": 0
+  }
+}

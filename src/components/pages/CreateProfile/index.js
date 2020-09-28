@@ -1,19 +1,11 @@
-import React from "react";
-import {
-  Container,
-  Typography,
-  TextField,
-  Avatar,
-  Button,
-  CssBaseline,
-} from "@material-ui/core";
-import { withRouter } from "react-router-dom";
-import { createProfile } from "../../../redux/actions";
-import { useSelector, useDispatch } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { useStyles } from "../SignIn/signin-helper";
-import PropTypes from "prop-types";
-import { socials } from "./createProfile-helper";
+import React from 'react';
+import { Container, Typography, TextField, Avatar, Button, CssBaseline } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { Redirect, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { useStyles } from '../SignIn/signin-helper';
+import { createProfile } from '../../../redux/actions';
+import { socials } from './createProfile-helper';
 
 function SignIn({ socials, history }) {
   const classes = useStyles();
@@ -25,13 +17,13 @@ function SignIn({ socials, history }) {
 
   const onFieldChange = React.useCallback(
     (e) => {
-      const target = e.target;
+      const { value, name } = e.target;
       setProfileData((profileData) => ({
         ...profileData,
-        [target.name]: target.value,
+        [name]: value,
       }));
     },
-    [profileData]
+    [profileData],
   );
 
   const onClick = React.useCallback(() => {
@@ -42,13 +34,13 @@ function SignIn({ socials, history }) {
     (e) => {
       const target = e.target;
       const data = new FormData();
-      data.append("file", target.files[0]);
+      data.append('file', target.files[0]);
       setProfileData((profileData) => ({
         ...profileData,
         photo: data,
       }));
     },
-    [profileData]
+    [profileData],
   );
 
   if (profile) {
@@ -109,8 +101,8 @@ function SignIn({ socials, history }) {
 }
 
 SignIn.propTypes = {
-  socials: PropTypes.arrayOf(PropTypes.object).isRequired,
-  history: PropTypes.object,
+  socials: PropTypes.arrayOf(PropTypes.object),
+  history: PropTypes.object.isRequired,
 };
 
 SignIn.defaultProps = {

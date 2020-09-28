@@ -1,5 +1,4 @@
 import {
-  REGISTER_COMPLETE,
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
@@ -7,14 +6,14 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CONFIRMATION,
-} from "../actions/types";
+} from '../actions/types';
 
 const initState = {
   loading: true,
   user: null,
   isAuthenticated: null,
-  confirmation_status: "sent",
-  token: localStorage.getItem("token"),
+  confirmation_status: 'sent',
+  token: localStorage.getItem('token'),
 };
 
 export default function (state = initState, action) {
@@ -34,7 +33,7 @@ export default function (state = initState, action) {
         user: payload,
       };
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", payload.token);
+      localStorage.setItem('token', payload.token);
       return {
         ...state,
         ...payload,
@@ -44,7 +43,7 @@ export default function (state = initState, action) {
     case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
       return {
         ...state,
         isAuthenticated: false,
@@ -57,7 +56,7 @@ export default function (state = initState, action) {
         isAuthenticated: false,
         token: null,
         loading: false,
-        confirmation_status: "sent",
+        confirmation_status: 'sent',
       };
     default:
       return state;

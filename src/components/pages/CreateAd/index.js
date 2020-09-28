@@ -1,13 +1,13 @@
-import React from "react";
-import { tabItems } from "./createAdHelper";
-import { TabComponent } from "../..";
+import React from 'react';
+import { tabItems } from './createAdHelper';
+import { TabComponent } from '../..';
 
-function index() {
+function CreateAD() {
   return (
-    <div className="mu-block">
+    <div>
       <TabComponent tabItems={tabItems} />
     </div>
   );
 }
 
-export default index;
+export default CreateAD;

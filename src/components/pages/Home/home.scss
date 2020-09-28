@@ -42,9 +42,9 @@
 }
 .hero {
   position: relative;
-  height: calc(100vh);
-  background: url("http://www.fonstola.ru/pic/201304/1600x1200/fonstola.ru-92109.jpg")
-    no-repeat center center/cover;
+  height: calc(100vh - 80px);
+  background: url('http://www.fonstola.ru/pic/201304/1600x1200/fonstola.ru-92109.jpg') no-repeat
+    center center/cover;
 }
 
 .mu-block {

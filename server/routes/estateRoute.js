@@ -1,6 +1,6 @@
-const express = require("express");
-const { check } = require("express-validator");
-const { Estate } = require("../models");
+const express = require('express');
+const { check } = require('express-validator');
+const { Estate } = require('../models');
 const {
   createEstate,
   getAllCollectionsController,
@@ -11,58 +11,45 @@ const {
   uncommentCollectionCtrl,
   getOwnEstates,
   getADByID,
-} = require("../controllers");
-const { authMiddleware } = require("../middlewares");
+} = require('../controllers');
+const { authMiddleware } = require('../middlewares');
 const router = express.Router();
 
 router.post(
-  "/",
+  '/',
   [
     authMiddleware,
-    check("title", "Title is required").exists(),
-    check("text", "Text is required").exists(),
-    check("contactNumber", "Contact number is required").exists(),
-    check("price", "Price is required").exists(),
-    check("footage", "Footage is required").exists(),
-    check("region", "Region is required").exists(),
+    check('title', 'Title is required').exists(),
+    check('text', 'Text is required').exists(),
+    check('contactNumber', 'Contact number is required').exists(),
+    check('price', 'Price is required').exists(),
+    check('footage', 'Footage is required').exists(),
+    check('region', 'Region is required').exists(),
+    check('price', 'price should be a number').isNumeric(),
+    check('footage', 'footage should be a number').isNumeric(),
+    check('buildingNumber', 'Building Number should be a number').isNumeric(),
   ],
-  createEstate
+  createEstate,
 );
 
-router.get("/", authMiddleware, getAllCollectionsController(Estate));
+router.get('/', authMiddleware, getAllCollectionsController(Estate));
 
-router.get("/me", authMiddleware, getOwnEstates);
+router.get('/me', authMiddleware, getOwnEstates);
 
-router.get("/id/:ad_id", authMiddleware, getADByID(Estate));
+router.get('/id/:ad_id', authMiddleware, getADByID(Estate));
 
-router.put(
-  "/like/:liked_collection",
-  authMiddleware,
-  likeCollectionCtrl(Estate)
-);
+router.put('/like/:liked_collection', authMiddleware, likeCollectionCtrl(Estate, '_id'));
 
-router.put(
-  "/dislike/:disliked_collection",
-  authMiddleware,
-  dislikeCollectionCtrl(Estate)
-);
+router.put('/dislike/:disliked_collection', authMiddleware, dislikeCollectionCtrl(Estate, '_id'));
+
+router.put('/rate/:rated_collection', authMiddleware, rateCollectionCtrl(Estate, '_id'));
+
+router.put('/comment/:commented_collection', authMiddleware, commentCollectionCtrl(Estate, '_id'));
 
 router.put(
-  "/rate/:rated_collection",
+  '/uncomment/:uncommented_collection',
   authMiddleware,
-  rateCollectionCtrl(Estate)
-);
-
-router.put(
-  "/comment/:commented_collection",
-  authMiddleware,
-  commentCollectionCtrl(Estate)
-);
-
-router.put(
-  "/uncomment/:uncommented_collection",
-  authMiddleware,
-  uncommentCollectionCtrl(Estate)
+  uncommentCollectionCtrl(Estate, '_id'),
 );
 
 module.exports = router;

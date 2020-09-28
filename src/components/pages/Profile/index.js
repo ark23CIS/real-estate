@@ -1,69 +1,42 @@
-import React, { Fragment } from "react";
-import { withRouter } from "react-router";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import Banner from "../../Banner";
-import PropTypes from "prop-types";
-import { Rating } from "../../index";
-import {
-  getProfileByID,
-  getProfile,
-  likeProfile,
-  dislikeProfile,
-} from "../../../redux/actions";
-import { ThumbDown, ThumbUp } from "@material-ui/icons";
-import "./profile.scss";
+import React from 'react';
+import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Avatar } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { SocialIcon } from 'react-social-icons';
+import Banner from '../../Banner';
+import { getProfileByID, getProfile } from '../../../redux/actions';
+import { Comments, Like, Dislike, Rating, TabComponent } from '../..';
+import { profileTabItems } from './profileTabItems';
+import './profile.scss';
 
-function Profile({ match, history }) {
-  console.log(history);
+function Profile({ match }) {
   const {
     auth,
-    profile: { profile, profiles },
+    profile: { profile },
   } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [isOwnPage, setIsOwnPage] = React.useState(false);
 
   React.useEffect(() => {
-    if (
-      match.params.profileID === "me" ||
-      (auth.user && auth.user._id === match.params.profileID)
-    ) {
-      dispatch(getProfile());
-      setIsOwnPage(true);
-    } else {
-      dispatch(getProfileByID(match.params.profileID));
-      setIsOwnPage(false);
-    }
-  }, [dispatch, auth]);
-
-  const onLike = React.useCallback(() => {
-    if (auth.user && auth.user._id) {
-      dispatch(
-        likeProfile(
-          match.params.profileID === "me"
-            ? auth.user._id
-            : match.params.profileID
-        )
-      );
-    }
-  }, [dispatch]);
-
-  const onDislike = React.useCallback(() => {
-    if (auth.user && auth.user._id) {
-      dispatch(
-        dislikeProfile(
-          match.params.profileID === "me"
-            ? auth.user._id
-            : match.params.profileID
-        )
-      );
-    }
-  }, [dispatch]);
-
-  if (auth.user && auth) {
-    console.log(match.params.profileID, auth.user._id);
-    console.log(isOwnPage);
-  }
+    const updateProfile = () => {
+      if (
+        match.params.profileID === 'me' ||
+        (auth.user && auth.user._id === match.params.profileID)
+      ) {
+        dispatch(getProfile());
+        setIsOwnPage(true);
+      } else {
+        dispatch(getProfileByID(match.params.profileID));
+        console.log();
+        setIsOwnPage(false);
+      }
+    };
+    updateProfile();
+    const interval = setInterval(updateProfile, 30000);
+    return () => clearInterval(interval);
+  }, [dispatch, auth, match]);
 
   return (
     <div>
@@ -74,13 +47,40 @@ function Profile({ match, history }) {
           </Link>
         </Banner>
       )}
-      {!isOwnPage && <Fragment>Profile</Fragment>}
-      {isOwnPage && profile && <Fragment>My profile</Fragment>}
+      {!isOwnPage && <React.Fragment>Profile</React.Fragment>}
+      {isOwnPage && profile && <React.Fragment>My profile</React.Fragment>}
       {profile && (
         <div>
-          <Rating authUserID={auth.user._id || null} />
-          <ThumbDown className="cursor" onClick={onDislike} />
-          <ThumbUp className="cursor" onClick={onLike} />
+          <div>{profile.isOnline ? 'Online' : 'Offline'}</div>
+          <div>{`${profile.user.firstName} ${profile.user.lastName}`}</div>
+          <Avatar src={profile.photo === 'default' ? '' : profile.photo} />
+          {profile.social &&
+            Object.keys(profile.social).map((key, index) => (
+              <SocialIcon url={profile.social[key]} key={`${profile.social[key]}_${index}`} />
+            ))}
+          <div>Contact Number: {profile.contactNumber}</div>
+          <TabComponent tabItems={profileTabItems} />
+          <Rating
+            authUserID={auth.user._id || ''}
+            collectionID={match.params.profileID}
+            label="profile"
+          />
+          <Like
+            likeType="profile"
+            collectionID={match.params.profileID === 'me' ? auth.user._id : match.params.profileID}
+            amountOflikes={profile.amountOflikes}
+            isActive={profile.likes.includes(profile.user._id)}
+          />
+          <Dislike
+            dislikeType="profile"
+            collectionID={match.params.profileID === 'me' ? auth.user._id : match.params.profileID}
+            amountOfDislikes={profile.amountOfdislikes}
+            isActive={profile.dislikes.includes(profile.user._id)}
+          />
+          <Comments
+            comments={profile.comments}
+            collectionID={match.params.profileID === 'me' ? auth.user._id : match.params.profileID}
+          />
         </div>
       )}
     </div>
@@ -88,8 +88,7 @@ function Profile({ match, history }) {
 }
 
 Profile.propTypes = {
-  match: PropTypes.object,
-  history: PropTypes.object,
+  match: PropTypes.object.isRequired,
 };
 
 export default React.memo(withRouter(Profile));

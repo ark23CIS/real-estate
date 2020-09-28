@@ -1,5 +1,5 @@
-import React from "react";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import React from 'react';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
   Container,
   Typography,
@@ -10,24 +10,26 @@ import {
   Avatar,
   Button,
   CssBaseline,
-} from "@material-ui/core";
-import { useSelector, useDispatch } from "react-redux";
-import { login } from "../../../redux/actions";
-import { Redirect } from "react-router-dom";
-import { Copyright } from "../SignUp/signup-helper";
-import { useStyles } from "./signin-helper";
+} from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { login } from '../../../redux/actions';
+import { Copyright } from '../SignUp/signup-helper';
+import { useStyles } from './signin-helper';
 
 export default function SignIn() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const [loginData, setLoginData] = React.useState({
-    password: "",
-    email: "",
+    password: '',
+    email: '',
   });
-  const onClick = React.useCallback(async () => {
+
+  const onClick = React.useCallback(() => {
     dispatch(login(loginData));
   }, [dispatch, loginData]);
+
   const onChange = React.useCallback(
     (e) => {
       setLoginData({
@@ -35,16 +37,17 @@ export default function SignIn() {
         [e.target.name]: e.target.value,
       });
     },
-    [loginData]
+    [loginData],
   );
+
   if (auth.isAuthenticated && auth.user) {
     return <Redirect to={`/profiles/me`} />;
   }
 
   return (
-    <Container component="main" maxWidth="xs" className="mu-block">
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div className={classes.paper} style={{ marginTop: 0 }}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>

@@ -1,6 +1,5 @@
-import React from "react";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { useStyles, Copyright } from "./signup-helper";
+import React from 'react';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
   Container,
   Typography,
@@ -11,37 +10,38 @@ import {
   CssBaseline,
   Button,
   Avatar,
-} from "@material-ui/core";
-import { Redirect } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { register, addError } from "../../../redux/actions";
-import { withRouter } from "react-router";
-import PropTypes from "prop-types";
+} from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { withRouter } from 'react-router';
+import PropTypes from 'prop-types';
+import { register, addError } from '../../../redux/actions';
+import { useStyles, Copyright } from './signup-helper';
 
 function SignUp({ history }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const [registrationData, setRegistrationData] = React.useState({
-    firstName: "",
-    lastName: "",
-    password: "",
-    email: "",
-    passwordConfirm: "",
+    firstName: '',
+    lastName: '',
+    password: '',
+    email: '',
+    passwordConfirm: '',
   });
+
   const onSubmit = React.useCallback(
-    async (e) => {
+    (e) => {
       e.preventDefault();
-      console.log(registrationData);
       if (registrationData.password !== registrationData.passwordConfirm) {
-        dispatch(addError("Password do not match"));
-        console.log("error");
+        dispatch(addError('Password do not match'));
         return;
       }
       dispatch(register({ ...registrationData, history }));
     },
-    [dispatch, registrationData]
+    [dispatch, registrationData],
   );
+
   const onChange = React.useCallback(
     (e) => {
       setRegistrationData({
@@ -49,16 +49,17 @@ function SignUp({ history }) {
         [e.target.name]: e.target.value,
       });
     },
-    [registrationData]
+    [registrationData],
   );
+
   if (auth.isAuthenticated && auth.user) {
     return <Redirect to={`/profiles/me`} />;
   }
 
   return (
-    <Container component="main" maxWidth="xs" className="mu-block">
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div className={classes.paper} style={{ marginTop: 0 }}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -158,7 +159,7 @@ function SignUp({ history }) {
 }
 
 SignUp.propTypes = {
-  history: PropTypes.object,
+  history: PropTypes.object.isRequired,
 };
 
 export default React.memo(withRouter(SignUp));

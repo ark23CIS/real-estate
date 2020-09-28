@@ -1,50 +1,67 @@
-import React, { Fragment } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getRenterByID } from "../../../redux/actions";
-import { withRouter } from "react-router";
-import { Link } from "react-router-dom";
-import Slider from "../../Slider";
-import PropTypes from "prop-types";
-import { Comments } from "../..";
+import React, { Fragment } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getRenterByID } from '../../../redux/actions';
+import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
+import Slider from '../../Slider';
+import { Comments, Rating, Like, Dislike } from '../..';
 
-function index({ match }) {
+function SingleRenter({ match }) {
   const dispatch = useDispatch();
-  const { renter } = useSelector((state) => state.renter);
+  const {
+    renter: { renter },
+    auth: { user },
+  } = useSelector((state) => state);
   const renterID = match.params.renterID;
+
   React.useEffect(() => {
     if (renterID) dispatch(getRenterByID(renterID));
   }, [dispatch, renterID]);
-  console.log(renter);
+
   return (
-    <div className="mu-block">
+    <div>
       {renter && (
         <Fragment>
           <Slider photoLinks={renter.photos} />
           <div>{renter.title}</div>
           <div>{renter.text}</div>
           <div>Total views: {renter.totalViews}</div>
-          <div>Users watched times: {renter.amountOfusersWatched}</div>
+          <div>Users watched: {renter.amountOfusersWatched}</div>
           <div>Phone to contact: {renter.contactNumber}</div>
           <div>Max Price: {renter.maxPrice}$</div>
           <div>Preferred Footage: {renter.footage} squared meters</div>
           <div>Preferred Region: {renter.region}</div>
-          <div>Created at: {renter.created}</div>
+          <div>Created at: {new Date(renter.created).toDateString()}</div>
+          <Like
+            likeType="renter"
+            collectionID={renterID}
+            amountOflikes={renter.amountOflikes}
+            isActive={renter.likes.includes(user._id)}
+          />
+          <Dislike
+            collectionID={renterID}
+            amountOfDislikes={renter.amountOfdislikes}
+            dislikeType="renter"
+            isActive={renter.dislikes.includes(user._id)}
+          />
           <div>Total Star Rating: {renter.totalRating}</div>
+          <Rating label="renter" collectionID={renterID} />
           <div>
-            Author:{" "}
+            Author:{' '}
             <Link
               to={`/profiles/${renter.user._id}`}
             >{`${renter.user.firstName} ${renter.user.lastName}`}</Link>
           </div>
-          <Comments comments={[]} />
+          <Comments comments={renter.comments} label="renter" collectionID={renterID} />
         </Fragment>
       )}
     </div>
   );
 }
 
-index.propTypes = {
-  match: PropTypes.object,
+SingleRenter.propTypes = {
+  match: PropTypes.object.isRequired,
 };
 
-export default React.memo(withRouter(index));
+export default React.memo(withRouter(SingleRenter));

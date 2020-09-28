@@ -1,4 +1,4 @@
-import { GET_ESTATE, GET_ESTATES } from "../actions/types";
+import { GET_ESTATE, GET_ESTATES } from '../actions/types';
 
 const initState = {
   estate: null,

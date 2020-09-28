@@ -1,47 +1,29 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { withRouter } from "react-router";
-import { Result, Button } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { Block } from "..";
-import PropTypes from "prop-types";
-import { confirm } from "../../redux/actions";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { Result, Button } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Block } from '..';
+import { confirm } from '../../redux/actions';
+import { formTextInfo } from './checkInfo-helper';
 
-const formTextInfo = (confirmation_status) => {
-  if (confirmation_status === "success") {
-    return {
-      status: "success",
-      title: "Ready!",
-      subtitle: "Account has been confirmed",
-    };
-  } else if (confirmation_status === "error") {
-    return {
-      status: "error",
-      title: "Error",
-      subtitle: "The hash doesnt exist or it is invalid",
-    };
-  } else {
-    return {
-      status: "info",
-      title: "Confirm your E-mail",
-      subtitle: "The link with confirmation has been sent to your email",
-    };
-  }
-};
-
-function index({ location }) {
+function CheckInfo({ location }) {
   const dispatch = useDispatch();
   const { confirmation_status } = useSelector((state) => state.auth);
-  const hash = location.search.split("hash=")[1];
+  const hash = location.search.split('hash=')[1];
   const [info, setInfo] = React.useState(formTextInfo(confirmation_status));
+
   React.useEffect(() => {
     if (hash) {
       dispatch(confirm(hash));
     }
   }, [hash]);
+
   React.useEffect(() => {
     setInfo(formTextInfo(confirmation_status));
   }, [hash, confirmation_status]);
+
   return (
     <div>
       <Block>
@@ -50,7 +32,7 @@ function index({ location }) {
           title={info.title}
           subTitle={info.subtitle}
           extra={
-            info.status === "success" && (
+            info.status === 'success' && (
               <Button type="primary" key="console">
                 <Link to="/signin">Sign In</Link>
               </Button>
@@ -62,8 +44,8 @@ function index({ location }) {
   );
 }
 
-index.propTypes = {
-  location: PropTypes.object,
+CheckInfo.propTypes = {
+  location: PropTypes.object.isRequired,
 };
 
-export default React.memo(withRouter(index));
+export default React.memo(withRouter(CheckInfo));

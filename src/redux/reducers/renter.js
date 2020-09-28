@@ -1,4 +1,4 @@
-import { GET_RENTERS, GET_RENTER } from "../actions/types";
+import { GET_RENTERS, GET_RENTER } from '../actions/types';
 
 const initState = {
   renter: null,

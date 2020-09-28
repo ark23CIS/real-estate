@@ -1,5 +1,5 @@
-export { register, logout, login, loadUser, confirm } from "./auth";
-export { addError } from "./error";
+export { register, logout, login, loadUser, confirm } from './auth';
+export { addError } from './error';
 export {
   getAllProfiles,
   getProfile,
@@ -8,6 +8,24 @@ export {
   likeProfile,
   dislikeProfile,
   rateProfile,
-} from "./profile";
-export { createAD, getEstateByID } from "./estate";
-export { getRenterByID } from "./renter";
+  commentProfile,
+  uncommentProfile,
+} from './profile';
+
+export {
+  createAD,
+  getEstateByID,
+  commentEstate,
+  uncommentEstate,
+  rateEstate,
+  likeEstate,
+  dislikeEstate,
+} from './estate';
+export {
+  getRenterByID,
+  commentRenter,
+  uncommentRenter,
+  rateRenter,
+  likeRenter,
+  dislikeRenter,
+} from './renter';

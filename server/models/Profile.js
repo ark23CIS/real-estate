@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ProfileSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
   },
   contactNumber: {
     type: String,
@@ -31,8 +31,8 @@ const ProfileSchema = new Schema({
   messages: [
     {
       text: String,
-      author: { type: Schema.Types.ObjectId, ref: "user" },
-      receiver: { type: Schema.Types.ObjectId, ref: "user" },
+      author: { type: Schema.Types.ObjectId, ref: 'user' },
+      receiver: { type: Schema.Types.ObjectId, ref: 'user' },
     },
   ],
 
@@ -40,24 +40,24 @@ const ProfileSchema = new Schema({
     {
       text: String,
       created: { type: Date, default: Date.now },
-      postedBy: { type: mongoose.Schema.ObjectId, ref: "profile" },
+      postedBy: { type: mongoose.Schema.ObjectId, ref: 'profile' },
     },
   ],
 
-  likes: [{ type: Schema.Types.ObjectId, ref: "user" }],
+  likes: [{ type: Schema.Types.ObjectId, ref: 'user' }],
 
-  dislikes: [{ type: Schema.Types.ObjectId, ref: "user" }],
+  dislikes: [{ type: Schema.Types.ObjectId, ref: 'user' }],
 
   ratings: [
     {
       rating: Number,
-      ratedBy: { type: Schema.Types.ObjectId, ref: "user" },
+      ratedBy: { type: Schema.Types.ObjectId, ref: 'user' },
     },
   ],
 
   photo: {
     type: String,
-    default: "default",
+    default: 'default',
   },
 
   last_seen: {
@@ -65,7 +65,7 @@ const ProfileSchema = new Schema({
     default: new Date(),
   },
 
-  usersWatched: [{ type: Schema.Types.ObjectId, ref: "user" }],
+  usersWatched: [{ type: Schema.Types.ObjectId, ref: 'user' }],
 
   totalViews: {
     type: Number,
@@ -73,14 +73,11 @@ const ProfileSchema = new Schema({
   },
 });
 
-ProfileSchema.virtual("isOnline").get(function () {
-  return (
-    Math.trunc((Date.parse(new Date()) - Date.parse(this.last_seen)) / 60000) <
-    5
-  );
+ProfileSchema.virtual('isOnline').get(function () {
+  return Math.trunc((Date.parse(new Date()) - Date.parse(this.last_seen)) / 60000) < 5;
 });
 
-ProfileSchema.virtual("totalRating").get(function () {
+ProfileSchema.virtual('totalRating').get(function () {
   const ratings = this.ratings.map(({ rating }) => rating);
   const amountOfRatings = ratings ? ratings.length : 0;
   const totalRating = ratings.reduce((p, c) => p + c, 0) / amountOfRatings;
@@ -93,12 +90,12 @@ const virtualTotalField = (field) => {
   });
 };
 
-const fields = ["likes", "dislikes", "comments", "estates", "usersWatched"];
+const fields = ['likes', 'dislikes', 'comments', 'estates', 'usersWatched'];
 
 fields.forEach((val) => virtualTotalField(val));
 
-ProfileSchema.set("toJSON", {
+ProfileSchema.set('toJSON', {
   virtuals: true,
 });
 
-module.exports = mongoose.model("profile", ProfileSchema);
+module.exports = mongoose.model('profile', ProfileSchema);

@@ -1,8 +1,8 @@
-import React from "react";
-import "./banner.scss";
-import PropTypes from "prop-types";
+import React from 'react';
+import './banner.scss';
+import PropTypes from 'prop-types';
 
-function index({ children, title, subtitle }) {
+function Banner({ children, title, subtitle }) {
   return (
     <div className="banner">
       <h1 className="banner__title">{title}</h1>
@@ -13,10 +13,16 @@ function index({ children, title, subtitle }) {
   );
 }
 
-index.propTypes = {
-  children: PropTypes.string,
+Banner.propTypes = {
+  children: PropTypes.node,
   title: PropTypes.string,
   subtitle: PropTypes.string,
 };
 
-export default index;
+Banner.defaultProps = {
+  children: null,
+  title: '',
+  subtitle: '',
+};
+
+export default Banner;

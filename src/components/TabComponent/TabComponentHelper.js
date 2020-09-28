@@ -1,18 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { makeStyles, Box, Typography } from "@material-ui/core";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { makeStyles, Box, Typography } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: "100%",
+    width: '100%',
   },
 }));
 
 export function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
 
@@ -35,7 +35,7 @@ export const TabPanel = ({ children, value, index, ...other }) => {
 };
 
 TabPanel.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
 };

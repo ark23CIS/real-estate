@@ -1,12 +1,12 @@
-const { validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { secret } = require("../constants");
-const { User } = require("../models");
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { secret } = require('../constants');
+const { User } = require('../models');
 
 exports.authGetController = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -24,26 +24,20 @@ exports.authPostController = async (req, res) => {
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "This account is not registered" }] });
+      return res.status(400).json({ errors: [{ msg: 'This account is not registered' }] });
     }
     let passwordsAreEqual = await bcrypt.compare(password, user.password);
     if (!passwordsAreEqual) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "Incorrect password! Try one more time" }] });
+      return res.status(400).json({ errors: [{ msg: 'Incorrect password! Try one more time' }] });
     }
     if (!user.confirmed) {
-      return res
-        .status(400)
-        .json({
-          errors: [
-            {
-              msg: "You should confirm your email and only then try to log in",
-            },
-          ],
-        });
+      return res.status(400).json({
+        errors: [
+          {
+            msg: 'You should confirm your email and only then try to log in',
+          },
+        ],
+      });
     }
     let payload = {
       id: user.id,
@@ -53,7 +47,6 @@ exports.authPostController = async (req, res) => {
       res.json({ token });
     });
   } catch (err) {
-    console.log(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };

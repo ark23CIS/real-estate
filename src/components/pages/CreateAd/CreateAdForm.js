@@ -1,20 +1,13 @@
-import React from "react";
-import {
-  Container,
-  Typography,
-  TextField,
-  Avatar,
-  Button,
-  CssBaseline,
-} from "@material-ui/core";
-import { withRouter } from "react-router-dom";
-import ImageUploader from "react-images-upload";
-import { createAD } from "../../../redux/actions";
-import { useSelector, useDispatch } from "react-redux";
-import { useStyles } from "../SignIn/signin-helper";
-import PropTypes from "prop-types";
+import React from 'react';
+import { Container, Typography, TextField, Avatar, Button, CssBaseline } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+import ImageUploader from 'react-images-upload';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { createAD } from '../../../redux/actions';
+import { useStyles } from '../SignIn/signin-helper';
 
-function CreateAd({ label, iconComponent, fields, history }) {
+function CreateAdForm({ label, iconComponent, fields, history }) {
   const classes = useStyles();
   const [ADData, setADData] = React.useState({ pictures: [] });
   const dispatch = useDispatch();
@@ -25,9 +18,8 @@ function CreateAd({ label, iconComponent, fields, history }) {
         ...ADData,
         pictures: pictures,
       }));
-      console.log(ADData);
     },
-    [ADData]
+    [ADData],
   );
 
   const onAddressChange = React.useCallback(
@@ -38,7 +30,7 @@ function CreateAd({ label, iconComponent, fields, history }) {
         estateAddress: { ...ADData.estateAddress, [target.name]: target.value },
       }));
     },
-    [ADData]
+    [ADData],
   );
 
   const onFieldChange = React.useCallback(
@@ -49,19 +41,17 @@ function CreateAd({ label, iconComponent, fields, history }) {
         [target.name]: target.value,
       }));
     },
-    [ADData]
+    [ADData],
   );
 
   const onSubmit = React.useCallback(() => {
     dispatch(createAD(ADData, label, history));
   }, [ADData]);
 
-  console.log(ADData.pictures);
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div className={classes.paper} style={{ marginTop: 0 }}>
         <Avatar className={classes.avatar}>{iconComponent}</Avatar>
         <Typography component="h1" variant="h5">
           {label}
@@ -70,7 +60,7 @@ function CreateAd({ label, iconComponent, fields, history }) {
           {fields &&
             fields
               .filter(({ belongs }) =>
-                label === "renter" ? belongs !== "estate" : belongs !== "renter"
+                label === 'renter' ? belongs !== 'estate' : belongs !== 'renter',
               )
               .map(({ name, label, type }, index) => (
                 <TextField
@@ -82,9 +72,7 @@ function CreateAd({ label, iconComponent, fields, history }) {
                   id={name}
                   autoComplete={name}
                   autoFocus
-                  onChange={
-                    type === "location" ? onAddressChange : onFieldChange
-                  }
+                  onChange={type === 'location' ? onAddressChange : onFieldChange}
                   key={`${name}_${index}`}
                   required
                 />
@@ -94,7 +82,7 @@ function CreateAd({ label, iconComponent, fields, history }) {
             withPreview={true}
             buttonText={`Choose ${label} images`}
             onChange={onPhotosChange}
-            imgExtension={[".jpg", ".gif", ".png", ".gif", "jpeg"]}
+            imgExtension={['.jpg', '.gif', '.png', '.gif', 'jpeg']}
             maxFileSize={5242880}
           />
           <Button
@@ -113,11 +101,11 @@ function CreateAd({ label, iconComponent, fields, history }) {
   );
 }
 
-CreateAd.propTypes = {
-  history: PropTypes.object,
+CreateAdForm.propTypes = {
+  history: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
   iconComponent: PropTypes.element.isRequired,
   fields: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default React.memo(withRouter(CreateAd));
+export default React.memo(withRouter(CreateAdForm));

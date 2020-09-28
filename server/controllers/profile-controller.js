@@ -1,53 +1,52 @@
-const { Profile, User } = require("../models");
+const { Profile, User } = require('../models');
 
 exports.profileMeGetController = async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id }).populate(
-      "user"
-    );
+    const profile = await Profile.findOne({ user: req.user.id })
+      .populate('user', '-password -confirmation_hash')
+      .populate({
+        path: 'comments.postedBy',
+        model: 'profile',
+        populate: { path: 'user', model: 'user' },
+      });
 
     if (!profile) {
-      return res.status(400).send("No profile for the user");
+      return res.status(400).send('No profile for the user');
     }
     res.json(profile);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
 exports.getProfileByUserIDController = async (req, res) => {
   try {
-    const profile = await Profile.find({ user: req.params.user_id }).populate(
-      "user"
-    );
+    const profile = await Profile.findOne({ user: req.params.user_id })
+      .populate('user', '-password -confirmation_hash')
+      .populate({
+        path: 'comments.postedBy',
+        model: 'profile',
+        populate: { path: 'user', model: 'user' },
+      });
     if (!profile) {
-      return res.status(400).send("No profile for the user");
+      return res.status(400).send('No profile for the user');
     }
     res.json(profile);
   } catch (err) {
     console.error(err.message);
-    res.send(500).send("Server Error");
+    res.send(500).send('Server Error');
   }
 };
 
 exports.profilePostController = async (req, res) => {
-  const {
-    dateOfBirth,
-    // livingAddress,
-    contactNumber,
-    vk,
-    instagram,
-    facebook,
-    twitter,
-    youtube,
-  } = req.body;
+  const { dateOfBirth, contactNumber, vk, instagram, facebook, twitter, youtube } = req.body;
   const socials = [
-    { name: "vk", value: vk },
-    { name: "instagram", value: instagram },
-    { name: "facebook", value: facebook },
-    { name: "twitter", value: twitter },
-    { name: "youtube", value: youtube },
+    { name: 'vk', value: vk },
+    { name: 'instagram', value: instagram },
+    { name: 'facebook', value: facebook },
+    { name: 'twitter', value: twitter },
+    { name: 'youtube', value: youtube },
   ];
   const errors = (socials) => {
     return socials.reduce((p, { name, value }) => {
@@ -64,8 +63,8 @@ exports.profilePostController = async (req, res) => {
   const profileFields = {};
   profileFields.user = req.user.id;
 
-  const addFieldToObject = (field, obj, secondaryProperty = "", value) => {
-    if (secondaryProperty !== "") {
+  const addFieldToObject = (field, obj, secondaryProperty = '', value) => {
+    if (secondaryProperty !== '') {
       if (value) {
         if (!obj[secondaryProperty]) obj[secondaryProperty] = {};
         obj[secondaryProperty][field] = value;
@@ -76,61 +75,49 @@ exports.profilePostController = async (req, res) => {
   };
 
   const possibleProfileFields = [
-    // {
-    //   name: "livingAddress",
-    //   mainProperty: true,
-    //   value: livingAddress,
-    // },
-    { name: "dateOfBirth", mainProperty: true, value: dateOfBirth },
-    { name: "contactNumber", mainProperty: true, value: contactNumber },
+    { name: 'dateOfBirth', mainProperty: true, value: dateOfBirth },
+    { name: 'contactNumber', mainProperty: true, value: contactNumber },
     {
-      name: "youtube",
+      name: 'youtube',
       value: youtube,
       mainProperty: false,
-      secondaryProperty: "social",
+      secondaryProperty: 'social',
     },
     {
-      name: "twitter",
+      name: 'twitter',
       value: twitter,
       mainProperty: false,
-      secondaryProperty: "social",
+      secondaryProperty: 'social',
     },
     {
-      name: "facebook",
+      name: 'facebook',
       value: facebook,
       mainProperty: false,
-      secondaryProperty: "social",
+      secondaryProperty: 'social',
     },
     {
-      name: "instagram",
+      name: 'instagram',
       value: instagram,
       mainProperty: false,
-      secondaryProperty: "social",
+      secondaryProperty: 'social',
     },
     {
-      name: "vk",
+      name: 'vk',
       value: vk,
       mainProperty: false,
-      secondaryProperty: "social",
+      secondaryProperty: 'social',
     },
   ];
-  possibleProfileFields.forEach(
-    ({ name, mainProperty, secondaryProperty, value }) => {
-      addFieldToObject(
-        name,
-        profileFields,
-        mainProperty ? "" : secondaryProperty,
-        value
-      );
-    }
-  );
+  possibleProfileFields.forEach(({ name, mainProperty, secondaryProperty, value }) => {
+    addFieldToObject(name, profileFields, mainProperty ? '' : secondaryProperty, value);
+  });
   try {
     let profile = await Profile.findOne({ user: req.user.id });
     if (profile) {
       profile = await Profile.findByIdAndUpdate(
         { user: req.user.id },
         { $set: profileFields },
-        { new: true }
+        { new: true },
       );
       return res.json(profile);
     }
@@ -139,7 +126,7 @@ exports.profilePostController = async (req, res) => {
     res.json(profile);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -147,9 +134,9 @@ exports.deleteOwnProfileController = async (req, res) => {
   try {
     await Profile.findOneAndRemove({ user: req.body.id });
     await User.findOneAndRemove({ _id: req.body.id });
-    res.json({ msg: "User and its profile have been removed" });
+    res.json({ msg: 'User and its profile have been removed' });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
