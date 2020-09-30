@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_RENTER } from './types';
+import { GET_RENTER, GET_RENTERS } from './types';
 import { getProfile } from './index';
 
 export const getRenterByID = (renter_id) => async (dispatch) => {
@@ -12,6 +12,20 @@ export const getRenterByID = (renter_id) => async (dispatch) => {
     };
     const res = await axios.get(`/api/renters/id/${renter_id}`, config);
     dispatch({ type: GET_RENTER, payload: res.data });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getAllRenters = () => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const res = await axios.get(`/api/renters`, config);
+    dispatch({ type: GET_RENTERS, payload: res.data });
   } catch (err) {
     console.log(err.message);
   }
@@ -49,7 +63,9 @@ export const uncommentRenter = ({ uncommentedCollection, commentID }) => async (
   }
 };
 
-export const rateRenter = ({ rating, rated_collection }) => async (dispatch) => {
+export const rateRenter = ({ rating, rated_collection, isSearchPage = false }) => async (
+  dispatch,
+) => {
   try {
     const config = {
       headers: {
@@ -57,13 +73,13 @@ export const rateRenter = ({ rating, rated_collection }) => async (dispatch) => 
       },
     };
     const res = await axios.put(`/api/renters/rate/${rated_collection}`, { rating }, config);
-    dispatch({ type: GET_RENTER, payload: res.data });
+    !isSearchPage ? dispatch({ type: GET_RENTER, payload: res.data }) : dispatch(getAllRenters());
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const likeRenter = (liked_collection) => async (dispatch) => {
+export const likeRenter = (liked_collection, isSearchPage = false) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -71,13 +87,13 @@ export const likeRenter = (liked_collection) => async (dispatch) => {
       },
     };
     const res = await axios.put(`/api/renters/like/${liked_collection}`, null, config);
-    dispatch({ type: GET_RENTER, payload: res.data });
+    !isSearchPage ? dispatch({ type: GET_RENTER, payload: res.data }) : dispatch(getAllRenters());
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const dislikeRenter = (disliked_collection) => async (dispatch) => {
+export const dislikeRenter = (disliked_collection, isSearchPage = false) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -85,7 +101,7 @@ export const dislikeRenter = (disliked_collection) => async (dispatch) => {
       },
     };
     const res = await axios.put(`/api/renters/dislike/${disliked_collection}`, null, config);
-    dispatch({ type: GET_RENTER, payload: res.data });
+    !isSearchPage ? dispatch({ type: GET_RENTER, payload: res.data }) : dispatch(getAllRenters());
   } catch (err) {
     console.log(err.message);
   }

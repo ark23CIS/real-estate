@@ -10,3 +10,8 @@ export { default as Block } from './Block';
 export { default as Like } from './Like';
 export { default as Dislike } from './Dislike';
 export { default as Views } from './Views';
+export { default as Ads } from './Ads';
+export { default as CommentsIcon } from './CommentsIcon';
+export { default as SearchBar } from './SearchBar';
+export { default as Pagination } from './Pagination';
+export { default as Filters } from './Filters';

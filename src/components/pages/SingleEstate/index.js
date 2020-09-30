@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getEstateByID } from '../../../redux/actions';
 import Slider from '../../Slider';
-import { Comments, Rating, Like, Dislike } from '../..';
+import { Comments, Rating, Like, Dislike, Views } from '../..';
 
 function SingleEstate({ match }) {
   const dispatch = useDispatch();
   const {
     estate: { estate },
     auth: { user },
+    profile: { profile },
   } = useSelector((state) => state);
 
   const estateID = match.params.estateID;
@@ -29,7 +30,6 @@ function SingleEstate({ match }) {
           </div>
           <div>{estate.title}</div>
           <div>{estate.text}</div>
-          <div>Total views: {estate.totalViews}</div>
           <div>Users watched: {estate.amountOfusersWatched}</div>
           <div>Phone to contact: {estate.contactNumber}</div>
           <div>Price: {estate.price}$</div>
@@ -45,23 +45,32 @@ function SingleEstate({ match }) {
             likeType="renter"
             collectionID={estateID}
             amountOflikes={estate.amountOflikes}
-            isActive={estate.likes.includes(user._id)}
+            isActive={user ? estate.likes.includes(user._id) : false}
+            isClickable={!!profile}
           />
           <Dislike
             collectionID={estateID}
             amountOfDislikes={estate.amountOfdislikes}
             dislikeType="renter"
-            isActive={estate.dislikes.includes(user._id)}
+            isActive={user ? estate.dislikes.includes(user._id) : false}
+            isClickable={!!profile}
           />
           <div>Total Star Rating: {estate.totalRating}</div>
-          <Rating label="estate" collectionID={estateID} />
+          <Rating label="estate" collectionID={estateID} isClickable={!!profile} />
           <div>
             Author:{' '}
             <Link
               to={`/profiles/${estate.user._id}`}
             >{`${estate.user.firstName} ${estate.user.lastName}`}</Link>
           </div>
-          <Comments comments={estate.comments} label="estate" collectionID={estateID} />
+          <Comments
+            comments={estate.comments}
+            label="estate"
+            collectionID={estateID}
+            ownerID={estate.user._id}
+            userCanComment={!!profile}
+          />
+          <Views amountOfViews={estate.totalViews} />
         </Fragment>
       )}
     </React.Fragment>

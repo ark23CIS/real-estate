@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import SearchIcon from '@material-ui/icons/Search';
 import { FaBars } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -34,12 +33,6 @@ const Header = React.memo(({ location }) => {
               <FaBars onClick={toggleDrawer} />
             </Link>
             <div className="header__logo">Real Estate</div>
-          </div>
-          <div className="header__right">
-            <div className="header__input">
-              <SearchIcon />
-              <input type="text" placeholder="Search" />
-            </div>
           </div>
         </div>
         <nav className={isActive ? 'nav-menu active' : 'nav-menu'}>

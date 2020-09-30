@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { addError } from './index';
-import { GET_PROFILE, PROFILE_ERROR, GET_PROFILES, UPDATE_PROFILE_PHOTO } from './types';
+import { GET_PROFILE, GET_PROFILES, PROFILE_ERROR, UPDATE_PROFILE_PHOTO } from './types';
 
 export const getProfile = () => async (dispatch) => {
   try {
@@ -38,8 +38,8 @@ export const getProfileByID = (user_id) => async (dispatch) => {
   try {
     const res = await axios.get(`/api/profiles/id/${user_id}`);
     dispatch({
-      type: GET_PROFILE,
-      payload: res.data,
+      type: GET_PROFILES,
+      payload: [res.data],
     });
   } catch (err) {
     if (err.statusText)
@@ -92,7 +92,7 @@ export const likeProfile = (user_id) => async (dispatch) => {
       },
     };
     const res = await axios.put(`/api/profiles/like/${user_id}`, null, config);
-    dispatch({ type: GET_PROFILE, payload: res.data });
+    dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     if (err.statusText)
       dispatch({
@@ -110,7 +110,7 @@ export const dislikeProfile = (user_id) => async (dispatch) => {
       },
     };
     const res = await axios.put(`/api/profiles/dislike/${user_id}`, null, config);
-    dispatch({ type: GET_PROFILE, payload: res.data });
+    dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     if (err.statusText)
       dispatch({
@@ -128,7 +128,7 @@ export const rateProfile = (user_id, rating) => async (dispatch) => {
       },
     };
     const res = await axios.put(`/api/profiles/rate/${user_id}`, { rating }, config);
-    dispatch({ type: GET_PROFILE, payload: res.data });
+    dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     if (err.statusText)
       dispatch({
@@ -146,7 +146,7 @@ export const commentProfile = ({ commented_collection, text }) => async (dispatc
       },
     };
     const res = await axios.put(`/api/profiles/comment/${commented_collection}`, { text }, config);
-    dispatch({ type: GET_PROFILE, payload: res.data });
+    dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     console.log(err.message);
   }
@@ -164,7 +164,7 @@ export const uncommentProfile = ({ uncommentedCollection, commentID }) => async 
       { commentID },
       config,
     );
-    dispatch({ type: GET_PROFILE, payload: res.data });
+    dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     console.log(err.message);
   }

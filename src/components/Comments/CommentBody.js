@@ -5,7 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import PropTypes from 'prop-types';
 import { uncommentEstate, uncommentRenter, uncommentProfile } from '../../redux/actions';
 
-function CommentBody({ item, classes, collectionID, userID, label }) {
+function CommentBody({ item, classes, collectionID, userID, ownerID, label }) {
   const dispatch = useDispatch();
 
   const onUncomment = React.useCallback(
@@ -21,6 +21,7 @@ function CommentBody({ item, classes, collectionID, userID, label }) {
     [dispatch, collectionID],
   );
 
+  console.log(item.postedBy);
   return (
     <p className={classes.commentText}>
       <Link to={`/profiles/${item.postedBy.user ? item.postedBy.user._id : ''}`}>
@@ -32,7 +33,7 @@ function CommentBody({ item, classes, collectionID, userID, label }) {
       {item.text}
       <span className={classes.commentDate}>
         {new Date(item.created).toDateString()} |
-        {item.postedBy.user && userID && item.postedBy.user._id === userID && (
+        {item.postedBy.user && userID && (item.postedBy.user._id === userID || ownerID === userID) && (
           <DeleteIcon onClick={() => onUncomment(item._id)} className={classes.commentDelete}>
             delete
           </DeleteIcon>
@@ -47,6 +48,7 @@ CommentBody.propTypes = {
   classes: PropTypes.object.isRequired,
   collectionID: PropTypes.string.isRequired,
   userID: PropTypes.string.isRequired,
+  ownerID: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
 };
 

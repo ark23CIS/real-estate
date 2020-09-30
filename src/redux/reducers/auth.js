@@ -57,6 +57,7 @@ export default function (state = initState, action) {
         token: null,
         loading: false,
         confirmation_status: 'sent',
+        user: null,
       };
     default:
       return state;

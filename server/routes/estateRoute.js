@@ -32,11 +32,11 @@ router.post(
   createEstate,
 );
 
-router.get('/', authMiddleware, getAllCollectionsController(Estate));
+router.get('/', getAllCollectionsController(Estate));
 
 router.get('/me', authMiddleware, getOwnEstates);
 
-router.get('/id/:ad_id', authMiddleware, getADByID(Estate));
+router.get('/id/:ad_id', getADByID(Estate));
 
 router.put('/like/:liked_collection', authMiddleware, likeCollectionCtrl(Estate, '_id'));
 

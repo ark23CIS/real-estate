@@ -5,3 +5,17 @@
 .thumb-active {
   color: rebeccapurple;
 }
+
+.comment {
+  color: gold;
+}
+
+.rate-block {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  &__appraisal {
+    font-size: 20px;
+    padding-left: 8px;
+  }
+}

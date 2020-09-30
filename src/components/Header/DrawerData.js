@@ -14,7 +14,6 @@ export const DrawerData = [
     title: 'Search',
     path: '/search',
     icon: <FaSearch />,
-    logged: true,
   },
   {
     title: 'Profile',

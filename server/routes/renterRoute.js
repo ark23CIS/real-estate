@@ -32,13 +32,13 @@ router.post(
   createRenter,
 );
 
-router.get('/', authMiddleware, getAllCollectionsController(Renter));
+router.get('/', getAllCollectionsController(Renter));
 
 router.get('/me', authMiddleware, getOwnRenters);
 
 router.put('/like/:liked_collection', authMiddleware, likeCollectionCtrl(Renter, '_id'));
 
-router.get('/id/:ad_id', authMiddleware, getADByID(Renter));
+router.get('/id/:ad_id', getADByID(Renter));
 
 router.put('/dislike/:disliked_collection', authMiddleware, dislikeCollectionCtrl(Renter, '_id'));
 

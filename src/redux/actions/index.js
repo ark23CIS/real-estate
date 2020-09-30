@@ -20,6 +20,7 @@ export {
   rateEstate,
   likeEstate,
   dislikeEstate,
+  getAllEstates,
 } from './estate';
 export {
   getRenterByID,
@@ -28,4 +29,5 @@ export {
   rateRenter,
   likeRenter,
   dislikeRenter,
+  getAllRenters,
 } from './renter';

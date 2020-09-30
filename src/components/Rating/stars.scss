@@ -1,3 +1,10 @@
 .stars {
   font-size: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.rating-value {
+  font-size: 25px;
+  padding-left: 10px;
 }

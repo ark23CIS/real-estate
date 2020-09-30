@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 function Views({ amountOfViews }) {
   return (
-    <div>
+    <div className="rate-block">
       <Visibility />
-      <span>{amountOfViews}</span>
+      <div className="rate-block__appraisal">{amountOfViews}</div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Ads } from '../..';
 
 export const profileTabItems = [
   {

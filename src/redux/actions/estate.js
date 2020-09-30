@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { addError } from './index';
-import { GET_ESTATE, GET_RENTER } from './types';
+import { GET_ESTATE, GET_RENTER, GET_ESTATES } from './types';
 import { getProfile } from './profile';
 
 export const createAD = (data, type, history) => (dispatch) => {
@@ -59,6 +59,20 @@ export const getEstateByID = (estate_id) => async (dispatch) => {
   }
 };
 
+export const getAllEstates = () => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const res = await axios.get(`/api/estates`, config);
+    dispatch({ type: GET_ESTATES, payload: res.data });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 export const commentEstate = ({ commented_collection, text }) => async (dispatch) => {
   try {
     const config = {
@@ -91,7 +105,9 @@ export const uncommentEstate = ({ uncommentedCollection, commentID }) => async (
   }
 };
 
-export const rateEstate = ({ rating, rated_collection }) => async (dispatch) => {
+export const rateEstate = ({ rating, rated_collection, isSearchPage = false }) => async (
+  dispatch,
+) => {
   try {
     const config = {
       headers: {
@@ -99,13 +115,13 @@ export const rateEstate = ({ rating, rated_collection }) => async (dispatch) => 
       },
     };
     const res = await axios.put(`/api/estates/rate/${rated_collection}`, { rating }, config);
-    dispatch({ type: GET_ESTATE, payload: res.data });
+    !isSearchPage ? dispatch({ type: GET_ESTATE, payload: res.data }) : dispatch(getAllEstates());
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const likeEstate = (liked_collection) => async (dispatch) => {
+export const likeEstate = (liked_collection, isSearchPage = false) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -113,13 +129,13 @@ export const likeEstate = (liked_collection) => async (dispatch) => {
       },
     };
     const res = await axios.put(`/api/estates/like/${liked_collection}`, null, config);
-    dispatch({ type: GET_ESTATE, payload: res.data });
+    !isSearchPage ? dispatch({ type: GET_ESTATE, payload: res.data }) : dispatch(getAllEstates());
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const dislikeEstate = (disliked_collection) => async (dispatch) => {
+export const dislikeEstate = (disliked_collection, isSearchPage = false) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -127,7 +143,7 @@ export const dislikeEstate = (disliked_collection) => async (dispatch) => {
       },
     };
     const res = await axios.put(`/api/estates/dislike/${disliked_collection}`, null, config);
-    dispatch({ type: GET_ESTATE, payload: res.data });
+    !isSearchPage ? dispatch({ type: GET_ESTATE, payload: res.data }) : dispatch(getAllEstates());
   } catch (err) {
     console.log(err.message);
   }
