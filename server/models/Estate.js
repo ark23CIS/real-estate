@@ -67,8 +67,8 @@ const EstateSchema = new Schema({
       default: '-',
     },
     buildingNumber: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: '-',
     },
   },
 
@@ -86,6 +86,11 @@ const EstateSchema = new Schema({
   totalViews: {
     type: Number,
     default: 0,
+  },
+
+  visible: {
+    type: Boolean,
+    default: true,
   },
 
   ratings: [

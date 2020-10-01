@@ -10,6 +10,7 @@ import {
   SingleRenter,
   Search,
   CreateProfile,
+  Offers,
 } from './pages';
 import { Error, CheckInfo } from '.';
 import 'antd/dist/antd.css';
@@ -21,14 +22,15 @@ export default function Routes() {
       <Error />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/estates/:estateID/" component={SingleEstate} />
-        <Route path="/signup/" component={SignUp} />
-        <Route path="/signin/" component={SignIn} />
-        <Route path="/profiles/:profileID/" component={Profile} />
-        <Route path="/search" component={Search} />
-        <Route path="/renters/:renterID" component={SingleRenter} />
-        <Route path="/create-profile" component={CreateProfile} />
-        <Route path="/check-info" component={CheckInfo} />
+        <Route exact path="/estates/:estateID/" component={SingleEstate} />
+        <Route exact path="/signup/" component={SignUp} />
+        <Route exact path="/signin/" component={SignIn} />
+        <Route exact path="/profiles/:profileID/" component={Profile} />
+        <Route exact path="/search" component={Search} />
+        <Route exact path="/renters/:renterID" component={SingleRenter} />
+        <Route exact path="/create-profile" component={CreateProfile} />
+        <Route exact path="/check-info" component={CheckInfo} />
+        <Route exact path="/offers" component={Offers} />
         <Route component={NotFound} />
       </Switch>
     </div>

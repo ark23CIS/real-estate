@@ -11,6 +11,7 @@ import {
   CLEAR_PROFILE,
   CONFIRMATION,
 } from './types';
+import { configContentType } from '../helpers';
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
@@ -29,14 +30,9 @@ export const loadUser = () => async (dispatch) => {
 };
 
 export const register = ({ firstName, lastName, email, password, history }) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   const body = JSON.stringify({ email, firstName, lastName, password });
   try {
-    await axios.post('/api/users', body, config);
+    await axios.post('/api/users', body, configContentType());
     history.push('/check-info');
   } catch (err) {
     const errors = err.response.data.errors;
@@ -59,14 +55,9 @@ export const confirm = (hash) => async (dispatch) => {
 };
 
 export const login = ({ email, password }) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   const body = JSON.stringify({ email, password });
   try {
-    const res = await axios.post('/api/auth', body, config);
+    const res = await axios.post('/api/auth', body, configContentType());
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,

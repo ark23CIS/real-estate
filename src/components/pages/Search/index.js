@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Ads, SearchBar, Pagination, Filters } from '../..';
-import { getAllRenters, getAllEstates, getProfile } from '../../../redux/actions';
+import { searchAds, getProfile, getAllEstates } from '../../../redux/actions';
 import { Container } from '@material-ui/core';
 import './search-page.scss';
 
@@ -27,9 +27,12 @@ function Search() {
   });
 
   React.useEffect(() => {
-    dispatch(getProfile());
-    dispatch(getAllRenters());
+    dispatch(getAllEstates());
   }, [dispatch]);
+
+  React.useEffect(() => {
+    dispatch(searchAds(searchPostsData));
+  }, [dispatch, searchPostsData]);
 
   const changeFilterData = React.useCallback(
     (name, value) => {
@@ -47,7 +50,10 @@ function Search() {
         <Filters {...searchPostsData} callback={changeFilterData} />
         <Ads
           cards={[
-            ...(renters ? [...renters, ...renters, ...renters] : estates).slice(
+            ...(searchPostsData.AdType === 'renters'
+              ? renters
+              : estates.filter((estate) => estate.visible)
+            ).slice(
               searchPostsData.postsPerPage * (searchPostsData.activePage - 1),
               searchPostsData.postsPerPage * searchPostsData.activePage,
             ),
@@ -57,7 +63,7 @@ function Search() {
         <Pagination
           callback={changeFilterData}
           postsPerPage={searchPostsData.postsPerPage}
-          totalPosts={renters ? renters.length : estates}
+          totalPosts={searchPostsData.AdType === 'renters' ? renters.length : estates.length}
         />
       </Container>
     </React.Fragment>

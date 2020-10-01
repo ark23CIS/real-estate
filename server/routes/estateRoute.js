@@ -11,6 +11,7 @@ const {
   uncommentCollectionCtrl,
   getOwnEstates,
   getADByID,
+  searchEstates,
 } = require('../controllers');
 const { authMiddleware } = require('../middlewares');
 const router = express.Router();
@@ -27,12 +28,13 @@ router.post(
     check('region', 'Region is required').exists(),
     check('price', 'price should be a number').isNumeric(),
     check('footage', 'footage should be a number').isNumeric(),
-    check('buildingNumber', 'Building Number should be a number').isNumeric(),
   ],
   createEstate,
 );
 
 router.get('/', getAllCollectionsController(Estate));
+
+router.get('/search', searchEstates);
 
 router.get('/me', authMiddleware, getOwnEstates);
 

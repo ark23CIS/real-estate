@@ -1,38 +1,11 @@
 const express = require('express');
-const { Profile, Estate, Renter } = require('../models');
-const { deleteProfileFileCtrl } = require('../controllers');
+const { Profile } = require('../models');
 const {
   multer: { multerUploads, datauri },
   cloudinary: { cloudinaryConfig, uploader },
 } = require('../constants');
 const { authMiddleware } = require('../middlewares');
 const router = express.Router();
-
-const updatePhotosADCtrl = (Model) => (req, res) => {
-  let ad_id = req.fields.ad_id;
-  const file = datauri(req);
-  uploader.upload(
-    file.content,
-    {
-      crop: 'scale',
-      responsive: true,
-      width: 'auto',
-    },
-    async (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send('Server Error');
-      }
-      try {
-        await Model.updateOne({ _id: ad_id }, { $push: { photos: result.secure_url } });
-        res.json({ photo: result.secure_url });
-      } catch (error) {
-        console.log(error.message);
-        res.status(500).send('Server Error');
-      }
-    },
-  );
-};
 
 router.put(
   '/profile',
@@ -115,7 +88,5 @@ router.post(
     );
   },
 );
-
-router.delete('/profile', authMiddleware, deleteProfileFileCtrl);
 
 module.exports = router;

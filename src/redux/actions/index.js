@@ -21,6 +21,7 @@ export {
   likeEstate,
   dislikeEstate,
   getAllEstates,
+  searchAds,
 } from './estate';
 export {
   getRenterByID,
@@ -31,3 +32,10 @@ export {
   dislikeRenter,
   getAllRenters,
 } from './renter';
+
+export {
+  createReservation,
+  getOwnReservations,
+  deleteReservation,
+  updateReservation,
+} from './reservation';

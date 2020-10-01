@@ -9,7 +9,6 @@ import {
 } from '../actions/types';
 
 const initState = {
-  loading: true,
   user: null,
   isAuthenticated: null,
   confirmation_status: 'sent',
@@ -29,7 +28,6 @@ export default function (state = initState, action) {
       return {
         ...state,
         isAuthenticated: true,
-        loading: false,
         user: payload,
       };
     case LOGIN_SUCCESS:
@@ -38,7 +36,6 @@ export default function (state = initState, action) {
         ...state,
         ...payload,
         isAuthenticated: true,
-        loading: false,
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
@@ -48,14 +45,12 @@ export default function (state = initState, action) {
         ...state,
         isAuthenticated: false,
         token: null,
-        loading: false,
       };
     case LOGOUT:
       return {
         ...state,
         isAuthenticated: false,
         token: null,
-        loading: false,
         confirmation_status: 'sent',
         user: null,
       };

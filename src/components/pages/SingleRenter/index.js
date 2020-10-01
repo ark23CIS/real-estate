@@ -5,7 +5,7 @@ import { getAllEstates, getRenterByID } from '../../../redux/actions';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import Slider from '../../Slider';
-import { Comments, Rating, Like, Dislike, Views } from '../..';
+import { Comments, Rating, Like, Dislike, Views, Banner } from '../..';
 
 function SingleRenter({ match }) {
   const dispatch = useDispatch();
@@ -69,6 +69,17 @@ function SingleRenter({ match }) {
             userCanComment={!!profile}
           />
         </Fragment>
+      )}
+      {!renter && (
+        <Banner
+          title="The renter does not exist"
+          subtitle="The renter wasnt found"
+          children={
+            <Link to="/search">
+              <button className="primary-button">Go back</button>
+            </Link>
+          }
+        />
       )}
     </div>
   );

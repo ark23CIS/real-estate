@@ -11,7 +11,7 @@ export const profileTabItems = [
     tabComponent: <div>Estates</div>,
   },
   {
-    label: 'Bookings',
+    label: 'Reservated',
     tabComponent: <div>Bookings</div>,
   },
 ];

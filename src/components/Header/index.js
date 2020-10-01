@@ -13,7 +13,7 @@ import './header.scss';
 
 const Header = React.memo(({ location }) => {
   const dispatch = useDispatch();
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [isActive, setIsActive] = React.useState(false);
 
   const toggleDrawer = React.useCallback(() => {
@@ -43,25 +43,23 @@ const Header = React.memo(({ location }) => {
                   <AiOutlineClose style={{ zIndex: 5 }} />
                 </Link>
               </li>
-              {DrawerData.filter((item) => item.logged !== !isAuthenticated && !loading).map(
-                (item, index) => {
-                  return (
-                    <li
-                      key={`${index} ${item.path}`}
-                      className={`nav-text`}
-                      onClick={item.title === 'Log out' ? onClick : undefined}
+              {DrawerData.filter((item) => item.logged !== !isAuthenticated).map((item, index) => {
+                return (
+                  <li
+                    key={`${index} ${item.path}`}
+                    className={`nav-text`}
+                    onClick={item.title === 'Log out' ? onClick : undefined}
+                  >
+                    <Link
+                      to={item.path}
+                      className={location.pathname === item.path ? 'active-page' : ''}
                     >
-                      <Link
-                        to={item.path}
-                        className={location.pathname === item.path ? 'active-page' : ''}
-                      >
-                        {item.icon}
-                        <span>{item.title}</span>
-                      </Link>
-                    </li>
-                  );
-                },
-              )}
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </Scrollbars>
         </nav>

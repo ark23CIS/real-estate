@@ -6,10 +6,15 @@ const {
   getProfileByUserIDController,
   deleteOwnProfileController,
 } = require('./profile-controller');
-const { deleteProfileFileCtrl } = require('./filesCtrl');
 const { Profile } = require('../models');
-const { createEstate, deleteEstate, getOwnEstates } = require('./estateCtrl');
-const { createRenter, deleteRenter, getOwnRenters } = require('./renterCtrl');
+const { createEstate, deleteEstate, getOwnEstates, searchEstates } = require('./estateCtrl');
+const { createRenter, deleteRenter, getOwnRenters, searchRenters } = require('./renterCtrl');
+const {
+  createReservation,
+  getOwnReservations,
+  deleteReservation,
+  updateReservation,
+} = require('./reservationCtrl');
 
 const getAllCollectionsController = (Model) => async (req, res) => {
   try {
@@ -269,13 +274,14 @@ module.exports = {
   profilePostController,
   getProfileByUserIDController,
   deleteOwnProfileController,
-  deleteProfileFileCtrl,
   createRenter,
   deleteRenter,
   getOwnRenters,
+  searchRenters,
   createEstate,
   deleteEstate,
   getOwnEstates,
+  searchEstates,
   uncommentCollectionCtrl,
   commentCollectionCtrl,
   rateCollectionCtrl,
@@ -283,4 +289,8 @@ module.exports = {
   likeCollectionCtrl,
   getAllCollectionsController,
   getADByID,
+  createReservation,
+  getOwnReservations,
+  deleteReservation,
+  updateReservation,
 };

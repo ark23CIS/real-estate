@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaStickyNote } from 'react-icons/fa';
 import { AiFillHome, AiOutlineForm } from 'react-icons/ai';
 import { ImProfile } from 'react-icons/im';
 import { GoSignIn, GoSignOut } from 'react-icons/go';
@@ -19,6 +19,12 @@ export const DrawerData = [
     title: 'Profile',
     path: '/profiles/me',
     icon: <ImProfile />,
+    logged: true,
+  },
+  {
+    title: 'Offers',
+    path: '/offers',
+    icon: <FaStickyNote />,
     logged: true,
   },
   {

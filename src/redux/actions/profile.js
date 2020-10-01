@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { addError } from './index';
 import { GET_PROFILE, GET_PROFILES, PROFILE_ERROR, UPDATE_PROFILE_PHOTO } from './types';
+import { configContentType } from '../helpers';
 
 export const getProfile = () => async (dispatch) => {
   try {
@@ -52,22 +53,17 @@ export const getProfileByID = (user_id) => async (dispatch) => {
 
 export const createProfile = (data, history) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const res = await axios.post('/api/profiles', data, config);
+    const res = await axios.post('/api/profiles', data, configContentType());
     dispatch({
       type: GET_PROFILE,
       payload: res.data,
     });
     if (data.photo) {
-      const res = await axios.put('/api/files/profile', data.photo, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const res = await axios.put(
+        '/api/files/profile',
+        data.photo,
+        configContentType('multipart/form-data'),
+      );
       dispatch({ type: UPDATE_PROFILE_PHOTO, payload: res.data.photo });
     }
     history.push('/profiles/me');
@@ -86,12 +82,7 @@ export const createProfile = (data, history) => async (dispatch) => {
 
 export const likeProfile = (user_id) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const res = await axios.put(`/api/profiles/like/${user_id}`, null, config);
+    const res = await axios.put(`/api/profiles/like/${user_id}`, null, configContentType());
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     if (err.statusText)
@@ -104,12 +95,7 @@ export const likeProfile = (user_id) => async (dispatch) => {
 
 export const dislikeProfile = (user_id) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const res = await axios.put(`/api/profiles/dislike/${user_id}`, null, config);
+    const res = await axios.put(`/api/profiles/dislike/${user_id}`, null, configContentType());
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     if (err.statusText)
@@ -122,12 +108,7 @@ export const dislikeProfile = (user_id) => async (dispatch) => {
 
 export const rateProfile = (user_id, rating) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const res = await axios.put(`/api/profiles/rate/${user_id}`, { rating }, config);
+    const res = await axios.put(`/api/profiles/rate/${user_id}`, { rating }, configContentType());
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     if (err.statusText)
@@ -140,12 +121,11 @@ export const rateProfile = (user_id, rating) => async (dispatch) => {
 
 export const commentProfile = ({ commented_collection, text }) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const res = await axios.put(`/api/profiles/comment/${commented_collection}`, { text }, config);
+    const res = await axios.put(
+      `/api/profiles/comment/${commented_collection}`,
+      { text },
+      configContentType(),
+    );
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
     console.log(err.message);
@@ -154,15 +134,10 @@ export const commentProfile = ({ commented_collection, text }) => async (dispatc
 
 export const uncommentProfile = ({ uncommentedCollection, commentID }) => async (dispatch) => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
     const res = await axios.put(
       `/api/profiles/uncomment/${uncommentedCollection}`,
       { commentID },
-      config,
+      configContentType(),
     );
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {

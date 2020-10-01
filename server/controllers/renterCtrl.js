@@ -26,6 +26,40 @@ exports.createRenter = async (req, res) => {
   }
 };
 
+exports.searchRenters = async (req, res) => {
+  try {
+    const { searchquery, minprice, maxFootage, minFootage, sortBy } = req.query;
+    let renters = await Renter.find({
+      $and: [
+        { maxPrice: { $gte: minprice } },
+        { footage: { $lte: maxFootage } },
+        { footage: { $gte: minFootage } },
+      ],
+    })
+      .populate('user')
+      .populate({
+        path: 'comments.postedBy',
+        model: 'profile',
+        populate: { path: 'user', model: 'user' },
+      })
+      .sort(sortBy !== 'totalRating' ? { [sortBy]: sortBy === 'price' ? 1 : -1 } : {});
+    if (sortBy === 'totalRating') {
+      renters = renters.sort((a, b) => {
+        if (a.totalRating > b.totalRating) return -1;
+        else if (a.totalRating === b.totalRating) return a.maxPrice > b.maxPrice ? -1 : 1;
+        return 1;
+      });
+    }
+    renters = renters.reduce((p, c) => {
+      const adText = `${c.title} ${c.text}`.replace(/ +/g, '').toLowerCase();
+      return adText.includes(searchquery.toLowerCase()) ? [...p, c] : [...p];
+    }, []);
+    res.json(renters);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 exports.getOwnRenters = async (req, res) => {
   try {
     let result = await Renter.find({ user: req.user.id });

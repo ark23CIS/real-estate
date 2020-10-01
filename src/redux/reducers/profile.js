@@ -10,7 +10,6 @@ import {
 const initState = {
   profile: null,
   profiles: [],
-  loading: true,
   error: {},
 };
 
@@ -22,13 +21,11 @@ export default function (state = initState, action) {
       return {
         ...state,
         profile: payload,
-        loading: false,
       };
     case PROFILE_ERROR:
       return {
         ...state,
         error: payload,
-        loading: false,
       };
     case GET_PROFILES:
       return {
@@ -38,7 +35,6 @@ export default function (state = initState, action) {
     case CLEAR_PROFILE:
       return {
         ...state,
-        loading: false,
         profile: null,
       };
     case UPDATE_PROFILE_PHOTO:

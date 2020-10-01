@@ -4,6 +4,7 @@ const profile = require('./profile-route');
 const files = require('./files-route');
 const estate = require('./estateRoute');
 const renter = require('./renterRoute');
+const reservation = require('./reservationRoute');
 
 module.exports = {
   auth,
@@ -12,4 +13,5 @@ module.exports = {
   files,
   estate,
   renter,
+  reservation,
 };

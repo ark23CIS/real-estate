@@ -65,8 +65,8 @@ function index({ maxFootage, maxPrice, minFootage, minPrice, AdType, callback })
           onChange={(e) => callback(e.target.name, e.target.value)}
         >
           <option value="price">Price</option>
-          <option value="creation-date">Creation date</option>
-          <option value="rating">Rating</option>
+          <option value="created">Creation date</option>
+          <option value="totalRating">Rating</option>
         </select>
       </div>
     </div>

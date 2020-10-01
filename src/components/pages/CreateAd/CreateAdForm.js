@@ -46,7 +46,7 @@ function CreateAdForm({ label, iconComponent, fields, history }) {
 
   const onSubmit = React.useCallback(() => {
     dispatch(createAD(ADData, label, history));
-  }, [ADData]);
+  }, [ADData, dispatch]);
 
   return (
     <Container component="main" maxWidth="xs">
