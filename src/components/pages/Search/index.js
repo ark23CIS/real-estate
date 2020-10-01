@@ -59,6 +59,7 @@ function Search() {
             ),
           ]}
           profile={profile ? profile : ''}
+          needToRenderBanner={true}
         />
         <Pagination
           callback={changeFilterData}

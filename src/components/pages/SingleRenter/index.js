@@ -39,6 +39,7 @@ function SingleRenter({ match }) {
             amountOflikes={renter.amountOflikes}
             isActive={user ? renter.likes.includes(user._id) : false}
             isClickable={!!profile}
+            pageType="single"
           />
           <Dislike
             collectionID={renterID}
@@ -46,6 +47,7 @@ function SingleRenter({ match }) {
             dislikeType="renter"
             isActive={user ? renter.dislikes.includes(user._id) : false}
             isClickable={!!profile}
+            pageType="single"
           />
           <Views amountOfViews={renter.totalViews} />
           <div>Total Star Rating: {renter.totalRating}</div>
@@ -54,6 +56,7 @@ function SingleRenter({ match }) {
             collectionID={renterID}
             ratingValue={renter.totalRating}
             isClickable={!!profile}
+            pageType="single"
           />
           <div>
             Author:{' '}

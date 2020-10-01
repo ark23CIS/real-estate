@@ -1,17 +1,48 @@
 import React from 'react';
 import { Ads } from '../..';
 
-export const profileTabItems = [
+export const profileTabItems = (
+  ownerID,
+  profile = null,
+  rentersCards = [],
+  estatesCards = [],
+  reservatedCards = [],
+) => [
   {
     label: 'Renters',
-    tabComponent: <div>Renters</div>,
+    tabComponent: (
+      <Ads
+        cards={rentersCards}
+        needToRenderBanner={true}
+        profile={profile}
+        pageType="specific"
+        pageOwnerID={ownerID}
+      />
+    ),
   },
   {
     label: 'Estates',
-    tabComponent: <div>Estates</div>,
+    tabComponent: (
+      <Ads
+        cards={estatesCards}
+        needToRenderBanner={true}
+        profile={profile}
+        pageType="specific"
+        pageOwnerID={ownerID}
+      />
+    ),
   },
   {
     label: 'Reservated',
-    tabComponent: <div>Bookings</div>,
+    tabComponent: (
+      <Ads
+        cards={reservatedCards}
+        needToRenderBanner={true}
+        profile={profile}
+        pageType="specific"
+        pageOwnerID={ownerID}
+      />
+    ),
+    ownerID,
   },
 ];

@@ -22,6 +22,7 @@ export {
   dislikeEstate,
   getAllEstates,
   searchAds,
+  getEstatesByUserID,
 } from './estate';
 export {
   getRenterByID,
@@ -31,6 +32,7 @@ export {
   likeRenter,
   dislikeRenter,
   getAllRenters,
+  getRentersByUserID,
 } from './renter';
 
 export {

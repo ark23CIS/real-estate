@@ -92,7 +92,7 @@ export const uncommentEstate = ({ uncommentedCollection, commentID }) => async (
   }
 };
 
-export const rateEstate = ({ rating, rated_collection, isSearchPage = false }) => async (
+export const rateEstate = ({ rating, rated_collection, pageType = '', pageOwnerID = '' }) => async (
   dispatch,
 ) => {
   try {
@@ -101,29 +101,52 @@ export const rateEstate = ({ rating, rated_collection, isSearchPage = false }) =
       { rating },
       configContentType(),
     );
-    !isSearchPage ? dispatch({ type: GET_ESTATE, payload: res.data }) : dispatch(getAllEstates());
+    if (pageType === 'specific') {
+      dispatch(getEstatesByUserID(pageOwnerID));
+    } else if (pageType === 'search') {
+      dispatch(getAllEstates());
+    } else if (pageType === 'single') {
+      dispatch({ type: GET_ESTATE, payload: res.data });
+    }
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const likeEstate = (liked_collection, isSearchPage = false) => async (dispatch) => {
+export const likeEstate = (liked_collection, pageType = '', pageOwnerID = '') => async (
+  dispatch,
+) => {
   try {
+    console.log(liked_collection);
     const res = await axios.put(`/api/estates/like/${liked_collection}`, null, configContentType());
-    !isSearchPage ? dispatch({ type: GET_ESTATE, payload: res.data }) : dispatch(getAllEstates());
+    if (pageType === 'search') {
+      dispatch(getAllEstates());
+    } else if (pageType === 'single') {
+      dispatch({ type: GET_ESTATE, payload: res.data });
+    } else if (pageType === 'specific') {
+      dispatch(getEstatesByUserID(pageOwnerID));
+    }
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const dislikeEstate = (disliked_collection, isSearchPage = false) => async (dispatch) => {
+export const dislikeEstate = (disliked_collection, pageType = '', pageOwnerID = '') => async (
+  dispatch,
+) => {
   try {
     const res = await axios.put(
       `/api/estates/dislike/${disliked_collection}`,
       null,
       configContentType(),
     );
-    !isSearchPage ? dispatch({ type: GET_ESTATE, payload: res.data }) : dispatch(getAllEstates());
+    if (pageType === 'search') {
+      dispatch(getAllEstates());
+    } else if (pageType === 'single') {
+      dispatch({ type: GET_ESTATE, payload: res.data });
+    } else if (pageType === 'specific') {
+      dispatch(getEstatesByUserID(pageOwnerID));
+    }
   } catch (err) {
     console.log(err.message);
   }
@@ -142,6 +165,17 @@ export const searchAds = ({
       `/api/${AdType}/search?searchquery=${searchQuery}&sortBy=${sortBy}&minprice=${minPrice}&maxprice=${maxPrice}&maxFootage=${maxFootage}&minFootage=${minFootage}`,
     );
     dispatch({ type: AdType === 'renters' ? GET_RENTERS : GET_ESTATES, payload: res.data });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getEstatesByUserID = (userID) => async (dispatch) => {
+  try {
+    console.log(userID, 'getEstatesByUserID');
+    const res = await axios.get(`/api/estates/user/${userID}`);
+    console.log(res.data);
+    dispatch({ type: GET_ESTATES, payload: res.data });
   } catch (err) {
     console.log(err.message);
   }

@@ -11,6 +11,7 @@ const {
   deleteRenter,
   getOwnRenters,
   getADByID,
+  getADsByUserID,
   searchRenters,
 } = require('../controllers');
 const { authMiddleware } = require('../middlewares');
@@ -34,6 +35,8 @@ router.post(
 );
 
 router.get('/', getAllCollectionsController(Renter));
+
+router.get('/user/:userID', getADsByUserID(Renter));
 
 router.get('/search', searchRenters);
 

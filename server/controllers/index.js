@@ -92,6 +92,23 @@ const likeCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
   }
 };
 
+const getADsByUserID = (Model) => async (req, res) => {
+  const { userID } = req.params;
+  try {
+    const ads = await Model.find({ user: userID })
+      .populate('user')
+      .populate({
+        path: 'comments.postedBy',
+        model: 'profile',
+        populate: { path: 'user', model: 'user' },
+      });
+    res.json(ads);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+};
+
 const dislikeCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
   const disliked_collection_id = req.params.disliked_collection;
   try {
@@ -293,4 +310,5 @@ module.exports = {
   getOwnReservations,
   deleteReservation,
   updateReservation,
+  getADsByUserID,
 };

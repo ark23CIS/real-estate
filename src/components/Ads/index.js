@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { useStyles } from './ads-styles';
 import { Like, Dislike, CommentsIcon, Rating, Views, Banner } from '..';
 
-function Ads({ cards, profile }) {
+function Ads({ cards, profile, needToRenderBanner, pageType, pageOwnerID }) {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -69,17 +69,19 @@ function Ads({ cards, profile }) {
                       likeType={card.maxPrice ? 'renter' : 'estate'}
                       collectionID={card._id}
                       amountOflikes={card.amountOflikes}
-                      isSearchPage={true}
+                      pageType={pageType}
                       isActive={profile ? card.likes.includes(profile.user._id) : false}
                       isClickable={!!profile}
+                      pageOwnerID={pageOwnerID}
                     />
                     <Dislike
                       dislikeType={card.maxPrice ? 'renter' : 'estate'}
                       collectionID={card._id}
                       amountOfDislikes={card.amountOfdislikes}
-                      isSearchPage={true}
+                      pageType={pageType}
                       isActive={profile ? card.dislikes.includes(profile.user._id) : false}
                       isClickable={!!profile}
+                      pageOwnerID={pageOwnerID}
                     />
                     <Link
                       style={{ color: 'black', textDecoration: 'none' }}
@@ -95,8 +97,9 @@ function Ads({ cards, profile }) {
                       collectionID={card._id}
                       ratingValue={card.totalRating}
                       authUserID={profile ? profile.user._id : ''}
-                      isSearchPage={true}
+                      pageType={pageType}
                       isClickable={!!profile}
+                      pageOwnerID={pageOwnerID}
                     />
                   </CardActions>
                 </div>
@@ -110,7 +113,7 @@ function Ads({ cards, profile }) {
               </Card>
             </Grid>
           ))}
-        {cards.length === 0 && (
+        {cards.length === 0 && needToRenderBanner && (
           <Banner
             title="No ads"
             subtitle="There are no appropriate ads according your params"
@@ -125,5 +128,15 @@ function Ads({ cards, profile }) {
 Ads.propTypes = {
   cards: PropTypes.array.isRequired,
   profile: PropTypes.object.isRequired,
+  needToRenderBanner: PropTypes.bool,
+  pageType: PropTypes.string,
+  pageOwnerID: PropTypes.string,
 };
+
+Ads.defaultProps = {
+  needToRenderBanner: false,
+  pageType: 'search',
+  pageOwnerID: '',
+};
+
 export default Ads;

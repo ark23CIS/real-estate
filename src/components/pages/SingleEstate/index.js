@@ -56,18 +56,22 @@ function SingleEstate({ match, history }) {
           <div>Building Number: {estate.estateAddress.buildingNumber}</div>
           <div>Created at: {new Date(estate.created).toDateString()}</div>
           <Like
-            likeType="renter"
+            likeType="estate"
             collectionID={estateID}
             amountOflikes={estate.amountOflikes}
             isActive={user ? estate.likes.includes(user._id) : false}
             isClickable={!!profile}
+            pageType="single"
+            pageOwnerID={estate._id}
           />
           <Dislike
             collectionID={estateID}
             amountOfDislikes={estate.amountOfdislikes}
-            dislikeType="renter"
+            dislikeType="estate"
             isActive={user ? estate.dislikes.includes(user._id) : false}
             isClickable={!!profile}
+            pageType="single"
+            pageOwnerID={estate._id}
           />
           <Views amountOfViews={estate.totalViews} />
           <div>Total Star Rating: {estate.totalRating}</div>
@@ -76,6 +80,8 @@ function SingleEstate({ match, history }) {
             collectionID={estateID}
             isClickable={!!profile}
             ratingValue={estate.totalRating}
+            pageType="single"
+            pageOwnerID={estate._id}
           />
           <div>
             Author:{' '}

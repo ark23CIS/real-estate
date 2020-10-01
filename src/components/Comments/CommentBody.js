@@ -21,7 +21,6 @@ function CommentBody({ item, classes, collectionID, userID, ownerID, label }) {
     [dispatch, collectionID],
   );
 
-  console.log(item.postedBy);
   return (
     <p className={classes.commentText}>
       <Link to={`/profiles/${item.postedBy.user ? item.postedBy.user._id : ''}`}>

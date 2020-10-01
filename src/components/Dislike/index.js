@@ -9,8 +9,9 @@ function Dislike({
   collectionID,
   amountOfDislikes,
   isActive,
-  isSearchPage,
+  pageType,
   isClickable,
+  pageOwnerID,
 }) {
   const dispatch = useDispatch();
 
@@ -18,11 +19,11 @@ function Dislike({
     if (dislikeType === 'profile') {
       dispatch(dislikeProfile(collectionID));
     } else if (dislikeType === 'estate') {
-      dispatch(dislikeEstate(collectionID, isSearchPage));
+      dispatch(dislikeEstate(collectionID, pageType, pageOwnerID));
     } else if (dislikeType === 'renter') {
-      dispatch(dislikeRenter(collectionID, isSearchPage));
+      dispatch(dislikeRenter(collectionID, pageType, pageOwnerID));
     }
-  }, [dispatch, dislikeType, collectionID]);
+  }, [dispatch, dislikeType, collectionID, pageType, pageOwnerID]);
 
   return (
     <div className="rate-block">
@@ -40,15 +41,17 @@ Dislike.propTypes = {
   collectionID: PropTypes.string.isRequired,
   amountOfDislikes: PropTypes.number.isRequired,
   isActive: PropTypes.bool,
-  isSearchPage: PropTypes.bool,
+  pageType: PropTypes.string,
   isClickable: PropTypes.bool,
+  pageOwnerID: PropTypes.string,
 };
 
 Dislike.defaultProps = {
   dislikeType: '',
   isActive: false,
-  isSearchPage: false,
+  pageType: '',
   isClickable: false,
+  pageOwnerID: '',
 };
 
 export default Dislike;

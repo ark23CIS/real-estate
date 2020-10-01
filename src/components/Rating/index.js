@@ -5,7 +5,15 @@ import { useDispatch } from 'react-redux';
 import { rateProfile, rateEstate, rateRenter } from '../../redux/actions';
 import PropTypes from 'prop-types';
 
-const Rating = ({ authUserID, label, collectionID, ratingValue, isSearchPage, isClickable }) => {
+const Rating = ({
+  authUserID,
+  label,
+  collectionID,
+  ratingValue,
+  pageType,
+  isClickable,
+  pageOwnerID,
+}) => {
   const dispatch = useDispatch();
 
   const onStarClick = React.useCallback(
@@ -13,9 +21,13 @@ const Rating = ({ authUserID, label, collectionID, ratingValue, isSearchPage, is
       if (label === 'profile') {
         dispatch(rateProfile(collectionID === 'me' ? authUserID : collectionID, next));
       } else if (label === 'estate') {
-        dispatch(rateEstate({ rating: next, rated_collection: collectionID, isSearchPage }));
+        dispatch(
+          rateEstate({ rating: next, rated_collection: collectionID, pageType, pageOwnerID }),
+        );
       } else if (label === 'renter') {
-        dispatch(rateRenter({ rating: next, rated_collection: collectionID, isSearchPage }));
+        dispatch(
+          rateRenter({ rating: next, rated_collection: collectionID, pageType, pageOwnerID }),
+        );
       }
     },
     [dispatch, collectionID, authUserID],
@@ -39,8 +51,9 @@ Rating.propTypes = {
   label: PropTypes.string,
   collectionID: PropTypes.string,
   ratingValue: PropTypes.number,
-  isSearchPage: PropTypes.bool,
+  pageType: PropTypes.string,
   isClickable: PropTypes.bool,
+  pageOwnerID: PropTypes.string,
 };
 
 Rating.defaultProps = {
@@ -48,8 +61,9 @@ Rating.defaultProps = {
   authUserID: '',
   collectionID: '',
   ratingValue: 1,
-  isSearchPage: false,
+  pageType: PropTypes.string,
   isClickable: PropTypes.bool,
+  pageOwnerID: '',
 };
 
 export default React.memo(Rating);

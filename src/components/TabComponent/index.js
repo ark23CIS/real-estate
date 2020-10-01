@@ -1,13 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
 import { AppBar, Tabs, Tab, useTheme } from '@material-ui/core';
+import { getEstatesByUserID, getRentersByUserID } from '../../redux/actions';
 import { useStyles, a11yProps, TabPanel } from './TabComponentHelper';
 
 function TabComponent({ tabItems }) {
   const classes = useStyles();
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const { profiles } = useSelector((state) => state.profile);
   const [value, setValue] = React.useState(0);
+
+  React.useEffect(() => {
+    if (profiles) if (profiles[0]) dispatch(getRentersByUserID(profiles[0].user._id));
+  }, [dispatch, profiles]);
+
+  const onTabClick = React.useCallback(
+    (label) => {
+      console.log(label);
+      if (label === 'Renters') {
+        dispatch(getRentersByUserID(profiles[0].user._id));
+      } else if (label === 'Estates') {
+        dispatch(getEstatesByUserID(profiles[0].user._id));
+      }
+    },
+    [dispatch],
+  );
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -30,7 +50,12 @@ function TabComponent({ tabItems }) {
         >
           {tabItems &&
             tabItems.map(({ label }, index) => (
-              <Tab key={`${label}_${index}`} label={label} {...a11yProps(index)} />
+              <Tab
+                key={`${label}_${index}`}
+                label={label}
+                {...a11yProps(index)}
+                onClick={() => onTabClick(label)}
+              />
             ))}
         </Tabs>
       </AppBar>

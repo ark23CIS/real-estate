@@ -6,9 +6,8 @@ import { Avatar } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { SocialIcon } from 'react-social-icons';
-import Banner from '../../Banner';
-import { getProfileByID, getProfile } from '../../../redux/actions';
-import { Comments, Like, Dislike, Rating, TabComponent } from '../..';
+import { getProfileByID, getProfile, getOwnReservations } from '../../../redux/actions';
+import { Comments, Like, Dislike, Rating, TabComponent, Banner } from '../..';
 import { profileTabItems } from './profileTabItems';
 import EditProfile from './EditProfile';
 import './profile.scss';
@@ -17,6 +16,9 @@ function Profile({ match }) {
   const {
     auth: { user },
     profile: { profiles, profile },
+    reservation: { reservations },
+    estate: { estates },
+    renter: { renters },
   } = useSelector((state) => state);
   const currentProfile = profiles ? profiles[0] : null;
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ function Profile({ match }) {
   React.useEffect(() => {
     const updateProfile = () => {
       if (user) {
+        dispatch(getOwnReservations());
         if (match.params.profileID === 'me' || user._id === match.params.profileID) {
           dispatch(getProfile());
           dispatch(
@@ -56,6 +59,8 @@ function Profile({ match }) {
     return <EditProfile isEditPageVisible={isEditPageVisible} profile={currentProfile} />;
   }
 
+  console.log(currentProfile);
+
   return (
     <div>
       {!currentProfile && isOwnPage && (
@@ -83,16 +88,32 @@ function Profile({ match }) {
           {currentProfile.contactNumber && (
             <div>Contact Number: {currentProfile.contactNumber}</div>
           )}
-          <TabComponent tabItems={profileTabItems} />
+          <TabComponent
+            tabItems={
+              user
+                ? profileTabItems(
+                    currentProfile.user._id,
+                    profile,
+                    renters,
+                    estates.filter(({ visible }) => visible),
+                    reservations.map(({ estate }) => estate),
+                  ).filter(({ ownerID }) => !ownerID || ownerID === user._id)
+                : profileTabItems(currentProfile.user._id, profile).filter(
+                    ({ ownerID }) => !ownerID,
+                  )
+            }
+          />
           <Rating
             authUserID={user ? user._id : ''}
             collectionID={match.params.profileID}
             label="profile"
             ratingValue={currentProfile.totalRating}
             isClickable={!!profile}
+            pageType="single"
           />
           <Like
             likeType="profile"
+            pageType="single"
             collectionID={match.params.profileID === 'me' ? user._id : match.params.profileID}
             amountOflikes={currentProfile.amountOflikes}
             isActive={user ? currentProfile.likes.includes(user._id) : false}
@@ -100,6 +121,7 @@ function Profile({ match }) {
           />
           <Dislike
             dislikeType="profile"
+            pageType="single"
             collectionID={
               user ? (match.params.profileID === 'me' ? user._id : match.params.profileID) : ''
             }

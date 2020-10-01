@@ -12,6 +12,7 @@ const {
   getOwnEstates,
   getADByID,
   searchEstates,
+  getADsByUserID,
 } = require('../controllers');
 const { authMiddleware } = require('../middlewares');
 const router = express.Router();
@@ -31,6 +32,8 @@ router.post(
   ],
   createEstate,
 );
+
+router.get('/user/:userID', getADsByUserID(Estate));
 
 router.get('/', getAllCollectionsController(Estate));
 

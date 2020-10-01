@@ -48,7 +48,7 @@ export const uncommentRenter = ({ uncommentedCollection, commentID }) => async (
   }
 };
 
-export const rateRenter = ({ rating, rated_collection, isSearchPage = false }) => async (
+export const rateRenter = ({ rating, rated_collection, pageType = '', pageOwnerID = '' }) => async (
   dispatch,
 ) => {
   try {
@@ -57,29 +57,60 @@ export const rateRenter = ({ rating, rated_collection, isSearchPage = false }) =
       { rating },
       configContentType(),
     );
-    !isSearchPage ? dispatch({ type: GET_RENTER, payload: res.data }) : dispatch(getAllRenters());
+    if (pageType === 'search') {
+      dispatch(getAllRenters());
+    } else if (pageType === 'single') {
+      dispatch({ type: GET_RENTER, payload: res.data });
+    } else if (pageType === 'specific') {
+      dispatch(getRentersByUserID(pageOwnerID));
+    }
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const likeRenter = (liked_collection, isSearchPage = false) => async (dispatch) => {
+export const likeRenter = (liked_collection, pageType = '', pageOwnerID = '') => async (
+  dispatch,
+) => {
   try {
     const res = await axios.put(`/api/renters/like/${liked_collection}`, null, configContentType());
-    !isSearchPage ? dispatch({ type: GET_RENTER, payload: res.data }) : dispatch(getAllRenters());
+    if (pageType === 'search') {
+      dispatch(getAllRenters());
+    } else if (pageType === 'single') {
+      dispatch({ type: GET_RENTER, payload: res.data });
+    } else if (pageType === 'specific') {
+      dispatch(getRentersByUserID(pageOwnerID));
+    }
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const dislikeRenter = (disliked_collection, isSearchPage = false) => async (dispatch) => {
+export const dislikeRenter = (disliked_collection, pageType = '', pageOwnerID = '') => async (
+  dispatch,
+) => {
   try {
     const res = await axios.put(
       `/api/renters/dislike/${disliked_collection}`,
       null,
       configContentType(),
     );
-    !isSearchPage ? dispatch({ type: GET_RENTER, payload: res.data }) : dispatch(getAllRenters());
+    if (pageType === 'search') {
+      dispatch(getAllRenters());
+    } else if (pageType === 'single') {
+      dispatch({ type: GET_RENTER, payload: res.data });
+    } else if (pageType === 'specific') {
+      dispatch(getRentersByUserID(pageOwnerID));
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const getRentersByUserID = (userID) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/renters/user/${userID}`);
+    dispatch({ type: GET_RENTERS, payload: res.data });
   } catch (err) {
     console.log(err.message);
   }
