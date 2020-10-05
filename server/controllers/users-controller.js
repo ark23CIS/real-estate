@@ -37,7 +37,6 @@ exports.postUserCtrl = async (req, res) => {
       },
     );
   } catch (err) {
-    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -55,7 +54,6 @@ exports.confirmUserCtrl = async (req, res) => {
     );
     res.json(user);
   } catch (err) {
-    console.log(err.message);
     res.json({ confirmation_status: 'error' });
   }
 };

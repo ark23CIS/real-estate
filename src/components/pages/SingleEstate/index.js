@@ -3,9 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { getEstateByID, createReservation, getOwnReservations } from '../../../redux/actions';
+import { Delete } from '@material-ui/icons';
+import {
+  getEstateByID,
+  createReservation,
+  getOwnReservations,
+  deleteEstate,
+} from '../../../redux/actions';
 import Slider from '../../Slider';
 import { Comments, Rating, Like, Dislike, Views, Banner } from '../..';
+import './ad.scss';
 
 function SingleEstate({ match, history }) {
   const dispatch = useDispatch();
@@ -30,6 +37,13 @@ function SingleEstate({ match, history }) {
     dispatch(createReservation(estate.user._id, profile.user._id, estate._id, history));
   }, [dispatch, estate, profile]);
 
+  const onDeleteEstate = React.useCallback(
+    (estateID) => {
+      if (estateID) dispatch(deleteEstate(estateID, history));
+    },
+    [dispatch],
+  );
+
   if (reservations) {
     reservatedByMe = reservations
       .filter(({ status }) => status === 'accepted')
@@ -40,68 +54,82 @@ function SingleEstate({ match, history }) {
   return (
     <React.Fragment>
       {estate && (estate.visible || reservatedByMe) && (
-        <React.Fragment>
+        <div className="ad">
           <Slider photoLinks={estate.photos} />
-          <div>{estate.title}</div>
-          <div>{estate.text}</div>
-          <div>Users watched: {estate.amountOfusersWatched}</div>
-          <div>Phone to contact: {estate.contactNumber}</div>
-          <div>Price: {estate.price}$</div>
-          <div>Footage: {estate.footage} squared meters</div>
-          Address
-          <div>Country: {estate.estateAddress.country}</div>
-          <div>City: {estate.estateAddress.city}</div>
-          <div>Region: {estate.region}</div>
-          <div>Street: {estate.estateAddress.street}</div>
-          <div>Building Number: {estate.estateAddress.buildingNumber}</div>
-          <div>Created at: {new Date(estate.created).toDateString()}</div>
-          <Like
-            likeType="estate"
-            collectionID={estateID}
-            amountOflikes={estate.amountOflikes}
-            isActive={user ? estate.likes.includes(user._id) : false}
-            isClickable={!!profile}
-            pageType="single"
-            pageOwnerID={estate._id}
-          />
-          <Dislike
-            collectionID={estateID}
-            amountOfDislikes={estate.amountOfdislikes}
-            dislikeType="estate"
-            isActive={user ? estate.dislikes.includes(user._id) : false}
-            isClickable={!!profile}
-            pageType="single"
-            pageOwnerID={estate._id}
-          />
-          <Views amountOfViews={estate.totalViews} />
-          <div>Total Star Rating: {estate.totalRating}</div>
-          <Rating
-            label="estate"
-            collectionID={estateID}
-            isClickable={!!profile}
-            ratingValue={estate.totalRating}
-            pageType="single"
-            pageOwnerID={estate._id}
-          />
-          <div>
-            Author:{' '}
-            <Link
-              to={`/profiles/${estate.user._id}`}
-            >{`${estate.user.firstName} ${estate.user.lastName}`}</Link>
+          <div className="single-ad-data">
+            <div className="ad__details">
+              <h3>{estate.title}</h3>
+              <div className="ad__details-content">{estate.text}</div>
+            </div>
+            <div className="ad__info">
+              <h3>info</h3>
+              <div>Phone to contact : {estate.contactNumber}</div>
+              <div>Price : {estate.price}$</div>
+              <div>Footage : {estate.footage} squared meters</div>
+              <div>Created at : {new Date(estate.created).toDateString()}</div>
+              <div>
+                Author :{' '}
+                <Link to={`/profiles/${estate.user ? estate.user._id : ''}`}>{`${
+                  estate.user ? estate.user.firstName : 'Deleted'
+                } ${estate.user ? estate.user.lastName : ''}`}</Link>
+              </div>
+              <div className="ad__info-address">
+                <h3>Address</h3>
+                <div className="ad__info-address-content">
+                  <div>{`${estate.estateAddress.country}, ${estate.estateAddress.city}, ${estate.region}, ${estate.estateAddress.street}, ${estate.estateAddress.buildingNumber}`}</div>
+                </div>
+              </div>
+            </div>
+            <div className="ad__estimations">
+              <Like
+                likeType="estate"
+                collectionID={estateID}
+                amountOflikes={estate.amountOflikes}
+                isActive={user ? estate.likes.includes(user._id) : false}
+                isClickable={!!profile}
+                pageType="single"
+                pageOwnerID={estate._id}
+              />
+              <Dislike
+                collectionID={estateID}
+                amountOfDislikes={estate.amountOfdislikes}
+                dislikeType="estate"
+                isActive={user ? estate.dislikes.includes(user._id) : false}
+                isClickable={!!profile}
+                pageType="single"
+                pageOwnerID={estate._id}
+              />
+              <Views amountOfViews={estate.totalViews} />
+              <Rating
+                label="estate"
+                collectionID={estateID}
+                isClickable={!!profile}
+                ratingValue={estate.totalRating}
+                pageType="single"
+                pageOwnerID={estate._id}
+              />
+              {estate.user && user && estate.user._id === user._id && (
+                <Delete className="cursor" onClick={() => onDeleteEstate(estate._id)} />
+              )}
+            </div>
           </div>
-          {profile && estate.user._id !== profile.user._id && !reservatedByMe && (
+
+          {profile && estate.user && estate.user._id !== profile.user._id && !reservatedByMe && (
             <div className="primary-button" onClick={onReservateClick}>
               Reservate
             </div>
           )}
-          <Comments
-            comments={estate.comments}
-            label="estate"
-            collectionID={estateID}
-            ownerID={estate.user._id}
-            userCanComment={!!profile}
-          />
-        </React.Fragment>
+          {reservatedByMe && <div className="reservated">This page was reservated by you</div>}
+          <div className="comments">
+            <Comments
+              comments={estate.comments}
+              label="estate"
+              collectionID={estateID}
+              ownerID={estate.user ? estate.user._id : ''}
+              userCanComment={!!profile}
+            />
+          </div>
+        </div>
       )}
       {!estate ||
         (!estate.visible && !reservatedByMe && (

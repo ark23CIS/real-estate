@@ -24,7 +24,6 @@ exports.createReservation = async (req, res) => {
     ]);
     res.json(newReservation);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -38,7 +37,6 @@ exports.getOwnReservations = async (req, res) => {
       .populate({ path: 'estate', model: 'estate', populate: { path: 'user', model: 'user' } });
     res.json(reservations);
   } catch (error) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -58,7 +56,6 @@ exports.updateReservation = async (req, res) => {
     }
     res.json(reservation);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -68,7 +65,6 @@ exports.deleteReservation = async (req, res) => {
     const reservation = await Reservation.findOneAndRemove({ _id: req.params.reservationID });
     res.json(reservation);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };

@@ -1,4 +1,4 @@
-import { GET_ESTATE, GET_ESTATES } from '../actions/types';
+import { GET_ESTATE, GET_ESTATES, LOGOUT } from '../actions/types';
 
 const initState = {
   estate: null,
@@ -18,6 +18,12 @@ export default function (state = initState, action) {
       return {
         ...state,
         estates: payload,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        estates: [],
+        estate: null,
       };
     default:
       return { ...state };

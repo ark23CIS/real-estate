@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { addError, addSuccessStatus } from './index';
 import { GET_RENTER, GET_RENTERS } from './types';
 import { getProfile } from './index';
 import { configContentType } from '../helpers';
@@ -31,7 +32,7 @@ export const commentRenter = ({ commented_collection, text }) => async (dispatch
     );
     dispatch({ type: GET_RENTER, payload: res.data });
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Error with commenting renter'));
   }
 };
 
@@ -44,7 +45,7 @@ export const uncommentRenter = ({ uncommentedCollection, commentID }) => async (
     );
     dispatch({ type: GET_RENTER, payload: res.data });
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Error with uncomment renter'));
   }
 };
 
@@ -64,8 +65,9 @@ export const rateRenter = ({ rating, rated_collection, pageType = '', pageOwnerI
     } else if (pageType === 'specific') {
       dispatch(getRentersByUserID(pageOwnerID));
     }
+    dispatch(addSuccessStatus(`You rated the page with ${rating} rating`));
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Error with adding rating'));
   }
 };
 
@@ -82,7 +84,7 @@ export const likeRenter = (liked_collection, pageType = '', pageOwnerID = '') =>
       dispatch(getRentersByUserID(pageOwnerID));
     }
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Error with like renter'));
   }
 };
 
@@ -103,7 +105,7 @@ export const dislikeRenter = (disliked_collection, pageType = '', pageOwnerID = 
       dispatch(getRentersByUserID(pageOwnerID));
     }
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Error with dislike renter'));
   }
 };
 
@@ -113,5 +115,15 @@ export const getRentersByUserID = (userID) => async (dispatch) => {
     dispatch({ type: GET_RENTERS, payload: res.data });
   } catch (err) {
     console.log(err.message);
+  }
+};
+
+export const deleteRenter = (renterID, history) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/renters/${renterID}`);
+    history.push('/search');
+    dispatch(addSuccessStatus('You successfully deleted renter'));
+  } catch (err) {
+    dispatch(addError('Error with deleting renter'));
   }
 };

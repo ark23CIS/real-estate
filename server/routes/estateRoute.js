@@ -13,6 +13,7 @@ const {
   getADByID,
   searchEstates,
   getADsByUserID,
+  deleteEstate,
 } = require('../controllers');
 const { authMiddleware } = require('../middlewares');
 const router = express.Router();
@@ -56,5 +57,7 @@ router.put(
   authMiddleware,
   uncommentCollectionCtrl(Estate, '_id'),
 );
+
+router.delete('/:estateID', authMiddleware, deleteEstate);
 
 module.exports = router;

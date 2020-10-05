@@ -12,7 +12,7 @@ import {
   CreateProfile,
   Offers,
 } from './pages';
-import { Error, CheckInfo } from '.';
+import { Error, CheckInfo, Success } from '.';
 import 'antd/dist/antd.css';
 import '../styles.css';
 
@@ -20,6 +20,7 @@ export default function Routes() {
   return (
     <div className="mu-block">
       <Error />
+      <Success />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/estates/:estateID/" component={SingleEstate} />

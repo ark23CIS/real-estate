@@ -1,4 +1,4 @@
-const { Profile, User } = require('../models');
+const { Profile, User, Estate, Renter, Reservation } = require('../models');
 
 exports.profileMeGetController = async (req, res) => {
   try {
@@ -15,7 +15,6 @@ exports.profileMeGetController = async (req, res) => {
     }
     res.json(profile);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -34,7 +33,6 @@ exports.getProfileByUserIDController = async (req, res) => {
     }
     res.json(profile);
   } catch (err) {
-    console.error(err.message);
     res.send(500).send('Server Error');
   }
 };
@@ -125,18 +123,42 @@ exports.profilePostController = async (req, res) => {
     await profile.save();
     res.json(profile);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
 
 exports.deleteOwnProfileController = async (req, res) => {
-  try {
-    await Profile.findOneAndRemove({ user: req.body.id });
-    await User.findOneAndRemove({ _id: req.body.id });
-    res.json({ msg: 'User and its profile have been removed' });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
+  const models = [Estate, Profile, Renter];
+  let profileID;
+  Promise.all([
+    Profile.findOneAndRemove({ user: req.user.id }).then((profile) => {
+      if (profile) profileID = profile._id;
+    }),
+    await User.findOneAndRemove({ _id: req.user.id }),
+    await Estate.deleteMany({ user: req.user._id }),
+    await Renter.deleteMany({ user: req.user.id }),
+    await Reservation.deleteMany({ user: req.user.id }),
+    models.forEach(async (Model) => {
+      await Model.updateMany(
+        {},
+        {
+          $pull: {
+            ratings: { ratedBy: req.user.id },
+            likes: req.user.id,
+            dislikes: req.user.id,
+            comments: { postedBy: profileID },
+          },
+        },
+      );
+    }),
+    await Reservation.deleteMany({
+      $or: [{ owner: req.user.id }, { possibleClient: req.user.id }],
+    }),
+  ])
+    .then(() => {
+      res.json({ msg: 'User and its profile have been removed' });
+    })
+    .catch(() => {
+      res.status(500).send('Server Error');
+    });
 };

@@ -64,7 +64,11 @@ function Search() {
         <Pagination
           callback={changeFilterData}
           postsPerPage={searchPostsData.postsPerPage}
-          totalPosts={searchPostsData.AdType === 'renters' ? renters.length : estates.length}
+          totalPosts={
+            searchPostsData.AdType === 'renters'
+              ? renters.length
+              : estates.filter((estate) => estate.visible).length
+          }
         />
       </Container>
     </React.Fragment>

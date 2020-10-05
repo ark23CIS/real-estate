@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addError } from './index';
+import { addError, addSuccessStatus } from './index';
 import { GET_ESTATE, GET_RENTER, GET_ESTATES, GET_RENTERS } from './types';
 import { getProfile } from './profile';
 import { configContentType } from '../helpers';
@@ -38,6 +38,7 @@ export const createAD = (data, type, history) => (dispatch) => {
         payload: adRes.data,
       });
       history.push(`/${type === 'estate' ? 'estates' : 'renters'}/${adRes.data._id}`);
+      dispatch(addSuccessStatus('AD succesfully created'));
     })
     .catch((err) => {
       const errors = err.response.data.errors;
@@ -75,7 +76,7 @@ export const commentEstate = ({ commented_collection, text }) => async (dispatch
     );
     dispatch({ type: GET_ESTATE, payload: res.data });
   } catch (err) {
-    console.log(err.message);
+    dispatch(addSuccessStatus('Error with adding comment'));
   }
 };
 
@@ -88,7 +89,7 @@ export const uncommentEstate = ({ uncommentedCollection, commentID }) => async (
     );
     dispatch({ type: GET_ESTATE, payload: res.data });
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Error with deleting comment'));
   }
 };
 
@@ -108,8 +109,9 @@ export const rateEstate = ({ rating, rated_collection, pageType = '', pageOwnerI
     } else if (pageType === 'single') {
       dispatch({ type: GET_ESTATE, payload: res.data });
     }
+    dispatch(addSuccessStatus(`You rated the estate with ${rating} rating`));
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Eror with adding rating'));
   }
 };
 
@@ -178,5 +180,15 @@ export const getEstatesByUserID = (userID) => async (dispatch) => {
     dispatch({ type: GET_ESTATES, payload: res.data });
   } catch (err) {
     console.log(err.message);
+  }
+};
+
+export const deleteEstate = (estateID, history) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/estates/${estateID}`);
+    history.push('/search');
+    dispatch(addSuccessStatus('You successfully deleted Estate'));
+  } catch (err) {
+    dispatch(addError('Error with deleting estate'));
   }
 };

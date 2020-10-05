@@ -1,5 +1,6 @@
 export { register, logout, login, loadUser, confirm } from './auth';
 export { addError } from './error';
+export { addSuccessStatus } from './success';
 export {
   getAllProfiles,
   getProfile,
@@ -10,6 +11,7 @@ export {
   rateProfile,
   commentProfile,
   uncommentProfile,
+  deleteProfile,
 } from './profile';
 
 export {
@@ -23,6 +25,7 @@ export {
   getAllEstates,
   searchAds,
   getEstatesByUserID,
+  deleteEstate,
 } from './estate';
 export {
   getRenterByID,
@@ -33,6 +36,7 @@ export {
   dislikeRenter,
   getAllRenters,
   getRentersByUserID,
+  deleteRenter,
 } from './renter';
 
 export {

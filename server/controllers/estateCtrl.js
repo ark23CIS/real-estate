@@ -2,11 +2,14 @@ const { validationResult } = require('express-validator');
 const { Estate } = require('../models');
 
 exports.createEstate = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  let errors = [...validationResult(req).array()];
   const { region, footage, price, text, title, contactNumber, estateAddress, photos } = req.body;
+  if (!/^\+?[0-9]{6,12}$/g.test(contactNumber)) {
+    errors = [...errors, { msg: 'Input a real contact number' }];
+  }
+  if (errors.length) {
+    return res.status(400).json({ errors });
+  }
   const estate = new Estate({
     region,
     footage,
@@ -22,7 +25,6 @@ exports.createEstate = async (req, res) => {
     const result = await estate.save();
     res.json(result);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -38,7 +40,6 @@ exports.getOwnEstates = async (req, res) => {
       });
     res.json(estates);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -74,7 +75,7 @@ exports.searchEstates = async (req, res) => {
     }, []);
     res.json(estates);
   } catch (err) {
-    console.log(err.message);
+    res.status(500).send('Server Error');
   }
 };
 
@@ -89,21 +90,16 @@ exports.getAllEstates = async (req, res) => {
       });
     res.json(estates);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
 
 exports.deleteEstate = async (req, res) => {
-  const { estateID, user_id } = req.body;
-  if (req.user.id != user_id) {
-    res.status(400).json({ status: 'You cannot delete the renter ad' });
-  }
+  const { estateID } = req.params;
   try {
-    await Estate.findOneAndRemove({ id: estateID });
+    await Estate.findOneAndRemove({ _id: estateID });
     res.json({ status: 'Estate has been removed successfully' });
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };

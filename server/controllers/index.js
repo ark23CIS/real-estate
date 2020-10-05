@@ -27,7 +27,6 @@ const getAllCollectionsController = (Model) => async (req, res) => {
       });
     res.json(collections);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -87,7 +86,6 @@ const likeCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
     }
     res.json(result);
   } catch (err) {
-    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -104,7 +102,6 @@ const getADsByUserID = (Model) => async (req, res) => {
       });
     res.json(ads);
   } catch (err) {
-    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -154,7 +151,6 @@ const dislikeCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
     }
     res.json(result);
   } catch (err) {
-    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -194,7 +190,6 @@ const getADByID = (Model) => async (req, res) => {
     }
     res.json(collection);
   } catch (err) {
-    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -228,7 +223,6 @@ const rateCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
     }
     res.json(collection);
   } catch (err) {
-    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -251,7 +245,6 @@ const commentCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
       });
     res.json(result);
   } catch (err) {
-    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -277,7 +270,6 @@ const uncommentCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
       });
     res.json(result);
   } catch (err) {
-    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };

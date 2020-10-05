@@ -58,6 +58,6 @@ router.put(
   uncommentCollectionCtrl(Renter, '_id'),
 );
 
-router.delete('/', authMiddleware, deleteRenter);
+router.delete('/:renterID', authMiddleware, deleteRenter);
 
 module.exports = router;

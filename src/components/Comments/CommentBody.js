@@ -23,8 +23,8 @@ function CommentBody({ item, classes, collectionID, userID, ownerID, label }) {
 
   return (
     <p className={classes.commentText}>
-      <Link to={`/profiles/${item.postedBy.user ? item.postedBy.user._id : ''}`}>
-        {item.postedBy.user
+      <Link to={`/profiles/${item.postedBy && item.postedBy.user ? item.postedBy.user._id : ''}`}>
+        {item.postedBy && item.postedBy.user
           ? `${item.postedBy.user.firstName} ${item.postedBy.user.lastName}`
           : 'Anonymous'}
       </Link>
@@ -32,11 +32,14 @@ function CommentBody({ item, classes, collectionID, userID, ownerID, label }) {
       {item.text}
       <span className={classes.commentDate}>
         {new Date(item.created).toDateString()} |
-        {item.postedBy.user && userID && (item.postedBy.user._id === userID || ownerID === userID) && (
-          <DeleteIcon onClick={() => onUncomment(item._id)} className={classes.commentDelete}>
-            delete
-          </DeleteIcon>
-        )}
+        {item.postedBy &&
+          item.postedBy.user &&
+          userID &&
+          (item.postedBy.user._id === userID || ownerID === userID) && (
+            <DeleteIcon onClick={() => onUncomment(item._id)} className={classes.commentDelete}>
+              delete
+            </DeleteIcon>
+          )}
       </span>
     </p>
   );

@@ -6,6 +6,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CONFIRMATION,
+  CLEAR_PROFILE,
 } from '../actions/types';
 
 const initState = {
@@ -47,6 +48,7 @@ export default function (state = initState, action) {
         token: null,
       };
     case LOGOUT:
+    case CLEAR_PROFILE:
       return {
         ...state,
         isAuthenticated: false,

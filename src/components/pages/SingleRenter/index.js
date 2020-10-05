@@ -1,13 +1,15 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getAllEstates, getRenterByID } from '../../../redux/actions';
+import { Delete } from '@material-ui/icons';
 import { withRouter } from 'react-router';
+import { getRenterByID, deleteRenter } from '../../../redux/actions';
 import { Link } from 'react-router-dom';
 import Slider from '../../Slider';
 import { Comments, Rating, Like, Dislike, Views, Banner } from '../..';
+import '../SingleEstate/ad.scss';
 
-function SingleRenter({ match }) {
+function SingleRenter({ match, history }) {
   const dispatch = useDispatch();
   const {
     renter: { renter },
@@ -20,58 +22,77 @@ function SingleRenter({ match }) {
     if (renterID) dispatch(getRenterByID(renterID));
   }, [dispatch, renterID]);
 
+  const onDeleteRenter = React.useCallback(
+    (renterID) => {
+      if (renterID) dispatch(deleteRenter(renterID, history));
+    },
+    [dispatch],
+  );
+
   return (
     <div>
       {renter && (
-        <Fragment>
+        <div className="ad">
           <Slider photoLinks={renter.photos} />
-          <div>{renter.title}</div>
-          <div>{renter.text}</div>
-          <div>Users watched: {renter.amountOfusersWatched}</div>
-          <div>Phone to contact: {renter.contactNumber}</div>
-          <div>Max Price: {renter.maxPrice}$</div>
-          <div>Preferred Footage: {renter.footage} squared meters</div>
-          <div>Preferred Region: {renter.region}</div>
-          <div>Created at: {new Date(renter.created).toDateString()}</div>
-          <Like
-            likeType="renter"
-            collectionID={renterID}
-            amountOflikes={renter.amountOflikes}
-            isActive={user ? renter.likes.includes(user._id) : false}
-            isClickable={!!profile}
-            pageType="single"
-          />
-          <Dislike
-            collectionID={renterID}
-            amountOfDislikes={renter.amountOfdislikes}
-            dislikeType="renter"
-            isActive={user ? renter.dislikes.includes(user._id) : false}
-            isClickable={!!profile}
-            pageType="single"
-          />
-          <Views amountOfViews={renter.totalViews} />
-          <div>Total Star Rating: {renter.totalRating}</div>
-          <Rating
-            label="renter"
-            collectionID={renterID}
-            ratingValue={renter.totalRating}
-            isClickable={!!profile}
-            pageType="single"
-          />
-          <div>
-            Author:{' '}
-            <Link
-              to={`/profiles/${renter.user._id}`}
-            >{`${renter.user.firstName} ${renter.user.lastName}`}</Link>
+          <div className="single-ad-data">
+            <div className="ad__details">
+              <h3>{renter.title}</h3>
+              <div className="ad__details-content">{renter.text}</div>
+            </div>
+            <div className="ad__info">
+              <h3>info</h3>
+              <div>Phone to contact : {renter.contactNumber}</div>
+              <div>Max Price : {renter.maxPrice}$</div>
+              <div>Preferred Footage : {renter.footage} squared meters</div>
+              <div>Preferred Region : {renter.region}</div>
+              <div>Created at : {new Date(renter.created).toDateString()}</div>
+              <div>
+                Author:{' '}
+                <Link to={`/profiles/${renter.user ? renter.user._id : ''}`}>{`${
+                  renter.user ? renter.user.firstName : ''
+                } ${renter.user ? renter.user.lastName : ''}`}</Link>
+              </div>
+            </div>
+            <div className="ad__estimations">
+              <Like
+                likeType="renter"
+                collectionID={renterID}
+                amountOflikes={renter.amountOflikes}
+                isActive={user ? renter.likes.includes(user._id) : false}
+                isClickable={!!profile}
+                pageType="single"
+              />
+              <Dislike
+                collectionID={renterID}
+                amountOfDislikes={renter.amountOfdislikes}
+                dislikeType="renter"
+                isActive={user ? renter.dislikes.includes(user._id) : false}
+                isClickable={!!profile}
+                pageType="single"
+              />
+              <Views amountOfViews={renter.totalViews} />
+              <Rating
+                label="renter"
+                collectionID={renterID}
+                ratingValue={renter.totalRating}
+                isClickable={!!profile}
+                pageType="single"
+              />
+              {renter.user && user && renter.user._id === user._id && (
+                <Delete className="cursor" onClick={() => onDeleteRenter(renter._id)} />
+              )}
+            </div>
           </div>
-          <Comments
-            comments={renter.comments}
-            label="renter"
-            collectionID={renterID}
-            ownerID={renter.user._id}
-            userCanComment={!!profile}
-          />
-        </Fragment>
+          <div className="comments">
+            <Comments
+              comments={renter.comments}
+              label="renter"
+              collectionID={renterID}
+              ownerID={renter.user ? renter.user._id : ''}
+              userCanComment={!!profile}
+            />
+          </div>
+        </div>
       )}
       {!renter && (
         <Banner
@@ -90,6 +111,7 @@ function SingleRenter({ match }) {
 
 SingleRenter.propTypes = {
   match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default React.memo(withRouter(SingleRenter));

@@ -39,7 +39,7 @@ exports.last_seen = async (req, _, next) => {
     try {
       await Profile.findOneAndUpdate({ user: req.user.id }, { $set: { last_seen: new Date() } });
     } catch (err) {
-      console.log(err.message);
+      return res.status(401);
     }
   }
   next();

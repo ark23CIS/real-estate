@@ -14,7 +14,7 @@ function TabComponent({ tabItems }) {
   const [value, setValue] = React.useState(0);
 
   React.useEffect(() => {
-    if (profiles) if (profiles[0]) dispatch(getRentersByUserID(profiles[0].user._id));
+    if (profiles && profiles.length) dispatch(getRentersByUserID(profiles[0].user._id));
   }, [dispatch, profiles]);
 
   const onTabClick = React.useCallback(

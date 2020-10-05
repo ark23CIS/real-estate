@@ -58,9 +58,11 @@ function Ads({ cards, profile, needToRenderBanner, pageType, pageOwnerID }) {
                     </Typography>
                     <Typography className={classes.dateAndUser}>
                       <Link
-                        href={`/#/profiles/${card.user._id}`}
+                        href={`/#/profiles/${card.user ? card.user._id : ''}`}
                         className={classes.user}
-                      >{`${card.user.firstName} ${card.user.lastName}`}</Link>
+                      >{`${card.user ? card.user.firstName : ''} ${
+                        card.user ? card.user.lastName : ''
+                      }`}</Link>
                       <div>{new Date(card.created).toDateString()}</div>
                     </Typography>
                   </CardContent>

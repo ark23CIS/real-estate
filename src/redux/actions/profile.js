@@ -1,6 +1,12 @@
 import axios from 'axios';
-import { addError } from './index';
-import { GET_PROFILE, GET_PROFILES, PROFILE_ERROR, UPDATE_PROFILE_PHOTO } from './types';
+import { addError, addSuccessStatus } from './index';
+import {
+  CLEAR_PROFILE,
+  GET_PROFILE,
+  GET_PROFILES,
+  PROFILE_ERROR,
+  UPDATE_PROFILE_PHOTO,
+} from './types';
 import { configContentType } from '../helpers';
 
 export const getProfile = () => async (dispatch) => {
@@ -67,6 +73,7 @@ export const createProfile = (data, history) => async (dispatch) => {
       dispatch({ type: UPDATE_PROFILE_PHOTO, payload: res.data.photo });
     }
     history.push('/profiles/me');
+    dispatch(addSuccessStatus('Your Profile has been created'));
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -110,6 +117,7 @@ export const rateProfile = (user_id, rating) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/profiles/rate/${user_id}`, { rating }, configContentType());
     dispatch({ type: GET_PROFILES, payload: [res.data] });
+    dispatch(addSuccessStatus(`You rated the profile with ${rating} rating`));
   } catch (err) {
     if (err.statusText)
       dispatch({
@@ -128,7 +136,7 @@ export const commentProfile = ({ commented_collection, text }) => async (dispatc
     );
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Error with adding comment'));
   }
 };
 
@@ -141,6 +149,17 @@ export const uncommentProfile = ({ uncommentedCollection, commentID }) => async 
     );
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Error with deleting comment'));
+  }
+};
+
+export const deleteProfile = (history) => async (dispatch) => {
+  try {
+    await axios.delete('/api/profiles/me');
+    dispatch({ type: CLEAR_PROFILE });
+    history.push('/search');
+    dispatch(addSuccessStatus('Your profile has been successfully deleted'));
+  } catch (err) {
+    dispatch(addError('Error with deleting profile'));
   }
 };

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { GET_RESERVATION, GET_RESERVATIONS, DELETE_RESERVATION } from './types';
+import { addError, addSuccessStatus } from '.';
 import { configContentType } from '../helpers';
 
 export const createReservation = (
@@ -43,7 +44,8 @@ export const deleteReservation = (reservationID) => async (dispatch) => {
   try {
     const res = await axios.delete(`/api/reservations/${reservationID}`);
     dispatch({ type: DELETE_RESERVATION, payload: res.data });
+    dispatch(addSuccessStatus('Reservation successfully deleted'));
   } catch (err) {
-    console.log(err.message);
+    dispatch(addError('Deleting reservation error'));
   }
 };

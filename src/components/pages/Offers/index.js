@@ -2,11 +2,23 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Check, DoneAll, Cancel, Timer, Delete, Error } from '@material-ui/icons';
-import { Banner } from '../..';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@material-ui/core';
+import useStyles from './offersStyles';
+import { Block, Banner } from '../..';
 import { getOwnReservations, updateReservation, deleteReservation } from '../../../redux/actions';
 
-function index() {
+export default function DenseTable() {
+  const classes = useStyles();
   const dispatch = useDispatch();
+
   const {
     reservation: { reservations },
     auth: { user },
@@ -33,55 +45,107 @@ function index() {
     [dispatch],
   );
 
-  console.log(reservations);
+  const renderActions = React.useCallback(
+    (reservation) => {
+      if (reservation.owner)
+        if (reservation.owner._id === user._id)
+          return (
+            <React.Fragment>
+              {reservation.status === 'pending' && (
+                <div>
+                  <Check
+                    className="cursor"
+                    style={{ color: 'green' }}
+                    onClick={() => onUpdate('accepted', reservation._id)}
+                  />
+                  <Cancel
+                    className="cursor"
+                    style={{ color: 'black' }}
+                    onClick={() => onUpdate('aborted', reservation._id)}
+                  />
+                </div>
+              )}
+              {reservation.status === 'accepted' && (
+                <DoneAll className="cursor" style={{ color: 'green' }} />
+              )}
+              {reservation.status === 'aborted' && (
+                <Error className="cursor" style={{ color: 'red' }} />
+              )}
+            </React.Fragment>
+          );
+        else
+          return (
+            <React.Fragment>
+              {reservation.status === 'pending' && (
+                <React.Fragment>
+                  <Timer className="cursor" />
+                  <Delete
+                    className="cursor"
+                    style={{ color: 'black' }}
+                    onClick={() => onDelete(reservation._id)}
+                  />
+                </React.Fragment>
+              )}
+              {reservation.status === 'accepted' && (
+                <DoneAll className="cursor" style={{ color: 'green' }} />
+              )}
+              {reservation.status === 'aborted' && (
+                <Error className="cursor" style={{ color: 'red' }} />
+              )}
+            </React.Fragment>
+          );
+    },
+    [user],
+  );
+
   return (
-    <div>
+    <React.Fragment>
       {reservations &&
         reservations.map((reservation) => (
-          <React.Fragment>
-            <div>
-              <Link
-                to={`${reservation.possibleClient._id}`}
-              >{`${reservation.possibleClient.firstName} ${reservation.possibleClient.lastName}`}</Link>
-              {` want${reservation.status === 'pending' ? 's' : 'ed'} to rent `}
-              <Link to={`/estates/${reservation.estate._id}`}>the following estate</Link>
-              {' asks'}
-              <Link> {`${reservation.owner.firstName} ${reservation.owner.lastName}`}</Link>
-              {' to confirm'}
-            </div>
-            <div key={`${reservation.owner._id}_${reservation.possibleClient._id}_${index}`}>
-              {reservation.status}
-            </div>
-            {reservation.owner._id === user._id ? (
-              <React.Fragment>
-                {reservation.status === 'pending' && (
-                  <div>
-                    <Check
-                      className="cursor"
-                      onClick={() => onUpdate('accepted', reservation._id)}
-                    />
-                    <Cancel
-                      className="cursor"
-                      onClick={() => onUpdate('aborted', reservation._id)}
-                    />
-                  </div>
-                )}
-                {reservation.status === 'accepted' && <DoneAll className="cursor" />}
-                {reservation.status === 'aborted' && <Error className="cursor" />}
-              </React.Fragment>
-            ) : (
-              <div>
-                {reservation.status === 'pending' && (
-                  <React.Fragment>
-                    <Timer className="cursor" />
-                    <Delete className="cursor" onClick={() => onDelete(reservation._id)} />
-                  </React.Fragment>
-                )}
-                {reservation.status === 'accepted' && <DoneAll className="cursor" />}
-                {reservation.status === 'aborted' && <Error className="cursor" />}
-              </div>
-            )}
-          </React.Fragment>
+          <Block>
+            <TableContainer component={Paper}>
+              <Table className={classes.table} size="small" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Estate</TableCell>
+                    <TableCell align="right">Owner</TableCell>
+                    <TableCell align="right">Client</TableCell>
+                    <TableCell align="right">Status</TableCell>
+                    <TableCell align="right">Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      <Link to={`/estates/${reservation.estate ? reservation.estate._id : ''}`}>
+                        {reservation.estate ? reservation.estate.title : ''}
+                      </Link>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Link to={`/profiles/${reservation.owner ? reservation.owner._id : ''}`}>{`${
+                        reservation.owner ? reservation.owner.firstName : ''
+                      } ${reservation.owner ? reservation.owner.lastName : ''}`}</Link>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Link
+                        to={`/profiles/${
+                          reservation.possibleClient ? reservation.possibleClient._id : ''
+                        }`}
+                      >{`${
+                        reservation.possibleClient ? reservation.possibleClient.firstName : ''
+                      } ${
+                        reservation.possibleClient ? reservation.possibleClient.lastName : ''
+                      }`}</Link>
+                    </TableCell>
+                    <TableCell align="right" style={{ textTransform: 'capitalize' }}>
+                      {reservation.status}
+                    </TableCell>
+                    <TableCell align="right">{renderActions(reservation)}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Block>
         ))}
       {!reservations.length && (
         <Banner
@@ -94,8 +158,6 @@ function index() {
           }
         />
       )}
-    </div>
+    </React.Fragment>
   );
 }
-
-export default index;

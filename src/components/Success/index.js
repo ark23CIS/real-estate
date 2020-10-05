@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Error() {
-  const errors = useSelector((state) => state.error);
+function Success() {
+  const successes = useSelector((state) => state.success);
 
   return (
     <ToastContainer>
-      {errors &&
-        errors.map((error) => {
-          toast.error(error.msg, {
+      {successes &&
+        successes.map((success) => {
+          toast.success(success.msg, {
             autoClose: 5000,
           });
         })}
@@ -18,4 +18,4 @@ function Error() {
   );
 }
 
-export default React.memo(Error);
+export default React.memo(Success);
