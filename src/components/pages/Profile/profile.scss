@@ -19,3 +19,54 @@
     padding-left: 8px;
   }
 }
+
+.profile_fullname {
+  padding-left: 10px;
+}
+
+.profile__fullname,
+.profile__status {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.3125;
+}
+
+.profile__joined,
+.profile__status {
+  color: #657786;
+}
+
+.profile__main-info {
+  margin-left: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 220px;
+  text-align: center;
+  & > div {
+    margin-bottom: 10px;
+  }
+  margin-bottom: 20px;
+}
+
+.profile__fullname-and-delete {
+  display: flex;
+}
+
+.profile__estimations {
+  display: flex;
+  & > div {
+    margin-right: 15px;
+  }
+}
+
+.profile__info {
+  margin: 0 0 20px 40px;
+  & > div {
+    margin-bottom: 10px;
+  }
+}
+
+.social-icon {
+  margin-right: 15px;
+}
