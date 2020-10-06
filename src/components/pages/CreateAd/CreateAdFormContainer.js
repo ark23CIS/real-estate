@@ -56,6 +56,7 @@ function CreateAdFormContainer({ label, iconComponent, fields, history }) {
       onFieldChange={onFieldChange}
       onSubmit={onSubmit}
       iconComponent={iconComponent}
+      label={label}
     />
   );
 }

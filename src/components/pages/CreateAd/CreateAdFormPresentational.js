@@ -11,6 +11,7 @@ function CreateAdFormPresentational({
   onFieldChange,
   onSubmit,
   iconComponent,
+  label,
 }) {
   return (
     <Container component="main" maxWidth="xs">
@@ -73,6 +74,7 @@ CreateAdFormPresentational.propTypes = {
   onFieldChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   iconComponent: PropTypes.element.isRequired,
+  label: PropTypes.string.isRequired,
 };
 
 export default CreateAdFormPresentational;
