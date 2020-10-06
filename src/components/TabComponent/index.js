@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import SwipeableViews from 'react-swipeable-views';
-import { AppBar, Tabs, Tab, useTheme } from '@material-ui/core';
+import { useTheme } from '@material-ui/core';
 import { getEstatesByUserID, getRentersByUserID } from '../../redux/actions';
-import { useStyles, a11yProps, TabPanel } from './TabComponentHelper';
+import TabPresentational from './TabPresentational';
+import { useStyles } from './TabComponentHelper';
 
-function TabComponent({ tabItems }) {
+function TabComponentContainer({ tabItems }) {
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ function TabComponent({ tabItems }) {
     [dispatch],
   );
 
-  const handleChange = (event, newValue) => {
+  const handleTabChange = (_, newValue) => {
     setValue(newValue);
   };
 
@@ -38,45 +38,20 @@ function TabComponent({ tabItems }) {
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" color="default">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-          aria-label="full width tabs example"
-        >
-          {tabItems &&
-            tabItems.map(({ label }, index) => (
-              <Tab
-                key={`${label}_${index}`}
-                label={label}
-                {...a11yProps(index)}
-                onClick={() => onTabClick(label)}
-              />
-            ))}
-        </Tabs>
-      </AppBar>
-      <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
-        onChangeIndex={handleChangeIndex}
-      >
-        {tabItems &&
-          tabItems.map(({ tabComponent }, index) => (
-            <TabPanel value={value} index={index} dir={theme.direction}>
-              {tabComponent}
-            </TabPanel>
-          ))}
-      </SwipeableViews>
-    </div>
+    <TabPresentational
+      handleTabChange={handleTabChange}
+      classes={classes}
+      value={value}
+      onTabClick={onTabClick}
+      handleChangeIndex={handleChangeIndex}
+      tabItems={tabItems}
+      theme={theme}
+    />
   );
 }
 
-TabComponent.proptypes = {
+TabComponentContainer.proptypes = {
   tabItems: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default TabComponent;
+export default TabComponentContainer;

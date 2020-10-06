@@ -1,11 +1,11 @@
 import React from 'react';
-import StarRatingComponent from 'react-star-rating-component';
-import './stars.scss';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { rateProfile, rateEstate, rateRenter } from '../../redux/actions';
-import PropTypes from 'prop-types';
+import RatingPresentational from './RatingPresentational';
+import './stars.scss';
 
-const Rating = ({
+const RatingContainer = ({
   authUserID,
   label,
   collectionID,
@@ -34,19 +34,15 @@ const Rating = ({
   );
 
   return (
-    <div className="stars">
-      <StarRatingComponent
-        name="rate1"
-        starCount={5}
-        value={Math.round(ratingValue)}
-        onStarClick={isClickable ? onStarClick : null}
-      />
-      <div className="rate-block__appraisal">{ratingValue}</div>
-    </div>
+    <RatingPresentational
+      isClickable={isClickable}
+      ratingValue={ratingValue}
+      onStarClick={onStarClick}
+    />
   );
 };
 
-Rating.propTypes = {
+RatingContainer.propTypes = {
   authUserID: PropTypes.string,
   label: PropTypes.string,
   collectionID: PropTypes.string,
@@ -56,7 +52,7 @@ Rating.propTypes = {
   pageOwnerID: PropTypes.string,
 };
 
-Rating.defaultProps = {
+RatingContainer.defaultProps = {
   label: '',
   authUserID: '',
   collectionID: '',
@@ -66,4 +62,4 @@ Rating.defaultProps = {
   pageOwnerID: '',
 };
 
-export default React.memo(Rating);
+export default React.memo(RatingContainer);

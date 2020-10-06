@@ -1,17 +1,10 @@
-import React, { Fragment } from 'react';
-import { FaBars } from 'react-icons/fa';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AiOutlineClose } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
-import { withRouter } from 'react-router';
-import { IconContext } from 'react-icons';
-import { Scrollbars } from 'react-custom-scrollbars';
-import PropTypes from 'prop-types';
-import { DrawerData } from './DrawerData';
+import HeaderPresentational from './HeaderPresentational';
 import { logout } from '../../redux/actions';
 import './header.scss';
 
-const Header = React.memo(({ location }) => {
+function HeaderContainer() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [isActive, setIsActive] = React.useState(false);
@@ -20,56 +13,18 @@ const Header = React.memo(({ location }) => {
     setIsActive(!isActive);
   }, [isActive]);
 
-  const onClick = React.useCallback(() => {
+  const onHeaderItemClick = React.useCallback(() => {
     dispatch(logout());
   });
 
   return (
-    <React.Fragment>
-      <IconContext.Provider value={{ color: '#fff' }}>
-        <div className="header">
-          <div className="header__left">
-            <Link to="#" className="menu-bars">
-              <FaBars onClick={toggleDrawer} />
-            </Link>
-            <div className="header__logo">Real Estate</div>
-          </div>
-        </div>
-        <nav className={isActive ? 'nav-menu active' : 'nav-menu'}>
-          <Scrollbars style={{ width: '100%', height: '100%' }}>
-            <ul className="nav-menu__items" onClick={toggleDrawer}>
-              <li className="navbar-toggler">
-                <Link to="#">
-                  <AiOutlineClose style={{ zIndex: 5 }} />
-                </Link>
-              </li>
-              {DrawerData.filter((item) => item.logged !== !isAuthenticated).map((item, index) => {
-                return (
-                  <li
-                    key={`${index} ${item.path}`}
-                    className={`nav-text`}
-                    onClick={item.title === 'Log out' ? onClick : undefined}
-                  >
-                    <Link
-                      to={item.path}
-                      className={location.pathname === item.path ? 'active-page' : ''}
-                    >
-                      {item.icon}
-                      <span>{item.title}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </Scrollbars>
-        </nav>
-      </IconContext.Provider>
-    </React.Fragment>
+    <HeaderPresentational
+      onHeaderItemClick={onHeaderItemClick}
+      toggleDrawer={toggleDrawer}
+      isAuthenticated={isAuthenticated}
+      isActive={isActive}
+    />
   );
-});
+}
 
-Header.propTypes = {
-  location: PropTypes.object.isRequired,
-};
-
-export default withRouter(React.memo(Header));
+export default HeaderContainer;

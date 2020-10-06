@@ -1,6 +1,6 @@
 import React from 'react';
 import { GiFamilyHouse, GiPerson } from 'react-icons/gi';
-import CreateAdForm from './CreateAdForm';
+import CreateAdFormContainer from './CreateAdFormContainer';
 
 const ADFields = [
   { name: 'contactNumber', label: 'Contact Number' },
@@ -25,11 +25,13 @@ export const tabItems = [
   {
     label: 'Renter',
     tabComponent: (
-      <CreateAdForm label="renter" iconComponent={<GiFamilyHouse />} fields={ADFields} />
+      <CreateAdFormContainer label="renter" iconComponent={<GiFamilyHouse />} fields={ADFields} />
     ),
   },
   {
     label: 'Estate',
-    tabComponent: <CreateAdForm label="estate" iconComponent={<GiPerson />} fields={ADFields} />,
+    tabComponent: (
+      <CreateAdFormContainer label="estate" iconComponent={<GiPerson />} fields={ADFields} />
+    ),
   },
 ];

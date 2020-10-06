@@ -1,10 +1,10 @@
 import React from 'react';
-import { ThumbUp } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { likeEstate, likeRenter, likeProfile } from '../../redux/actions';
+import LikePresentational from './LikePresentational';
 
-function Like({
+function LikeContainer({
   likeType,
   collectionID,
   amountOflikes,
@@ -14,6 +14,7 @@ function Like({
   pageOwnerID,
 }) {
   const dispatch = useDispatch();
+
   const onThumbUp = React.useCallback(() => {
     if (likeType === 'profile') {
       dispatch(likeProfile(collectionID));
@@ -25,17 +26,16 @@ function Like({
   }, [dispatch, likeType, collectionID, pageType, pageOwnerID]);
 
   return (
-    <div className="rate-block">
-      <ThumbUp
-        onClick={isClickable ? onThumbUp : null}
-        className={isActive ? 'thumb-active cursor' : 'cursor'}
-      />
-      <div className="rate-block__appraisal">{amountOflikes}</div>
-    </div>
+    <LikePresentational
+      amountOflikes={amountOflikes}
+      isActive={isActive}
+      isClickable={isClickable}
+      onThumbUp={onThumbUp}
+    />
   );
 }
 
-Like.propTypes = {
+LikeContainer.propTypes = {
   likeType: PropTypes.string,
   collectionID: PropTypes.string.isRequired,
   amountOflikes: PropTypes.number.isRequired,
@@ -45,7 +45,7 @@ Like.propTypes = {
   pageOwnerID: PropTypes.string,
 };
 
-Like.defaultProps = {
+LikeContainer.defaultProps = {
   likeType: '',
   isActive: false,
   pageType: '',
@@ -53,4 +53,4 @@ Like.defaultProps = {
   pageOwnerID: '',
 };
 
-export default Like;
+export default LikeContainer;

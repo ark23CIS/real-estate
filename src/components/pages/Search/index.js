@@ -1,11 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Ads, SearchBar, Pagination, Filters } from '../..';
 import { searchAds, getProfile, getAllEstates } from '../../../redux/actions';
-import { Container } from '@material-ui/core';
+import SearchPresentational from './SearchPresentational';
 import './search-page.scss';
 
-function Search() {
+function SearchContainer() {
   const dispatch = useDispatch();
 
   const {
@@ -27,6 +26,7 @@ function Search() {
   });
 
   React.useEffect(() => {
+    dispatch(getProfile());
     dispatch(getAllEstates());
   }, [dispatch]);
 
@@ -41,38 +41,15 @@ function Search() {
     [setSearchPostsData],
   );
 
-  console.log(searchPostsData);
-
   return (
-    <React.Fragment>
-      <SearchBar callback={changeFilterData} />
-      <Container className="wrapper">
-        <Filters {...searchPostsData} callback={changeFilterData} />
-        <Ads
-          cards={[
-            ...(searchPostsData.AdType === 'renters'
-              ? renters
-              : estates.filter((estate) => estate.visible)
-            ).slice(
-              searchPostsData.postsPerPage * (searchPostsData.activePage - 1),
-              searchPostsData.postsPerPage * searchPostsData.activePage,
-            ),
-          ]}
-          profile={profile ? profile : ''}
-          needToRenderBanner={true}
-        />
-        <Pagination
-          callback={changeFilterData}
-          postsPerPage={searchPostsData.postsPerPage}
-          totalPosts={
-            searchPostsData.AdType === 'renters'
-              ? renters.length
-              : estates.filter((estate) => estate.visible).length
-          }
-        />
-      </Container>
-    </React.Fragment>
+    <SearchPresentational
+      changeFilterData={changeFilterData}
+      searchPostsData={searchPostsData}
+      renters={renters}
+      estates={estates}
+      profile={profile}
+    />
   );
 }
 
-export default React.memo(Search);
+export default React.memo(SearchContainer);

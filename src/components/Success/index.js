@@ -1,21 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import SuccessPresentational from './SuccessPresentational';
 
-function Success() {
+function SuccessContainer() {
   const successes = useSelector((state) => state.success);
 
-  return (
-    <ToastContainer>
-      {successes &&
-        successes.map((success) => {
-          toast.success(success.msg, {
-            autoClose: 5000,
-          });
-        })}
-    </ToastContainer>
-  );
+  return <SuccessPresentational successes={successes} />;
 }
 
-export default React.memo(Success);
+export default React.memo(SuccessContainer);

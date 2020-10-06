@@ -1,5 +1,4 @@
 import React from 'react';
-import { Search } from '@material-ui/icons';
 import './search.scss';
 
 function index({ callback, searchQuery }) {

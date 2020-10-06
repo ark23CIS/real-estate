@@ -1,21 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import ErrorPresentational from './ErrorPresentational';
 
-function Error() {
+function ErrorContainer() {
   const errors = useSelector((state) => state.error);
 
-  return (
-    <ToastContainer>
-      {errors &&
-        errors.map((error) => {
-          toast.error(error.msg, {
-            autoClose: 5000,
-          });
-        })}
-    </ToastContainer>
-  );
+  return <ErrorPresentational errors={errors} />;
 }
 
-export default React.memo(Error);
+export default React.memo(ErrorContainer);

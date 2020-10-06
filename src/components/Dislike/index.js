@@ -1,10 +1,10 @@
 import React from 'react';
-import { ThumbDown } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import DislikePresentational from './DislikePresentational';
 import { dislikeEstate, dislikeProfile, dislikeRenter } from '../../redux/actions';
 
-function Dislike({
+function DislikeContainer({
   dislikeType,
   collectionID,
   amountOfDislikes,
@@ -26,17 +26,16 @@ function Dislike({
   }, [dispatch, dislikeType, collectionID, pageType, pageOwnerID]);
 
   return (
-    <div className="rate-block">
-      <ThumbDown
-        onClick={isClickable ? onThumbDown : null}
-        className={isActive ? 'thumb-active cursor' : 'cursor'}
-      />
-      <div className="rate-block__appraisal">{amountOfDislikes}</div>
-    </div>
+    <DislikePresentational
+      amountOfDislikes={amountOfDislikes}
+      isActive={isActive}
+      isClickable={isClickable}
+      onThumbDown={onThumbDown}
+    />
   );
 }
 
-Dislike.propTypes = {
+DislikeContainer.propTypes = {
   dislikeType: PropTypes.string,
   collectionID: PropTypes.string.isRequired,
   amountOfDislikes: PropTypes.number.isRequired,
@@ -46,7 +45,7 @@ Dislike.propTypes = {
   pageOwnerID: PropTypes.string,
 };
 
-Dislike.defaultProps = {
+DislikeContainer.defaultProps = {
   dislikeType: '',
   isActive: false,
   pageType: '',
@@ -54,4 +53,4 @@ Dislike.defaultProps = {
   pageOwnerID: '',
 };
 
-export default Dislike;
+export default DislikeContainer;

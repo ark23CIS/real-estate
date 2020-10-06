@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import './filters.scss';
 
 function index({ maxFootage, maxPrice, minFootage, minPrice, AdType, callback }) {
-  console.log(maxFootage, minFootage, minPrice, AdType);
   return (
     <div className="filter-form">
       <div className="form-group">
