@@ -134,9 +134,9 @@ exports.deleteOwnProfileController = async (req, res) => {
     Profile.findOneAndRemove({ user: req.user.id }).then((profile) => {
       if (profile) profileID = profile._id;
     }),
-    await Estate.remove({ user: req.user.id }),
-    await Renter.remove({ user: req.user.id }),
-    await Reservation.remove({ user: req.user.id }),
+    await Estate.deleteMany({ user: req.user.id }),
+    await Renter.deleteMany({ user: req.user.id }),
+    await Reservation.deleteMany({ user: req.user.id }),
     models.forEach(async (Model) => {
       await Model.updateMany(
         {},
@@ -150,7 +150,7 @@ exports.deleteOwnProfileController = async (req, res) => {
         },
       );
     }),
-    await Reservation.remove({
+    await Reservation.deleteMany({
       $or: [{ owner: req.user.id }, { possibleClient: req.user.id }],
     }),
     await User.findOneAndRemove({ _id: req.user.id }),

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { debounce } from 'lodash';
 import { searchAds, getProfile, getAllEstates } from '../../../redux/actions';
 import SearchPresentational from './SearchPresentational';
 import './search-page.scss';
@@ -32,13 +33,19 @@ function SearchContainer() {
 
   React.useEffect(() => {
     dispatch(searchAds(searchPostsData));
+    return () => {
+      changeFilterData.cancel();
+    };
   }, [dispatch, searchPostsData]);
 
-  const changeFilterData = React.useCallback(
-    (name, value) => {
-      if (name && value) setSearchPostsData((searchData) => ({ ...searchData, [name]: value }));
-    },
-    [setSearchPostsData],
+  const changeFilterData = debounce(
+    React.useCallback(
+      (name, value) => {
+        if (name) setSearchPostsData((searchData) => ({ ...searchData, [name]: value }));
+      },
+      [setSearchPostsData],
+    ),
+    1000,
   );
 
   return (
