@@ -9,7 +9,7 @@ router.get('/', authMiddleware, authGetController);
 router.post(
   '/',
   [
-    check('password', 'Password is required').exists(),
+    check('password', 'Password is required').not().isEmpty(),
     check('email', 'Email is not correct').isEmail(),
   ],
   authPostController,

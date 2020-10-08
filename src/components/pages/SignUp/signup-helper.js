@@ -33,3 +33,40 @@ export const Copyright = () => {
     </Typography>
   );
 };
+
+export const signUpFields = [
+  {
+    sm: 6,
+    id: 'firstName',
+    label: 'First Name',
+    name: 'firstName',
+    autoComplete: 'fname',
+  },
+  {
+    sm: 6,
+    id: 'lastName',
+    label: 'Last Name',
+    name: 'lastName',
+    autoComplete: 'lname',
+  },
+  {
+    id: 'email',
+    label: 'Email Address',
+    name: 'email',
+    autoComplete: 'email',
+  },
+  {
+    id: 'password',
+    label: 'Password',
+    type: 'password',
+    name: 'password',
+    autoComplete: 'current-password',
+  },
+  {
+    id: 'passwordConfirm',
+    label: 'Confirm Password',
+    type: 'password',
+    name: 'passwordConfirm',
+    autoComplete: 'current-password',
+  },
+];

@@ -5,7 +5,7 @@ exports.createRenter = async (req, res) => {
   let errors = [...validationResult(req).array()];
   const { region, footage, maxPrice, text, title, contactNumber, photos } = req.body;
   if (!/^\+?[0-9]{6,12}$/g.test(contactNumber)) {
-    errors = [...errors, { msg: 'Input a real contact number' }];
+    errors = [...errors, { msg: 'Input a real contact number', param: 'contactNumber' }];
   }
   if (errors.length) {
     return res.status(400).json({ errors });

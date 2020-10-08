@@ -12,9 +12,9 @@ import {
   Avatar,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Copyright } from './signup-helper';
+import { Copyright, signUpFields } from './signup-helper';
 
-function SignUpPresentational({ classes, onChange, onSubmit }) {
+function SignUpPresentational({ classes, onChange, onSubmit, errors }) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -27,69 +27,24 @@ function SignUpPresentational({ classes, onChange, onSubmit }) {
         </Typography>
         <div className={classes.form}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                onChange={onChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                onChange={onChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={onChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={onChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="passwordConfirm"
-                label="Confirm Password"
-                type="password"
-                id="confirmPassword"
-                autoComplete="current-password"
-                onChange={onChange}
-              />
-            </Grid>
+            {signUpFields.map((field) => (
+              <Grid item xs={12} sm={field.sm ? field.sm : 12}>
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  autoFocus
+                  helperText={
+                    errors.map((error) => error.param).includes(field.name)
+                      ? errors.filter(({ param }) => param === field.name)[0].msg
+                      : ''
+                  }
+                  error={errors.map((error) => error.param).includes(field.name)}
+                  onChange={onChange}
+                />
+              </Grid>
+            ))}
           </Grid>
           <Button
             type="submit"
@@ -121,6 +76,7 @@ SignUpPresentational.propTypes = {
   classes: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default SignUpPresentational;

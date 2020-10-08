@@ -1,18 +1,24 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { login } from '../../../redux/actions';
-import { useStyles } from './signin-helper';
+import { login, clearError } from '../../../redux/actions';
+import { useStyles, signInFields } from './signin-helper';
 import SignInRepresentational from './SignInRepresentational';
 
 export default function SignIn() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
+  const { auth, error: errors } = useSelector((state) => state);
   const [loginData, setLoginData] = React.useState({
     password: '',
     email: '',
   });
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
 
   const onClick = React.useCallback(() => {
     dispatch(login(loginData));
@@ -32,5 +38,13 @@ export default function SignIn() {
     return <Redirect to={`/profiles/me`} />;
   }
 
-  return <SignInRepresentational classes={classes} onChange={onChange} onClick={onClick} />;
+  return (
+    <SignInRepresentational
+      classes={classes}
+      onChange={onChange}
+      onClick={onClick}
+      errors={errors}
+      signInFields={signInFields}
+    />
+  );
 }

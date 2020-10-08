@@ -12,6 +12,7 @@ function CreateAdFormPresentational({
   onSubmit,
   iconComponent,
   label,
+  errors,
 }) {
   return (
     <Container component="main" maxWidth="xs">
@@ -37,6 +38,12 @@ function CreateAdFormPresentational({
                   id={name}
                   autoComplete={name}
                   autoFocus
+                  helperText={
+                    errors.map((error) => error.param).includes(name)
+                      ? errors.filter(({ param }) => param === name)[0].msg
+                      : ''
+                  }
+                  error={errors.map((error) => error.param).includes(name)}
                   onChange={type === 'location' ? onAddressChange : onFieldChange}
                   key={`${name}_${index}`}
                   required
@@ -75,6 +82,7 @@ CreateAdFormPresentational.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   iconComponent: PropTypes.element.isRequired,
   label: PropTypes.string.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
 };
 
 export default CreateAdFormPresentational;

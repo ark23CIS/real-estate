@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { setAuthToken } from '../helpers';
-import { addError } from './error';
+import { addError, addErrors } from './error';
 import {
   REGISTER_FAIL,
   AUTH_ERROR,
@@ -23,7 +23,7 @@ export const loadUser = () => async (dispatch) => {
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(addError(error.msg)));
+      dispatch(addErrors(errors));
     }
     dispatch({ type: AUTH_ERROR });
   }
@@ -37,7 +37,7 @@ export const register = ({ firstName, lastName, email, password, history }) => a
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(addError(error.msg)));
+      dispatch(addErrors(errors));
     }
     dispatch({
       type: REGISTER_FAIL,
@@ -66,7 +66,7 @@ export const login = ({ email, password }) => async (dispatch) => {
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(addError(error.msg)));
+      dispatch(addErrors(errors));
     }
     dispatch({
       type: LOGIN_FAIL,

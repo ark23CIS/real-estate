@@ -2,10 +2,10 @@ const { validationResult } = require('express-validator');
 const { Estate } = require('../models');
 
 exports.createEstate = async (req, res) => {
-  let errors = [...validationResult(req).array()];
+  let errors = [...validationResult(req).array({ onlyFirstError: false })];
   const { region, footage, price, text, title, contactNumber, estateAddress, photos } = req.body;
   if (!/^\+?[0-9]{6,12}$/g.test(contactNumber)) {
-    errors = [...errors, { msg: 'Input a real contact number' }];
+    errors = [...errors, { msg: 'Input a real contact number', param: 'contactNumber' }];
   }
   if (errors.length) {
     return res.status(400).json({ errors });

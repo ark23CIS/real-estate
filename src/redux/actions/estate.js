@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addError, addSuccessStatus } from './index';
+import { addError, addErrors, addSuccessStatus } from './index';
 import { GET_ESTATE, GET_RENTER, GET_ESTATES, GET_RENTERS } from './types';
 import { getProfile } from './profile';
 import { configContentType } from '../helpers';
@@ -38,12 +38,12 @@ export const createAD = (data, type, history) => (dispatch) => {
         payload: adRes.data,
       });
       history.push(`/${type === 'estate' ? 'estates' : 'renters'}/${adRes.data._id}`);
-      dispatch(addSuccessStatus('AD succesfully created'));
+      dispatch(addSuccessStatus({ msg: 'AD succesfully created' }));
     })
     .catch((err) => {
       const errors = err.response.data.errors;
       if (errors) {
-        errors.forEach((error) => dispatch(addError(error.msg)));
+        dispatch(addErrors(errors));
       }
     });
 };
@@ -76,7 +76,7 @@ export const commentEstate = ({ commented_collection, text }) => async (dispatch
     );
     dispatch({ type: GET_ESTATE, payload: res.data });
   } catch (err) {
-    dispatch(addSuccessStatus('Error with adding comment'));
+    dispatch(addSuccessStatus({ msg: 'Error with adding comment' }));
   }
 };
 
@@ -89,7 +89,7 @@ export const uncommentEstate = ({ uncommentedCollection, commentID }) => async (
     );
     dispatch({ type: GET_ESTATE, payload: res.data });
   } catch (err) {
-    dispatch(addError('Error with deleting comment'));
+    dispatch(addError({ msg: 'Error with deleting comment' }));
   }
 };
 
@@ -109,9 +109,9 @@ export const rateEstate = ({ rating, rated_collection, pageType = '', pageOwnerI
     } else if (pageType === 'single') {
       dispatch({ type: GET_ESTATE, payload: res.data });
     }
-    dispatch(addSuccessStatus(`You rated the estate with ${rating} rating`));
+    dispatch(addSuccessStatus({ msg: `You rated the estate with ${rating} rating` }));
   } catch (err) {
-    dispatch(addError('Eror with adding rating'));
+    dispatch(addError({ msg: 'Error with adding rating' }));
   }
 };
 
@@ -187,8 +187,8 @@ export const deleteEstate = (estateID, history) => async (dispatch) => {
   try {
     await axios.delete(`/api/estates/${estateID}`);
     history.push('/search');
-    dispatch(addSuccessStatus('You successfully deleted Estate'));
+    dispatch(addSuccessStatus({ msg: 'You successfully deleted Estate' }));
   } catch (err) {
-    dispatch(addError('Error with deleting estate'));
+    dispatch(addError({ msg: 'Error with deleting estate' }));
   }
 };

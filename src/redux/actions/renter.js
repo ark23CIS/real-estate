@@ -32,7 +32,7 @@ export const commentRenter = ({ commented_collection, text }) => async (dispatch
     );
     dispatch({ type: GET_RENTER, payload: res.data });
   } catch (err) {
-    dispatch(addError('Error with commenting renter'));
+    dispatch(addError({ msg: 'Error with commenting renter' }));
   }
 };
 
@@ -45,7 +45,7 @@ export const uncommentRenter = ({ uncommentedCollection, commentID }) => async (
     );
     dispatch({ type: GET_RENTER, payload: res.data });
   } catch (err) {
-    dispatch(addError('Error with uncomment renter'));
+    dispatch(addError({ msg: 'Error with uncomment renter' }));
   }
 };
 
@@ -67,7 +67,7 @@ export const rateRenter = ({ rating, rated_collection, pageType = '', pageOwnerI
     }
     dispatch(addSuccessStatus(`You rated the page with ${rating} rating`));
   } catch (err) {
-    dispatch(addError('Error with adding rating'));
+    dispatch(addError({ msg: 'Error with adding rating' }));
   }
 };
 
@@ -84,7 +84,7 @@ export const likeRenter = (liked_collection, pageType = '', pageOwnerID = '') =>
       dispatch(getRentersByUserID(pageOwnerID));
     }
   } catch (err) {
-    dispatch(addError('Error with like renter'));
+    dispatch(addError({ msg: 'Error with like renter' }));
   }
 };
 
@@ -105,7 +105,7 @@ export const dislikeRenter = (disliked_collection, pageType = '', pageOwnerID = 
       dispatch(getRentersByUserID(pageOwnerID));
     }
   } catch (err) {
-    dispatch(addError('Error with dislike renter'));
+    dispatch(addError({ msg: 'Error with dislike renter' }));
   }
 };
 
@@ -122,8 +122,8 @@ export const deleteRenter = (renterID, history) => async (dispatch) => {
   try {
     await axios.delete(`/api/renters/${renterID}`);
     history.push('/search');
-    dispatch(addSuccessStatus('You successfully deleted renter'));
+    dispatch(addSuccessStatus({ msg: 'You successfully deleted renter' }));
   } catch (err) {
-    dispatch(addError('Error with deleting renter'));
+    dispatch(addError({ msg: 'Error with deleting renter' }));
   }
 };

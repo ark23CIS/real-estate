@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addError, addSuccessStatus } from './index';
+import { addError, addErrors, addSuccessStatus } from './index';
 import {
   CLEAR_PROFILE,
   GET_PROFILE,
@@ -77,7 +77,7 @@ export const createProfile = (data, history) => async (dispatch) => {
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(addError(error.msg)));
+      dispatch(addErrors(errors));
     }
     if (err.statusText)
       dispatch({
@@ -136,7 +136,7 @@ export const commentProfile = ({ commented_collection, text }) => async (dispatc
     );
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
-    dispatch(addError('Error with adding comment'));
+    dispatch(addError({ msg: 'Error with adding comment' }));
   }
 };
 
@@ -149,7 +149,7 @@ export const uncommentProfile = ({ uncommentedCollection, commentID }) => async 
     );
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
-    dispatch(addError('Error with deleting comment'));
+    dispatch(addError({ msg: 'Error with deleting comment' }));
   }
 };
 
@@ -160,6 +160,6 @@ export const deleteProfile = (history) => async (dispatch) => {
     history.push('/search');
     dispatch(addSuccessStatus('Your profile has been successfully deleted'));
   } catch (err) {
-    dispatch(addError('Error with deleting profile'));
+    dispatch(addError({ msg: 'Error with deleting profile' }));
   }
 };

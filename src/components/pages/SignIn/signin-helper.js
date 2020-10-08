@@ -19,3 +19,20 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0, 2),
   },
 }));
+
+export const signInFields = [
+  {
+    id: 'email',
+    label: 'Email Address',
+    type: 'email',
+    name: 'email',
+    autoComplete: 'email',
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    id: 'password',
+    autoComplete: 'current-password',
+  },
+];

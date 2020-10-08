@@ -17,7 +17,7 @@ function SuccessPresentational({ successes }) {
 }
 
 SuccessPresentational.propTypes = {
-  successes: PropTypes.object.isRequired,
+  successes: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
 };
 
 export default SuccessPresentational;

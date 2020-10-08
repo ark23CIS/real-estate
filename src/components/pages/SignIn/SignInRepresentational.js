@@ -14,7 +14,7 @@ import {
 import PropTypes from 'prop-types';
 import { Copyright } from '../SignUp/signup-helper';
 
-function SignInRepresentational({ classes, onChange, onClick }) {
+function SignInRepresentational({ classes, onChange, onClick, errors, signInFields }) {
   return (
     <div>
       <Container component="main" maxWidth="xs">
@@ -27,30 +27,23 @@ function SignInRepresentational({ classes, onChange, onClick }) {
             Sign in
           </Typography>
           <div className={classes.form}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={onChange}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={onChange}
-            />
+            {signInFields.map((field) => (
+              <TextField
+                {...field}
+                variant="outlined"
+                margin="normal"
+                autoFocus
+                onChange={onChange}
+                required
+                fullWidth
+                helperText={
+                  errors.map((error) => error.param).includes(field.name)
+                    ? errors.filter(({ param }) => param === field.name)[0].msg
+                    : ''
+                }
+                error={errors.map((error) => error.param).includes(field.name)}
+              />
+            ))}
             <Button
               type="submit"
               fullWidth
@@ -82,6 +75,8 @@ SignInRepresentational.propTypes = {
   classes: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  signInFields: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
 };
 
 export default SignInRepresentational;

@@ -1,15 +1,25 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { createAD } from '../../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { createAD, clearError } from '../../../redux/actions';
 import { useStyles } from '../SignIn/signin-helper';
 import CreateAdFormPresentational from './CreateAdFormPresentational';
 
 function CreateAdFormContainer({ label, iconComponent, fields, history }) {
   const classes = useStyles();
+  const errors = useSelector((state) => state.error);
+
+  console.log(errors);
+
   const [ADData, setADData] = React.useState({ pictures: [] });
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
 
   const onPhotosChange = React.useCallback(
     (pictures) => {
@@ -44,6 +54,7 @@ function CreateAdFormContainer({ label, iconComponent, fields, history }) {
   );
 
   const onSubmit = React.useCallback(() => {
+    dispatch(clearError());
     dispatch(createAD(ADData, label, history));
   }, [ADData, dispatch]);
 
@@ -57,6 +68,7 @@ function CreateAdFormContainer({ label, iconComponent, fields, history }) {
       onSubmit={onSubmit}
       iconComponent={iconComponent}
       label={label}
+      errors={errors}
     />
   );
 }

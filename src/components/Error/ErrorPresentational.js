@@ -4,16 +4,7 @@ import PropTypes from 'prop-types';
 import 'react-toastify/dist/ReactToastify.css';
 
 function ErrorPresentational({ errors }) {
-  return (
-    <ToastContainer>
-      {errors &&
-        errors.map((error) => {
-          toast.error(error.msg, {
-            autoClose: 5000,
-          });
-        })}
-    </ToastContainer>
-  );
+  return <ToastContainer autoClose={2000} />;
 }
 
 ErrorPresentational.propTypes = {
