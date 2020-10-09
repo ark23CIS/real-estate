@@ -21,7 +21,10 @@ function SingleEstateContainer({ match, history }) {
   } = useSelector((state) => state);
 
   const estateID = match.params.estateID;
+
   let reservatedByMe = false;
+
+  const [isWindowOpen, setIsWindowOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (estateID) {
@@ -30,13 +33,20 @@ function SingleEstateContainer({ match, history }) {
     }
   }, [dispatch, estateID]);
 
+  const toggleWindow = React.useCallback(() => {
+    setIsWindowOpen((open) => !open);
+  }, [isWindowOpen]);
+
   const onReservateClick = React.useCallback(() => {
     dispatch(createReservation(estate.user._id, profile.user._id, estate._id, history));
   }, [dispatch, estate, profile]);
 
   const onDeleteEstate = React.useCallback(
     (estateID) => {
-      if (estateID) dispatch(deleteEstate(estateID, history));
+      if (estateID) {
+        dispatch(deleteEstate(estateID, history));
+        toggleWindow();
+      }
     },
     [dispatch],
   );
@@ -57,6 +67,8 @@ function SingleEstateContainer({ match, history }) {
       user={user}
       onDeleteEstate={onDeleteEstate}
       onReservateClick={onReservateClick}
+      toggleWindow={toggleWindow}
+      isWindowOpen={isWindowOpen}
     />
   );
 }

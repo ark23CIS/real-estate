@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addError, addErrors, addSuccessStatus } from './index';
+import { addError, addErrors, addSuccessStatus, removeSuccesses } from './index';
 import { GET_ESTATE, GET_RENTER, GET_ESTATES, GET_RENTERS } from './types';
 import { getProfile } from './profile';
 import { configContentType } from '../helpers';
@@ -186,6 +186,7 @@ export const getEstatesByUserID = (userID) => async (dispatch) => {
 export const deleteEstate = (estateID, history) => async (dispatch) => {
   try {
     await axios.delete(`/api/estates/${estateID}`);
+    dispatch({ type: GET_ESTATE, payload: null });
     history.push('/search');
     dispatch(addSuccessStatus({ msg: 'You successfully deleted Estate' }));
   } catch (err) {

@@ -5,6 +5,7 @@ import {
   GET_PROFILE,
   GET_PROFILES,
   PROFILE_ERROR,
+  REMOVE_SUCCESSES,
   UPDATE_PROFILE_PHOTO,
 } from './types';
 import { configContentType } from '../helpers';
@@ -73,7 +74,7 @@ export const createProfile = (data, history) => async (dispatch) => {
       dispatch({ type: UPDATE_PROFILE_PHOTO, payload: res.data.photo });
     }
     history.push('/profiles/me');
-    dispatch(addSuccessStatus('Your Profile has been created'));
+    dispatch(addSuccessStatus({ msg: 'Your Profile has been created' }));
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -157,8 +158,9 @@ export const deleteProfile = (history) => async (dispatch) => {
   try {
     await axios.delete('/api/profiles/me');
     dispatch({ type: CLEAR_PROFILE });
+    dispatch({ type: REMOVE_SUCCESSES });
     history.push('/search');
-    dispatch(addSuccessStatus('Your profile has been successfully deleted'));
+    dispatch(addSuccessStatus({ msg: 'Your profile has been successfully deleted' }));
   } catch (err) {
     dispatch(addError({ msg: 'Error with deleting profile' }));
   }

@@ -15,6 +15,7 @@ function ConfirmationWindowPresentational({
   open,
   fullScreen,
   handleClose,
+  confirm,
 }) {
   return (
     <Dialog
@@ -29,10 +30,10 @@ function ConfirmationWindowPresentational({
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">
-          Disagree
+          Cancel
         </Button>
-        <Button onClick={handleClose} color="primary" autoFocus>
-          Agree
+        <Button onClick={confirm} color="primary" autoFocus>
+          Accept
         </Button>
       </DialogActions>
     </Dialog>
@@ -45,6 +46,7 @@ ConfirmationWindowPresentational.propTypes = {
   open: PropTypes.bool.isRequired,
   fullScreen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
+  confirm: PropTypes.func.isRequired,
 };
 
 export default ConfirmationWindowPresentational;

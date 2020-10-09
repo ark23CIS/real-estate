@@ -11,6 +11,7 @@ export const REMOVE_ERROR = 'REMOVE_ERROR';
 export const REMOVE_ERRORS = 'REMOVE_ERRORS';
 export const ADD_SUCCESS = 'ADD_SUCCESS';
 export const REMOVE_SUCCESS = 'REMOVE_SUCCESS';
+export const REMOVE_SUCCESSES = 'REMOVE_SUCCESSES';
 export const GET_PROFILE = 'GET_PROFILE';
 export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 export const GET_PROFILES = 'GET_PROFILES';

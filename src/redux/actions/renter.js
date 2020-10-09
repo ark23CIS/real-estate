@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { addError, addSuccessStatus } from './index';
+import { addError, addSuccessStatus, getProfile } from './index';
 import { GET_RENTER, GET_RENTERS } from './types';
-import { getProfile } from './index';
 import { configContentType } from '../helpers';
 
 export const getRenterByID = (renter_id) => async (dispatch) => {
@@ -65,7 +64,7 @@ export const rateRenter = ({ rating, rated_collection, pageType = '', pageOwnerI
     } else if (pageType === 'specific') {
       dispatch(getRentersByUserID(pageOwnerID));
     }
-    dispatch(addSuccessStatus(`You rated the page with ${rating} rating`));
+    dispatch(addSuccessStatus({ msg: `You rated the page with ${rating} rating` }));
   } catch (err) {
     dispatch(addError({ msg: 'Error with adding rating' }));
   }
@@ -121,6 +120,7 @@ export const getRentersByUserID = (userID) => async (dispatch) => {
 export const deleteRenter = (renterID, history) => async (dispatch) => {
   try {
     await axios.delete(`/api/renters/${renterID}`);
+    dispatch({ type: GET_RENTER, payload: null });
     history.push('/search');
     dispatch(addSuccessStatus({ msg: 'You successfully deleted renter' }));
   } catch (err) {

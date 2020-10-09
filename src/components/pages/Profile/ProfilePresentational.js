@@ -4,22 +4,33 @@ import { Avatar } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { SocialIcon } from 'react-social-icons';
-import { Comments, Like, Dislike, Rating, TabComponent, Banner } from '../..';
+import { Comments, Like, Dislike, Rating, TabComponent, Banner, ConfirmationWindow } from '../..';
 import { profileTabItems } from './profileTabItems';
 
 function ProfilePresentational({
   currentProfile,
   isOwnPage,
-  onDeleteProfile,
   profile,
   renters,
   estates,
   reservations,
   user,
   match,
+  handleClose,
+  isWindowOpened,
+  confirm,
 }) {
   return (
     <div>
+      {isWindowOpened && (
+        <ConfirmationWindow
+          confirmationText="Do you really want to delete the profile ?"
+          confirmationTitle="Deleting Profile"
+          open={isWindowOpened}
+          handleClose={handleClose}
+          confirm={confirm}
+        />
+      )}
       {!currentProfile && isOwnPage && (
         <Banner title="Need to create a Profile">
           <Link to="/create-profile" className="primary-button">
@@ -44,7 +55,7 @@ function ProfilePresentational({
               style={{ height: '200px', width: '200px' }}
             />
             <div className="profile__fullname-and-delete">
-              {isOwnPage && <Delete className="cursor" onClick={onDeleteProfile} />}
+              {isOwnPage && <Delete className="cursor" onClick={handleClose} />}
 
               <div className="profile__fullname">{`${currentProfile.user.firstName} ${currentProfile.user.lastName}`}</div>
             </div>
@@ -132,13 +143,15 @@ function ProfilePresentational({
 ProfilePresentational.propTypes = {
   currentProfile: PropTypes.object.isRequired,
   isOwnPage: PropTypes.bool.isRequired,
-  onDeleteProfile: PropTypes.func.isRequired,
+  confirm: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   renters: PropTypes.arrayOf(PropTypes.object).isRequired,
   estates: PropTypes.arrayOf(PropTypes.object).isRequired,
   reservations: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  isWindowOpened: PropTypes.bool.isRequired,
 };
 
 export default ProfilePresentational;

@@ -15,13 +15,22 @@ function SingleRenter({ match, history }) {
   } = useSelector((state) => state);
   const renterID = match.params.renterID;
 
+  const [isWindowOpen, setIsWindowOpen] = React.useState(false);
+
   React.useEffect(() => {
     if (renterID) dispatch(getRenterByID(renterID));
   }, [dispatch, renterID]);
 
+  const toggleWindow = React.useCallback(() => {
+    setIsWindowOpen((open) => !open);
+  }, [isWindowOpen]);
+
   const onDeleteRenter = React.useCallback(
     (renterID) => {
-      if (renterID) dispatch(deleteRenter(renterID, history));
+      if (renterID) {
+        dispatch(deleteRenter(renterID, history));
+        toggleWindow();
+      }
     },
     [dispatch],
   );
@@ -33,6 +42,8 @@ function SingleRenter({ match, history }) {
       renterID={renterID}
       profile={profile}
       user={user}
+      isWindowOpen={isWindowOpen}
+      toggleWindow={toggleWindow}
     />
   );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Delete } from '@material-ui/icons';
 import Slider from '../../Slider';
-import { Comments, Rating, Like, Dislike, Views, Banner } from '../..';
+import { Comments, Rating, Like, Dislike, Views, Banner, ConfirmationWindow } from '../..';
 import PropTypes from 'prop-types';
 import './ad.scss';
 
@@ -14,9 +14,21 @@ function SingleEstatePresentational({
   estateID,
   onReservateClick,
   onDeleteEstate,
+  isWindowOpen,
+  toggleWindow,
 }) {
+  console.log(!estate, estate);
   return (
     <div>
+      {isWindowOpen && estateID && (
+        <ConfirmationWindow
+          confirmationTitle="Deleting Estate"
+          confirmationText="Do you really want to delete the estate ?"
+          confirm={() => onDeleteEstate(estateID)}
+          open={isWindowOpen}
+          handleClose={toggleWindow}
+        />
+      )}
       {estate && (estate.visible || reservatedByMe) && (
         <div className="ad">
           <Slider photoLinks={estate.photos} />
@@ -49,7 +61,7 @@ function SingleEstatePresentational({
                 likeType="estate"
                 collectionID={estateID}
                 amountOflikes={estate.amountOflikes}
-                isActive={user ? estate.likes.includes(user._id) : false}
+                isActive={user && estate.likes ? estate.likes.includes(user._id) : false}
                 isClickable={!!profile}
                 pageType="single"
                 pageOwnerID={estate._id}
@@ -58,7 +70,7 @@ function SingleEstatePresentational({
                 collectionID={estateID}
                 amountOfDislikes={estate.amountOfdislikes}
                 dislikeType="estate"
-                isActive={user ? estate.dislikes.includes(user._id) : false}
+                isActive={user && estate.dislikes ? estate.dislikes.includes(user._id) : false}
                 isClickable={!!profile}
                 pageType="single"
                 pageOwnerID={estate._id}
@@ -73,7 +85,7 @@ function SingleEstatePresentational({
                 pageOwnerID={estate._id}
               />
               {estate.user && user && estate.user._id === user._id && (
-                <Delete className="cursor" onClick={() => onDeleteEstate(estate._id)} />
+                <Delete className="cursor" onClick={toggleWindow} />
               )}
             </div>
           </div>
@@ -95,18 +107,17 @@ function SingleEstatePresentational({
           </div>
         </div>
       )}
-      {!estate ||
-        (!estate.visible && !reservatedByMe && (
-          <Banner
-            title="The estate is not found"
-            subtitle="The estate is not found or it has been already rented"
-            children={
-              <Link to="/search">
-                <button className="primary-button">Go back</button>
-              </Link>
-            }
-          />
-        ))}
+      {(!estate || (!estate.visible && !reservatedByMe)) && (
+        <Banner
+          title="The estate is not found"
+          subtitle="The estate is not found or it has been already rented"
+          children={
+            <Link to="/search">
+              <button className="primary-button">Go back</button>
+            </Link>
+          }
+        />
+      )}
     </div>
   );
 }
@@ -119,6 +130,8 @@ SingleEstatePresentational.propTypes = {
   estateID: PropTypes.string.isRequired,
   onDeleteEstate: PropTypes.func.isRequired,
   onReservateClick: PropTypes.func.isRequired,
+  toggleWindow: PropTypes.func.isRequired,
+  isWindowOpen: PropTypes.bool.isRequired,
 };
 
 export default SingleEstatePresentational;

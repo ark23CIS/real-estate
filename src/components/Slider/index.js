@@ -5,7 +5,7 @@ import Item from './Item';
 import './slider.scss';
 
 function Slider({ photoLinks }) {
-  if (!photoLinks.length) {
+  if (!photoLinks || !photoLinks.length) {
     photoLinks = ['https://banffventureforum.com/wp-content/uploads/2019/08/No-Image.png'];
   }
   return (

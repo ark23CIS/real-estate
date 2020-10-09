@@ -9,7 +9,7 @@ function SuccessPresentational({ successes }) {
       {successes &&
         successes.map((success) => {
           toast.success(success.msg, {
-            autoClose: 5000,
+            autoClose: 2000,
           });
         })}
     </ToastContainer>

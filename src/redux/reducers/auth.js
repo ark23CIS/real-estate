@@ -49,6 +49,7 @@ export default function (state = initState, action) {
       };
     case LOGOUT:
     case CLEAR_PROFILE:
+      localStorage.removeItem('token');
       return {
         ...state,
         isAuthenticated: false,
