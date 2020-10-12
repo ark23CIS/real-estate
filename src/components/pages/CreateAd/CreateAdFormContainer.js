@@ -10,8 +10,6 @@ function CreateAdFormContainer({ label, iconComponent, fields, history }) {
   const classes = useStyles();
   const errors = useSelector((state) => state.error);
 
-  console.log(errors);
-
   const [ADData, setADData] = React.useState({ pictures: [] });
   const dispatch = useDispatch();
 

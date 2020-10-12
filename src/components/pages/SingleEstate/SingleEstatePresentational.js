@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Delete } from '@material-ui/icons';
 import Slider from '../../Slider';
-import { Comments, Rating, Like, Dislike, Views, Banner, ConfirmationWindow } from '../..';
+import { Comments, Rating, Like, Dislike, Views, Banner, DeletePage } from '../..';
 import PropTypes from 'prop-types';
 import './ad.scss';
 
@@ -14,21 +13,9 @@ function SingleEstatePresentational({
   estateID,
   onReservateClick,
   onDeleteEstate,
-  isWindowOpen,
-  toggleWindow,
 }) {
-  console.log(!estate, estate);
   return (
     <div>
-      {isWindowOpen && estateID && (
-        <ConfirmationWindow
-          confirmationTitle="Deleting Estate"
-          confirmationText="Do you really want to delete the estate ?"
-          confirm={() => onDeleteEstate(estateID)}
-          open={isWindowOpen}
-          handleClose={toggleWindow}
-        />
-      )}
       {estate && (estate.visible || reservatedByMe) && (
         <div className="ad">
           <Slider photoLinks={estate.photos} />
@@ -85,7 +72,7 @@ function SingleEstatePresentational({
                 pageOwnerID={estate._id}
               />
               {estate.user && user && estate.user._id === user._id && (
-                <Delete className="cursor" onClick={toggleWindow} />
+                <DeletePage onDelete={() => onDeleteEstate(estateID)} />
               )}
             </div>
           </div>
@@ -130,8 +117,6 @@ SingleEstatePresentational.propTypes = {
   estateID: PropTypes.string.isRequired,
   onDeleteEstate: PropTypes.func.isRequired,
   onReservateClick: PropTypes.func.isRequired,
-  toggleWindow: PropTypes.func.isRequired,
-  isWindowOpen: PropTypes.bool.isRequired,
 };
 
 export default SingleEstatePresentational;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addError, addErrors, addSuccessStatus } from './index';
+import { addErrorAndDelete, addErrors, addSuccessStatus } from './index';
 import {
   CLEAR_PROFILE,
   GET_PROFILE,
@@ -91,7 +91,9 @@ export const createProfile = (data, history) => async (dispatch) => {
 export const likeProfile = (user_id) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/profiles/like/${user_id}`, null, configContentType());
-    dispatch({ type: GET_PROFILES, payload: [res.data] });
+    const { collection, status } = res.data;
+    dispatch({ type: GET_PROFILES, payload: [collection] });
+    dispatch(addSuccessStatus({ msg: status }));
   } catch (err) {
     if (err.statusText)
       dispatch({
@@ -104,7 +106,9 @@ export const likeProfile = (user_id) => async (dispatch) => {
 export const dislikeProfile = (user_id) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/profiles/dislike/${user_id}`, null, configContentType());
-    dispatch({ type: GET_PROFILES, payload: [res.data] });
+    const { collection, status } = res.data;
+    dispatch({ type: GET_PROFILES, payload: [collection] });
+    dispatch(addSuccessStatus({ msg: status }));
   } catch (err) {
     if (err.statusText)
       dispatch({
@@ -118,13 +122,9 @@ export const rateProfile = (user_id, rating) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/profiles/rate/${user_id}`, { rating }, configContentType());
     dispatch({ type: GET_PROFILES, payload: [res.data] });
-    dispatch(addSuccessStatus(`You rated the profile with ${rating} rating`));
+    dispatch(addSuccessStatus({ msg: `You rated the profile with ${rating} rating` }));
   } catch (err) {
-    if (err.statusText)
-      dispatch({
-        type: PROFILE_ERROR,
-        payload: { msg: err.response.statusText },
-      });
+    dispatch(addErrorAndDelete({ msg: 'You already rated the page' }));
   }
 };
 
@@ -137,7 +137,7 @@ export const commentProfile = ({ commented_collection, text }) => async (dispatc
     );
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
-    dispatch(addError({ msg: 'Error with adding comment' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with adding comment' }));
   }
 };
 
@@ -150,7 +150,7 @@ export const uncommentProfile = ({ uncommentedCollection, commentID }) => async 
     );
     dispatch({ type: GET_PROFILES, payload: [res.data] });
   } catch (err) {
-    dispatch(addError({ msg: 'Error with deleting comment' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with deleting comment' }));
   }
 };
 
@@ -162,6 +162,6 @@ export const deleteProfile = (history) => async (dispatch) => {
     history.push('/search');
     dispatch(addSuccessStatus({ msg: 'Your profile has been successfully deleted' }));
   } catch (err) {
-    dispatch(addError({ msg: 'Error with deleting profile' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with deleting profile' }));
   }
 };

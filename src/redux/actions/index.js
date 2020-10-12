@@ -1,5 +1,5 @@
 export { register, logout, login, loadUser, confirm } from './auth';
-export { addError, addErrors, clearError } from './error';
+export { addError, addErrorAndDelete, addErrors, clearError } from './error';
 export { addSuccessStatus, removeSuccesses } from './success';
 export {
   getAllProfiles,

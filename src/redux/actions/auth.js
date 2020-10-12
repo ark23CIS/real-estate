@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { setAuthToken } from '../helpers';
-import { addError, addErrors } from './error';
+import { addErrors } from './error';
 import {
   REGISTER_FAIL,
   AUTH_ERROR,

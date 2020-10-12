@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { GET_RESERVATION, GET_RESERVATIONS, DELETE_RESERVATION } from './types';
-import { addError, addSuccessStatus } from '.';
+import { addSuccessStatus, addErrorAndDelete } from '.';
 import { configContentType } from '../helpers';
 
 export const createReservation = (
@@ -18,7 +18,7 @@ export const createReservation = (
     dispatch({ type: GET_RESERVATION, payload: res.data });
     history.push('/offers');
   } catch (err) {
-    console.log(err.message);
+    dispatch(addErrorAndDelete({ msg: 'Creation error' }));
   }
 };
 
@@ -27,7 +27,7 @@ export const updateReservation = (status, reservationID) => async (dispatch) => 
     await axios.put('/api/reservations', { status, reservationID }, configContentType());
     dispatch(getOwnReservations());
   } catch (err) {
-    console.log(err.message);
+    dispatch(addErrorAndDelete({ msg: 'Update reservation error' }));
   }
 };
 
@@ -46,6 +46,6 @@ export const deleteReservation = (reservationID) => async (dispatch) => {
     dispatch({ type: DELETE_RESERVATION, payload: res.data });
     dispatch(addSuccessStatus('Reservation successfully deleted'));
   } catch (err) {
-    dispatch(addError({ msg: 'Deleting reservation error' }));
+    dispatch(addErrorAndDelete({ msg: 'Deleting reservation error' }));
   }
 };

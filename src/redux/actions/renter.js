@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addError, addSuccessStatus, getProfile } from './index';
+import { addSuccessStatus, getProfile, addErrorAndDelete } from './index';
 import { GET_RENTER, GET_RENTERS } from './types';
 import { configContentType } from '../helpers';
 
@@ -31,7 +31,7 @@ export const commentRenter = ({ commented_collection, text }) => async (dispatch
     );
     dispatch({ type: GET_RENTER, payload: res.data });
   } catch (err) {
-    dispatch(addError({ msg: 'Error with commenting renter' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with commenting renter' }));
   }
 };
 
@@ -44,7 +44,7 @@ export const uncommentRenter = ({ uncommentedCollection, commentID }) => async (
     );
     dispatch({ type: GET_RENTER, payload: res.data });
   } catch (err) {
-    dispatch(addError({ msg: 'Error with uncomment renter' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with uncomment renter' }));
   }
 };
 
@@ -66,7 +66,7 @@ export const rateRenter = ({ rating, rated_collection, pageType = '', pageOwnerI
     }
     dispatch(addSuccessStatus({ msg: `You rated the page with ${rating} rating` }));
   } catch (err) {
-    dispatch(addError({ msg: 'Error with adding rating' }));
+    dispatch(addErrorAndDelete({ msg: 'You already rated the renter' }));
   }
 };
 
@@ -75,15 +75,17 @@ export const likeRenter = (liked_collection, pageType = '', pageOwnerID = '') =>
 ) => {
   try {
     const res = await axios.put(`/api/renters/like/${liked_collection}`, null, configContentType());
+    const { collection, status } = res.data;
     if (pageType === 'search') {
       dispatch(getAllRenters());
     } else if (pageType === 'single') {
-      dispatch({ type: GET_RENTER, payload: res.data });
+      dispatch({ type: GET_RENTER, payload: collection });
     } else if (pageType === 'specific') {
       dispatch(getRentersByUserID(pageOwnerID));
     }
+    dispatch(addSuccessStatus({ msg: status }));
   } catch (err) {
-    dispatch(addError({ msg: 'Error with like renter' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with like renter' }));
   }
 };
 
@@ -96,15 +98,17 @@ export const dislikeRenter = (disliked_collection, pageType = '', pageOwnerID = 
       null,
       configContentType(),
     );
+    const { collection, status } = res.data;
     if (pageType === 'search') {
       dispatch(getAllRenters());
     } else if (pageType === 'single') {
-      dispatch({ type: GET_RENTER, payload: res.data });
+      dispatch({ type: GET_RENTER, payload: collection });
     } else if (pageType === 'specific') {
       dispatch(getRentersByUserID(pageOwnerID));
     }
+    dispatch(addSuccessStatus({ msg: status }));
   } catch (err) {
-    dispatch(addError({ msg: 'Error with dislike renter' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with dislike renter' }));
   }
 };
 
@@ -124,6 +128,6 @@ export const deleteRenter = (renterID, history) => async (dispatch) => {
     history.push('/search');
     dispatch(addSuccessStatus({ msg: 'You successfully deleted renter' }));
   } catch (err) {
-    dispatch(addError({ msg: 'Error with deleting renter' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with deleting renter' }));
   }
 };

@@ -16,28 +16,53 @@ const RatingContainer = ({
 }) => {
   const dispatch = useDispatch();
 
+  const [state, setState] = React.useState({ isRatingWindowOpen: false });
+
   const onStarClick = React.useCallback(
-    (next) => {
+    (next, needToToggle = true) => {
+      setState((state) => ({
+        ...state,
+        myRating: next,
+        isRatingWindowOpen: needToToggle ? !state.isRatingWindowOpen : state.isRatingWindowOpen,
+      }));
+    },
+    [state],
+  );
+
+  const toggleWindow = React.useCallback(() => {
+    setState((state) => ({ ...state, isRatingWindowOpen: !state.isRatingWindowOpen }));
+  }, [state]);
+
+  const onRate = React.useCallback(
+    (myRating) => {
       if (label === 'profile') {
-        dispatch(rateProfile(collectionID === 'me' ? authUserID : collectionID, next));
+        dispatch(rateProfile(collectionID === 'me' ? authUserID : collectionID, myRating));
       } else if (label === 'estate') {
         dispatch(
-          rateEstate({ rating: next, rated_collection: collectionID, pageType, pageOwnerID }),
+          rateEstate({ rating: myRating, rated_collection: collectionID, pageType, pageOwnerID }),
         );
       } else if (label === 'renter') {
         dispatch(
-          rateRenter({ rating: next, rated_collection: collectionID, pageType, pageOwnerID }),
+          rateRenter({ rating: myRating, rated_collection: collectionID, pageType, pageOwnerID }),
         );
       }
+      toggleWindow();
+      console.log('onRate');
     },
-    [dispatch, collectionID, authUserID],
+    [dispatch, collectionID, authUserID, label, state],
   );
+
+  console.log(state);
 
   return (
     <RatingPresentational
       isClickable={isClickable}
       ratingValue={ratingValue}
       onStarClick={onStarClick}
+      onRate={onRate}
+      isWindowOpen={state.isRatingWindowOpen}
+      toggleWindow={toggleWindow}
+      myRating={state.myRating}
     />
   );
 };

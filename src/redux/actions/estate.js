@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addError, addErrors, addSuccessStatus, removeSuccesses } from './index';
+import { addErrors, addSuccessStatus, addErrorAndDelete } from './index';
 import { GET_ESTATE, GET_RENTER, GET_ESTATES, GET_RENTERS } from './types';
 import { getProfile } from './profile';
 import { configContentType } from '../helpers';
@@ -89,7 +89,7 @@ export const uncommentEstate = ({ uncommentedCollection, commentID }) => async (
     );
     dispatch({ type: GET_ESTATE, payload: res.data });
   } catch (err) {
-    dispatch(addError({ msg: 'Error with deleting comment' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with deleting comment' }));
   }
 };
 
@@ -111,7 +111,7 @@ export const rateEstate = ({ rating, rated_collection, pageType = '', pageOwnerI
     }
     dispatch(addSuccessStatus({ msg: `You rated the estate with ${rating} rating` }));
   } catch (err) {
-    dispatch(addError({ msg: 'Error with adding rating' }));
+    dispatch(addErrorAndDelete({ msg: 'You can not rate the estate cause you already did it' }));
   }
 };
 
@@ -119,17 +119,18 @@ export const likeEstate = (liked_collection, pageType = '', pageOwnerID = '') =>
   dispatch,
 ) => {
   try {
-    console.log(liked_collection);
     const res = await axios.put(`/api/estates/like/${liked_collection}`, null, configContentType());
+    const { collection, status } = res.data;
     if (pageType === 'search') {
       dispatch(getAllEstates());
     } else if (pageType === 'single') {
-      dispatch({ type: GET_ESTATE, payload: res.data });
+      dispatch({ type: GET_ESTATE, payload: collection });
     } else if (pageType === 'specific') {
       dispatch(getEstatesByUserID(pageOwnerID));
     }
+    dispatch(addSuccessStatus({ msg: status }));
   } catch (err) {
-    console.log(err.message);
+    dispatch(addErrorAndDelete({ msg: 'Like error' }));
   }
 };
 
@@ -142,15 +143,17 @@ export const dislikeEstate = (disliked_collection, pageType = '', pageOwnerID = 
       null,
       configContentType(),
     );
+    const { collection, status } = res.data;
     if (pageType === 'search') {
       dispatch(getAllEstates());
     } else if (pageType === 'single') {
-      dispatch({ type: GET_ESTATE, payload: res.data });
+      dispatch({ type: GET_ESTATE, payload: collection });
     } else if (pageType === 'specific') {
       dispatch(getEstatesByUserID(pageOwnerID));
     }
+    dispatch(addSuccessStatus({ msg: status }));
   } catch (err) {
-    console.log(err.message);
+    dispatch(addErrorAndDelete({ msg: 'Dislike error' }));
   }
 };
 export const searchAds = ({
@@ -174,9 +177,7 @@ export const searchAds = ({
 
 export const getEstatesByUserID = (userID) => async (dispatch) => {
   try {
-    console.log(userID, 'getEstatesByUserID');
     const res = await axios.get(`/api/estates/user/${userID}`);
-    console.log(res.data);
     dispatch({ type: GET_ESTATES, payload: res.data });
   } catch (err) {
     console.log(err.message);
@@ -190,6 +191,6 @@ export const deleteEstate = (estateID, history) => async (dispatch) => {
     history.push('/search');
     dispatch(addSuccessStatus({ msg: 'You successfully deleted Estate' }));
   } catch (err) {
-    dispatch(addError({ msg: 'Error with deleting estate' }));
+    dispatch(addErrorAndDelete({ msg: 'Error with deleting estate' }));
   }
 };

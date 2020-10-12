@@ -1,24 +1,63 @@
 import React from 'react';
-import { CardHeader, TextField, Avatar, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import CommentBody from './CommentBody';
-import { commentEstate, commentProfile, commentRenter } from '../../redux/actions';
+import CommentsPresentational from './CommentsPresentational';
+import {
+  commentEstate,
+  commentProfile,
+  commentRenter,
+  uncommentEstate,
+  uncommentRenter,
+  uncommentProfile,
+} from '../../redux/actions';
 import { styles } from './comments-styles';
 
 function Comments({ comments, classes, label, collectionID, ownerID, userCanComment }) {
-  const [comment, setComment] = React.useState('');
+  const [state, setState] = React.useState({
+    comment: '',
+    isWindowOpen: false,
+    text: '',
+    commentID: '',
+  });
   const dispatch = useDispatch();
   const {
     profile: { profile },
     auth: { user },
   } = useSelector((state) => state);
 
+  const toggleWindow = React.useCallback(
+    (text = '', commentID = '') => {
+      setState((currentState) => ({
+        ...currentState,
+        isWindowOpen: !currentState.isWindowOpen,
+        text,
+        commentID,
+      }));
+    },
+    [state],
+  );
+
+  const onUncomment = React.useCallback(() => {
+    const { commentID } = state;
+    if (commentID) {
+      if (label === 'estate') {
+        dispatch(uncommentEstate({ uncommentedCollection: collectionID, commentID }));
+      } else if (label === 'renter') {
+        dispatch(uncommentRenter({ uncommentedCollection: collectionID, commentID }));
+      } else if (label === 'profile') {
+        dispatch(uncommentProfile({ uncommentedCollection: collectionID, commentID }));
+      }
+    }
+    toggleWindow();
+  }, [dispatch, collectionID, label, state]);
+
   const onCommentChange = React.useCallback(
     (e) => {
-      setComment(e.target.value);
+      const target = e.target;
+      setState((currentState) => ({ ...currentState, comment: target.value }));
     },
-    [setComment],
+    [state],
   );
 
   const onKeyDown = React.useCallback(
@@ -27,79 +66,41 @@ function Comments({ comments, classes, label, collectionID, ownerID, userCanComm
         if (e.keyCode === 13 && e.target.value !== '') {
           if (collectionID && e.target.value !== '') {
             if (label === 'estate') {
-              dispatch(commentEstate({ text: comment, commented_collection: collectionID }));
+              dispatch(commentEstate({ text: state.comment, commented_collection: collectionID }));
             } else if (label === 'renter') {
-              dispatch(commentRenter({ text: comment, commented_collection: collectionID }));
+              dispatch(commentRenter({ text: state.comment, commented_collection: collectionID }));
             } else {
               dispatch(
                 commentProfile({
-                  text: comment,
+                  text: state.comment,
                   commented_collection: collectionID,
                 }),
               );
             }
           }
-          setComment('');
+          setState((currentState) => ({ ...currentState, comment: '' }));
         }
       }
     },
-    [dispatch, comment, collectionID],
+    [dispatch, state, collectionID, label],
   );
 
   return (
-    <div>
-      {userCanComment && (
-        <CardHeader
-          avatar={
-            <Avatar
-              className={classes.smallAvatar}
-              src={profile ? (profile.photo === 'default' ? '' : profile.photo) : ''}
-            />
-          }
-          title={
-            <TextField
-              onKeyDown={onKeyDown}
-              multiline
-              value={comment}
-              onChange={onCommentChange}
-              placeholder="Write something ..."
-              className={classes.commentField}
-              margin="normal"
-              style={{ color: 'black' }}
-            />
-          }
-          className={classes.cardHeader}
-        />
-      )}
-
-      {comments &&
-        comments.map((item, i) => {
-          return (
-            <CardHeader
-              avatar={
-                <Avatar
-                  className={classes.smallAvatar}
-                  src={
-                    item.postedBy && item.postedBy.photo !== 'default' ? item.postedBy.photo : ''
-                  }
-                />
-              }
-              title={
-                <CommentBody
-                  item={item}
-                  classes={classes}
-                  collectionID={collectionID}
-                  userID={user ? user._id : ''}
-                  label={label}
-                  ownerID={ownerID}
-                />
-              }
-              className={classes.cardHeader}
-              key={`${i}_${item.created}`}
-            />
-          );
-        })}
-    </div>
+    <CommentsPresentational
+      userCanComment={userCanComment}
+      profile={profile}
+      classes={classes}
+      onKeyDown={onKeyDown}
+      comment={state.comment}
+      onCommentChange={onCommentChange}
+      comments={comments}
+      user={user}
+      ownerID={ownerID}
+      toggleWindow={toggleWindow}
+      onUncomment={onUncomment}
+      isWindowOpen={state.isWindowOpen}
+      confirmationText={state.text}
+    />
   );
 }
 

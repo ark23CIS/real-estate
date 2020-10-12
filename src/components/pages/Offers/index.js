@@ -18,8 +18,6 @@ export default function OffersContainer() {
     dispatch(getOwnReservations());
   }, [dispatch]);
 
-  console.log(reservations);
-
   const onUpdate = React.useCallback(
     (status, reservationID) => {
       dispatch(updateReservation(status, reservationID));
@@ -29,7 +27,6 @@ export default function OffersContainer() {
 
   const onDelete = React.useCallback(
     (reservationID) => {
-      console.log(reservationID);
       dispatch(deleteReservation(reservationID));
     },
     [dispatch],

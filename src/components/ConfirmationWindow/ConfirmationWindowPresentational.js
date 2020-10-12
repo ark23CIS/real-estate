@@ -42,7 +42,7 @@ function ConfirmationWindowPresentational({
 
 ConfirmationWindowPresentational.propTypes = {
   confirmationTitle: PropTypes.string.isRequired,
-  confirmationText: PropTypes.string.isRequired,
+  confirmationText: PropTypes.node.isRequired,
   open: PropTypes.bool.isRequired,
   fullScreen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,

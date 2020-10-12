@@ -19,7 +19,6 @@ function TabComponentContainer({ tabItems }) {
 
   const onTabClick = React.useCallback(
     (label) => {
-      console.log(label);
       if (label === 'Renters') {
         dispatch(getRentersByUserID(profiles[0].user._id));
       } else if (label === 'Estates') {

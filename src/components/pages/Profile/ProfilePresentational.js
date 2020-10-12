@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { SocialIcon } from 'react-social-icons';
-import { Comments, Like, Dislike, Rating, TabComponent, Banner, ConfirmationWindow } from '../..';
+import { Comments, Like, Dislike, Rating, TabComponent, Banner, DeletePage } from '../..';
 import { profileTabItems } from './profileTabItems';
 
 function ProfilePresentational({
@@ -16,21 +15,10 @@ function ProfilePresentational({
   reservations,
   user,
   match,
-  handleClose,
-  isWindowOpened,
   confirm,
 }) {
   return (
     <div>
-      {isWindowOpened && (
-        <ConfirmationWindow
-          confirmationText="Do you really want to delete the profile ?"
-          confirmationTitle="Deleting Profile"
-          open={isWindowOpened}
-          handleClose={handleClose}
-          confirm={confirm}
-        />
-      )}
       {!currentProfile && isOwnPage && (
         <Banner title="Need to create a Profile">
           <Link to="/create-profile" className="primary-button">
@@ -55,7 +43,7 @@ function ProfilePresentational({
               style={{ height: '200px', width: '200px' }}
             />
             <div className="profile__fullname-and-delete">
-              {isOwnPage && <Delete className="cursor" onClick={handleClose} />}
+              {isOwnPage && <DeletePage onDelete={confirm} />}
 
               <div className="profile__fullname">{`${currentProfile.user.firstName} ${currentProfile.user.lastName}`}</div>
             </div>
@@ -150,8 +138,6 @@ ProfilePresentational.propTypes = {
   reservations: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  isWindowOpened: PropTypes.bool.isRequired,
 };
 
 export default ProfilePresentational;

@@ -1,31 +1,13 @@
 import React from 'react';
-import { Delete } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import Slider from '../../Slider';
-import { Comments, Rating, Like, Dislike, Views, Banner, ConfirmationWindow } from '../..';
+import { Comments, Rating, Like, Dislike, Views, Banner, DeletePage } from '../..';
 import PropTypes from 'prop-types';
 import '../SingleEstate/ad.scss';
 
-function SingleRenterPresentational({
-  onDeleteRenter,
-  renter,
-  renterID,
-  profile,
-  user,
-  toggleWindow,
-  isWindowOpen,
-}) {
+function SingleRenterPresentational({ onDeleteRenter, renter, renterID, profile, user }) {
   return (
     <div>
-      {isWindowOpen && renterID && (
-        <ConfirmationWindow
-          confirmationTitle="Deleting renter"
-          confirmationText="Do you really want to delete the renter ?"
-          confirm={() => onDeleteRenter(renterID)}
-          open={isWindowOpen}
-          handleClose={toggleWindow}
-        />
-      )}
       {renter && (
         <div className="ad">
           <Slider photoLinks={renter.photos} />
@@ -74,7 +56,7 @@ function SingleRenterPresentational({
                 pageType="single"
               />
               {renter.user && user && renter.user._id === user._id && (
-                <Delete className="cursor" onClick={toggleWindow} />
+                <DeletePage onDelete={() => onDeleteRenter(renterID)} />
               )}
             </div>
           </div>
@@ -110,8 +92,6 @@ SingleRenterPresentational.propTypes = {
   renterID: PropTypes.string.isRequired,
   profile: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  toggleWindow: PropTypes.func.isRequired,
-  isWindowOpen: PropTypes.bool.isRequired,
 };
 
 export default SingleRenterPresentational;

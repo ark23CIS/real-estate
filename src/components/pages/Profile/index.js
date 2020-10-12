@@ -24,16 +24,16 @@ function Profile({ match, history }) {
 
   const dispatch = useDispatch();
 
-  const [isOwnPage, setIsOwnPage] = React.useState(false);
-
-  const [isWindowOpened, setIsWindowOpened] = React.useState(false);
+  const [state, setState] = React.useState({
+    isOwnPage: false,
+  });
 
   React.useEffect(() => {
     const updateProfile = () => {
       if (user) {
         dispatch(getOwnReservations());
         if (match.params.profileID === 'me' || user._id === match.params.profileID) {
-          if (profile) dispatch(getProfile());
+          if (!profile) dispatch(getProfile());
           dispatch(
             getProfileByID(
               match.params.profileID === 'me' || user._id === match.params.profileID
@@ -41,7 +41,7 @@ function Profile({ match, history }) {
                 : match.params.profileID,
             ),
           );
-          setIsOwnPage(true);
+          setState((state) => ({ ...state, isOwnPage: true }));
         } else {
           dispatch(getProfileByID(match.params.profileID));
         }
@@ -51,32 +51,26 @@ function Profile({ match, history }) {
     };
     updateProfile();
     const interval = setInterval(updateProfile, 30000);
-    return () => clearInterval(interval);
-  }, [dispatch, user, match, profile]);
-
-  const toggleWindow = React.useCallback(() => {
-    setIsWindowOpened((isWindowOpened) => !isWindowOpened);
-  }, [isWindowOpened]);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [dispatch, user, profile, match]);
 
   const onDeleteProfile = React.useCallback(() => {
     dispatch(deleteProfile(history));
     toggleWindow();
   }, [dispatch]);
 
-  console.log(currentProfile);
-
   return (
     <ProfilePresentational
       currentProfile={currentProfile}
-      isOwnPage={isOwnPage}
+      isOwnPage={state.isOwnPage}
       profile={profile}
       renters={renters}
       estates={estates}
       reservations={reservations}
       user={user}
       match={match}
-      handleClose={toggleWindow}
-      isWindowOpened={isWindowOpened}
       confirm={onDeleteProfile}
     />
   );

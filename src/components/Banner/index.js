@@ -3,7 +3,6 @@ import './banner.scss';
 import PropTypes from 'prop-types';
 
 function Banner({ children, title, subtitle, styles }) {
-  console.log(styles);
   return (
     <div className="banner" style={styles}>
       <h1 className="banner__title">{title}</h1>

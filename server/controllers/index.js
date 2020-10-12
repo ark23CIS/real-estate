@@ -43,46 +43,55 @@ const likeCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
         model: 'profile',
         populate: { path: 'user', model: 'user' },
       });
-    let result;
+    let result = {};
     if (!collection.likes.includes(req.user.id)) {
-      result = await Model.findOneAndUpdate(
-        { [fieldToSearch]: liked_collection_id },
-        { $push: { likes: req.user.id } },
-        { new: true },
-      )
-        .populate('user')
-        .populate({
-          path: 'comments.postedBy',
-          model: 'profile',
-          populate: { path: 'user', model: 'user' },
-        });
-      result = await Model.findOneAndUpdate(
-        {
-          [fieldToSearch]: liked_collection_id,
-        },
-        {
-          $pull: { dislikes: req.user.id },
-        },
-        { new: true },
-      )
-        .populate('user')
-        .populate({
-          path: 'comments.postedBy',
-          model: 'profile',
-          populate: { path: 'user', model: 'user' },
-        });
+      result = {
+        collection: await Model.findOneAndUpdate(
+          { [fieldToSearch]: liked_collection_id },
+          { $push: { likes: req.user.id } },
+          { new: true },
+        )
+          .populate('user')
+          .populate({
+            path: 'comments.postedBy',
+            model: 'profile',
+            populate: { path: 'user', model: 'user' },
+          }),
+        status: 'You succesfully liked the page',
+      };
+      result = {
+        ...result,
+        collection: await Model.findOneAndUpdate(
+          {
+            [fieldToSearch]: liked_collection_id,
+          },
+          {
+            $pull: { dislikes: req.user.id },
+          },
+          { new: true },
+        )
+          .populate('user')
+          .populate({
+            path: 'comments.postedBy',
+            model: 'profile',
+            populate: { path: 'user', model: 'user' },
+          }),
+      };
     } else {
-      result = await Model.findOneAndUpdate(
-        { [fieldToSearch]: liked_collection_id },
-        { $pull: { likes: req.user.id } },
-        { new: true },
-      )
-        .populate('user')
-        .populate({
-          path: 'comments.postedBy',
-          model: 'profile',
-          populate: { path: 'user', model: 'user' },
-        });
+      result = {
+        collection: await Model.findOneAndUpdate(
+          { [fieldToSearch]: liked_collection_id },
+          { $pull: { likes: req.user.id } },
+          { new: true },
+        )
+          .populate('user')
+          .populate({
+            path: 'comments.postedBy',
+            model: 'profile',
+            populate: { path: 'user', model: 'user' },
+          }),
+        status: 'You succesfully deleted like from the page',
+      };
     }
     res.json(result);
   } catch (err) {
@@ -112,42 +121,51 @@ const dislikeCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
     const collection = await Model.findOne({
       [fieldToSearch]: disliked_collection_id,
     });
-    let result;
+    let result = {};
     if (!collection.dislikes.includes(req.user.id)) {
-      result = await Model.findOneAndUpdate(
-        { [fieldToSearch]: disliked_collection_id },
-        { $push: { dislikes: req.user.id } },
-        { new: true },
-      )
-        .populate('user')
-        .populate({
-          path: 'comments.postedBy',
-          model: 'profile',
-          populate: { path: 'user', model: 'user' },
-        });
-      result = await Model.findOneAndUpdate(
-        { [fieldToSearch]: disliked_collection_id },
-        { $pull: { likes: req.user.id } },
-        { new: true },
-      )
-        .populate('user')
-        .populate({
-          path: 'comments.postedBy',
-          model: 'profile',
-          populate: { path: 'user', model: 'user' },
-        });
+      result = {
+        collection: await Model.findOneAndUpdate(
+          { [fieldToSearch]: disliked_collection_id },
+          { $push: { dislikes: req.user.id } },
+          { new: true },
+        )
+          .populate('user')
+          .populate({
+            path: 'comments.postedBy',
+            model: 'profile',
+            populate: { path: 'user', model: 'user' },
+          }),
+        status: 'You succesfully disliked the page',
+      };
+      result = {
+        ...result,
+        collection: await Model.findOneAndUpdate(
+          { [fieldToSearch]: disliked_collection_id },
+          { $pull: { likes: req.user.id } },
+          { new: true },
+        )
+          .populate('user')
+          .populate({
+            path: 'comments.postedBy',
+            model: 'profile',
+            populate: { path: 'user', model: 'user' },
+          }),
+      };
     } else {
-      result = await Model.findOneAndUpdate(
-        { [fieldToSearch]: disliked_collection_id },
-        { $pull: { dislikes: req.user.id } },
-        { new: true },
-      )
-        .populate('user')
-        .populate({
-          path: 'comments.postedBy',
-          model: 'profile',
-          populate: { path: 'user', model: 'user' },
-        });
+      result = {
+        collection: await Model.findOneAndUpdate(
+          { [fieldToSearch]: disliked_collection_id },
+          { $pull: { dislikes: req.user.id } },
+          { new: true },
+        )
+          .populate('user')
+          .populate({
+            path: 'comments.postedBy',
+            model: 'profile',
+            populate: { path: 'user', model: 'user' },
+          }),
+        status: 'You succesfully deleted dislike from the page',
+      };
     }
     res.json(result);
   } catch (err) {
@@ -220,10 +238,12 @@ const rateCollectionCtrl = (Model, fieldToSearch) => async (req, res) => {
           model: 'profile',
           populate: { path: 'user', model: 'user' },
         });
+    } else {
+      return res.status(400).json({ error: 'You already rated the page' });
     }
     res.json(collection);
   } catch (err) {
-    res.status(500).send('Server Error');
+    return res.status(500).json({ error: 'Cant find the collection or you are not registered' });
   }
 };
 

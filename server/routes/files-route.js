@@ -23,15 +23,12 @@ router.put(
       },
       async (err, result) => {
         if (err) {
-          console.log(err);
           return res.status(500).send('Server Error');
         }
         try {
           await Profile.updateOne({ user: req.user.id }, { $set: { photo: result.secure_url } });
           res.json({ photo: result.secure_url });
         } catch (error) {
-          console.log(error);
-          console.log(error.message);
           res.status(500).send('Server Error');
         }
       },
@@ -55,7 +52,6 @@ router.post(
       },
       (err, result) => {
         if (err) {
-          console.log(err);
           return res.status(500).send('Server Error');
         }
         return res.json({ photo: result.secure_url });
@@ -80,7 +76,6 @@ router.post(
       },
       (err, result) => {
         if (err) {
-          console.log(err);
           res.status(500).send('Server Error');
         }
         return res.json({ photo: result.secure_url });
