@@ -62,7 +62,17 @@ exports.updateReservation = async (req, res) => {
 
 exports.deleteReservation = async (req, res) => {
   try {
-    const reservation = await Reservation.findOneAndRemove({ _id: req.params.reservationID });
+    let reservation = await Reservation({ _id: req.params.reservationID });
+    reservation = {
+      reservation:
+        reservation.status === 'pending'
+          ? await Reservation.findOneAndRemove({ _id: req.params.reservationID })
+          : null,
+      status:
+        reservation.status === 'pending'
+          ? 'Successfully deleted'
+          : 'Not an appropriate status to delete the renter',
+    };
     res.json(reservation);
   } catch (err) {
     res.status(500).send('Server Error');

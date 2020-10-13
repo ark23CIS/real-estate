@@ -42,9 +42,9 @@ export const getOwnReservations = () => async (dispatch) => {
 
 export const deleteReservation = (reservationID) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/reservations/${reservationID}`);
-    dispatch({ type: DELETE_RESERVATION, payload: res.data });
-    dispatch(addSuccessStatus('Reservation successfully deleted'));
+    const { reservation, status } = await axios.delete(`/api/reservations/${reservationID}`).data;
+    dispatch({ type: DELETE_RESERVATION, payload: reservation });
+    dispatch(addSuccessStatus({ msg: status }));
   } catch (err) {
     dispatch(addErrorAndDelete({ msg: 'Deleting reservation error' }));
   }

@@ -28,7 +28,7 @@ function CreateAdFormPresentational({
               .filter(({ belongs }) =>
                 label === 'renter' ? belongs !== 'estate' : belongs !== 'renter',
               )
-              .map(({ name, label, type }, index) => (
+              .map(({ name, label, type, required }, index) => (
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -38,6 +38,7 @@ function CreateAdFormPresentational({
                   id={name}
                   autoComplete={name}
                   autoFocus
+                  required={required}
                   helperText={
                     errors.map((error) => error.param).includes(name)
                       ? errors.filter(({ param }) => param === name)[0].msg
@@ -46,7 +47,6 @@ function CreateAdFormPresentational({
                   error={errors.map((error) => error.param).includes(name)}
                   onChange={type === 'location' ? onAddressChange : onFieldChange}
                   key={`${name}_${index}`}
-                  required
                 />
               ))}
           <ImageUploader
