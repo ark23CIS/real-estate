@@ -62,7 +62,7 @@ exports.updateReservation = async (req, res) => {
 
 exports.deleteReservation = async (req, res) => {
   try {
-    let reservation = await Reservation({ _id: req.params.reservationID });
+    let reservation = await Reservation.findOne({ _id: req.params.reservationID });
     reservation = {
       reservation:
         reservation.status === 'pending'
