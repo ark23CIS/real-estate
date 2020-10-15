@@ -47,12 +47,9 @@ const RatingContainer = ({
         );
       }
       toggleWindow();
-      console.log('onRate');
     },
     [dispatch, collectionID, authUserID, label, state],
   );
-
-  console.log(state);
 
   return (
     <RatingPresentational

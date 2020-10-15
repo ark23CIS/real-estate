@@ -12,7 +12,6 @@ function RatingPresentational({
   toggleWindow,
   myRating,
 }) {
-  console.log(isWindowOpen);
   return (
     <React.Fragment>
       {isWindowOpen && (
