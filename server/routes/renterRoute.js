@@ -27,7 +27,6 @@ router.post(
     check('contactNumber', 'Contact number is required').not().isEmpty(),
     check('maxPrice', 'Max price is required').not().isEmpty(),
     check('footage', 'Footage is required').not().isEmpty(),
-    check('region', 'Region is required').not().isEmpty(),
     check('maxPrice', 'Max price should be a number').isNumeric(),
     check('footage', 'Footage should be a number').isNumeric(),
   ],
