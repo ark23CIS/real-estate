@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAuthToken } from '../helpers';
+import { setAuthToken, configContentType } from '../helpers';
 import { addErrors } from './error';
 import {
   REGISTER_FAIL,
@@ -11,7 +11,6 @@ import {
   CLEAR_PROFILE,
   CONFIRMATION,
 } from './types';
-import { configContentType } from '../helpers';
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {

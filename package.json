@@ -40,7 +40,7 @@
     "babel-runtime-regenerator": "7.8.4",
     "brotli-webpack-plugin": "1.1.0",
     "clean-webpack-plugin": "3.0.0",
-    "compression-webpack-plugin": "5.0.2",
+    "compression-webpack-plugin": "^5.0.2",
     "css-loader": "4.2.2",
     "eslint": "7.9.0",
     "eslint-config-airbnb": "18.2.0",
@@ -117,6 +117,7 @@
     "redux-thunk": "2.3.0",
     "semantic-ui-react": "1.2.1",
     "styled-components": "5.2.0",
+    "terser-webpack-plugin": "^5.1.1",
     "uuid": "8.3.0"
   },
   "browserslist": [

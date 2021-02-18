@@ -23,7 +23,7 @@ function CreateAdFormContainer({ label, iconComponent, fields, history }) {
     (pictures) => {
       setADData((ADData) => ({
         ...ADData,
-        pictures: pictures,
+        pictures,
       }));
     },
     [ADData],
@@ -31,7 +31,7 @@ function CreateAdFormContainer({ label, iconComponent, fields, history }) {
 
   const onAddressChange = React.useCallback(
     (e) => {
-      const target = e.target;
+      const { target } = e;
       setADData((ADData) => ({
         ...ADData,
         estateAddress: { ...ADData.estateAddress, [target.name]: target.value },

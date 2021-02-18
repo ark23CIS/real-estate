@@ -23,9 +23,9 @@ export const createAD = (data, type, history) => (dispatch) => {
     .then(async (values) => {
       data = {
         ...data,
-        footage: parseInt(data.footage),
+        footage: parseInt(data.footage, 10),
         [type === 'estate' ? 'price' : 'maxPrice']: parseInt(
-          type === 'estate' ? data.price : data.maxPrice,
+          type === 'estate' ? data.price : data.maxPrice, 10,
         ),
       };
       const adRes = await axios.post(
@@ -90,6 +90,26 @@ export const uncommentEstate = ({ uncommentedCollection, commentID }) => async (
     dispatch({ type: GET_ESTATE, payload: res.data });
   } catch (err) {
     dispatch(addErrorAndDelete({ msg: 'Error with deleting comment' }));
+  }
+};
+
+export const getEstatesByUserID = (userID) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/estates/user/${userID}`);
+    dispatch({ type: GET_ESTATES, payload: res.data });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const deleteEstate = (estateID, history) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/estates/${estateID}`);
+    dispatch({ type: GET_ESTATE, payload: null });
+    history.push('/search');
+    dispatch(addSuccessStatus({ msg: 'You successfully deleted Estate' }));
+  } catch (err) {
+    dispatch(addErrorAndDelete({ msg: 'Error with deleting estate' }));
   }
 };
 
@@ -172,25 +192,5 @@ export const searchAds = ({
     dispatch({ type: AdType === 'renters' ? GET_RENTERS : GET_ESTATES, payload: res.data });
   } catch (err) {
     console.log(err.message);
-  }
-};
-
-export const getEstatesByUserID = (userID) => async (dispatch) => {
-  try {
-    const res = await axios.get(`/api/estates/user/${userID}`);
-    dispatch({ type: GET_ESTATES, payload: res.data });
-  } catch (err) {
-    console.log(err.message);
-  }
-};
-
-export const deleteEstate = (estateID, history) => async (dispatch) => {
-  try {
-    await axios.delete(`/api/estates/${estateID}`);
-    dispatch({ type: GET_ESTATE, payload: null });
-    history.push('/search');
-    dispatch(addSuccessStatus({ msg: 'You successfully deleted Estate' }));
-  } catch (err) {
-    dispatch(addErrorAndDelete({ msg: 'Error with deleting estate' }));
   }
 };
